@@ -7,6 +7,10 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    const COUNT_OF_CATEGORIES = 3;
+
+    const PRODUCTS_IN_CATEGORY = 8;
+
     /**
      * Seed the application's database.
      */
@@ -18,5 +22,9 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        $this->call([
+            CategorySeeder::class,
+            ProductSeeder::class
+        ]);
     }
 }
