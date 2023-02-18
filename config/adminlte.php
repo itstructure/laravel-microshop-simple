@@ -297,6 +297,27 @@ return [
             'target' => '_blank'
         ],
         [
+            'text'    => 'rbac_manager',
+            'icon'    => 'fas fa-fw fa-user-cog',
+            'submenu' => [
+                [
+                    'text' => 'rbac_users',
+                    'url'  => '/rbac/users',
+                    'icon' => 'fas fa-fw fa-users',
+                ],
+                [
+                    'text' => 'rbac_roles',
+                    'url'  => '/rbac/roles',
+                    'icon' => 'fas fa-fw fa-user-tag',
+                ],
+                [
+                    'text' => 'rbac_permissions',
+                    'url'  => '/rbac/permissions',
+                    'icon' => 'fas fa-fw fa-user-lock',
+                ],
+            ],
+        ],
+        [
             'text' => 'categories',
             'icon' => 'fas fa-project-diagram',
             'submenu' => [

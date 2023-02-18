@@ -185,6 +185,9 @@ return [
         /*
          * Package Service Providers...
          */
+        Itstructure\GridView\GridViewServiceProvider::class,
+        Itstructure\LaRbac\RbacServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         /*
          * Application Service Providers...
