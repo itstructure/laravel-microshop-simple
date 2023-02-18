@@ -1,0 +1,15 @@
+.pagination {
+  & .page-item {
+    &.active {
+      & span {
+        background-color: $brown;
+        border-color: $brown;
+      }
+    }
+    & a {
+      &.page-link {
+        color: $brown;
+      }
+    }
+  }
+}

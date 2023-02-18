@@ -1,0 +1,41 @@
+.top-card-link {
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+
+  & .top-card-block {
+    width: 150px;
+    height: 40px;
+    border: 1px solid $brown;
+    border-radius: 5px;
+    background-color: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    & .top-card-icon {
+      width: 40px;
+      height: 40px;
+      background: url("images/top-card.svg") no-repeat 50% 50%;
+    }
+
+    & .top-card-amount {
+      color: $brown;
+      font-weight: bold;
+      padding-right: 15px;
+    }
+
+    &:hover {
+      background-color: $orange_light;
+      border-color: $orange_light;
+      box-shadow: 0 0 10px $orange_light;
+      & .top-card-amount {
+        color: white;
+      }
+    }
+  }
+}
+

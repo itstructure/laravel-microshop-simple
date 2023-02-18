@@ -1,0 +1,17 @@
+.order-table {
+  & input.product-count {
+    width: 50px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .order-table {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 575px) {
+  .order-table {
+    font-size: 10px;
+  }
+}

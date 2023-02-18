@@ -1,0 +1,52 @@
+.product-logo {
+  position: relative;
+
+  & a {
+    position: relative;
+    display: block;
+
+    & img {
+      min-height: 200px;
+      object-fit: cover;
+      width: 100%;
+      border-radius: 0.25rem 0.25rem 0 0;
+    }
+  }
+
+  &.mini {
+    & a {
+      & img {
+        min-height: 100px;
+        max-height: 100px;
+        width: 100px;
+        height: 100px;
+      }
+    }
+  }
+}
+
+.product-block {
+  & .btn.btn-secondary {
+    &.card-link {
+      width: 100%;
+    }
+    &:hover {
+      background-color: $orange;
+      border-color: $orange;
+    }
+  }
+}
+
+.card:hover {
+  border-color: $gray;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+@media (max-width:575px){
+  .media.product-block {
+    flex-direction: column;
+    .media-body {
+      margin-top: 10px;
+    }
+  }
+}
