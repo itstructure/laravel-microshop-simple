@@ -1,5 +1,5 @@
-TopCardAdapter = function(top_card_component) {
-    var t = this;
+export function TopCardAdapter (top_card_component) {
+    let t = this;
 
     t.top_card_component = top_card_component;
 
@@ -10,7 +10,7 @@ TopCardAdapter = function(top_card_component) {
 
         }).then(function (resp) {
             try {
-                var data = resp.data;
+                let data = resp.data;
                 if (data.success == 1) {
                     t.setTotalAmount(data.total_amount);
                 }

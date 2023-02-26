@@ -14,7 +14,7 @@ class TopCard extends Component {
     }
 
     setTotalAmount(total_amount) {
-        var state = this.state;
+        let state = this.state;
         state.total_amount = total_amount;
         this.setState(state);
     }

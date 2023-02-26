@@ -1,12 +1,12 @@
 import './bootstrap';
-import './top_card_adapter';
+import Alpine from 'alpinejs';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TopCard from './components/TopCard';
 import OrderCard from './components/OrderCard';
 
-import Alpine from 'alpinejs';
+import {TopCardAdapter} from './top_card_adapter';
 
 document.addEventListener('DOMContentLoaded', (event) => {
     var id_top_card = document.getElementById('id_top_card');

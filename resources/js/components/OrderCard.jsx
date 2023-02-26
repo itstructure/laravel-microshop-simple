@@ -21,7 +21,7 @@ class OrderCard extends Component {
     }
 
     setCountInCard(count, id) {
-        var t = this;
+        let t = this;
         axios.post('/set-count-in-card', {
             id: id,
             count: count !== undefined ? count : 1
@@ -50,7 +50,7 @@ class OrderCard extends Component {
     }
 
     removeFromCard(id) {
-        var t = this;
+        let t = this;
         axios.post('/remove-from-card', {
             id: id
 
@@ -83,7 +83,7 @@ class OrderCard extends Component {
     };
 
     sendOrder() {
-        var t = this;
+        let t = this;
         axios.post('/send-order', {
             card_counts: t.state.card_counts,
             user_name: t.state.user_name,
@@ -92,7 +92,7 @@ class OrderCard extends Component {
 
         }).then(function (resp) {
             try {
-                var data = resp.data;
+                let data = resp.data;
                 if (data.success == 1) {
                     window.top_card_component.setTotalAmount(0);
 
@@ -113,12 +113,12 @@ class OrderCard extends Component {
         }).catch(function (e) {
             console.error(e.response.data.message);
             if (e.response.data.errors !== undefined && Object.keys(e.response.data.errors).length) {
-                var userInputs = $('#user_inputs');
+                let userInputs = $('#user_inputs');
 
                 userInputs.find('.form-group').each(function () {
-                    var roleGroup = $(this).attr('role');
-                    var inputField = $(this).find('[name="'+roleGroup+'"]');
-                    var helpBlock = $(this).find('#help_block_'+roleGroup);
+                    let roleGroup = $(this).attr('role');
+                    let inputField = $(this).find('[name="'+roleGroup+'"]');
+                    let helpBlock = $(this).find('#help_block_'+roleGroup);
 
                     if (roleGroup in e.response.data.errors) {
                         if (!inputField.hasClass('is-invalid')) {
@@ -166,7 +166,7 @@ class OrderCard extends Component {
     }
 
     render() {
-        var rows = [];
+        let rows = [];
         for (let id in this.state.card_counts) {
             rows.push(
                 <tr key={id}>
@@ -176,7 +176,7 @@ class OrderCard extends Component {
                     <td>
                         <div className="product-logo mini">
                             <a href={"/product/"+(this.state.card_products[id].alias)}>
-                                <img src={"/images/product"+(this.state.card_products[id].catId)+".jpg"} />
+                                <img src={"/images/product"+(this.state.card_products[id].category_id)+".jpg"} />
                             </a>
                         </div>
                     </td>
