@@ -8,7 +8,7 @@
                 <div class="card my-2 product-block">
                     <div class="product-logo">
                         <a href="{{ route('product', ['alias' => $product->alias]) }}" target="_self">
-                            <img src="/images/product{{ $product->catId }}.jpg">
+                            <img src="/images/product{{ $product->category_id }}.jpg">
                         </a>
                     </div>
                     <div class="card-body">

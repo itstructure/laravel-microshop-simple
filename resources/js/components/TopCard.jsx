@@ -23,8 +23,7 @@ class TopCard extends Component {
         return (
             <a href="/card" className="top-card-link">
                 <div className="top-card-block">
-                    <div className="top-card-icon">
-                    </div>
+                    <div className="top-card-icon" />
                     <div className="top-card-amount">
                         $ {this.state.total_amount}
                     </div>

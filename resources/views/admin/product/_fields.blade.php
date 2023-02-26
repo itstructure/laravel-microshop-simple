@@ -58,15 +58,15 @@
     <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
         <div class="form-group mb-3">
             <label for="id_category">Category</label>
-            <select name="catId" class="custom-select @if ($errors->has('catId')) is-invalid @endif" id="id_category" aria-describedby="validationCatIdFeedback">
+            <select name="category_id" class="custom-select @if ($errors->has('category_id')) is-invalid @endif" id="id_category" aria-describedby="validationCatIdFeedback">
                 <option value="0" selected disabled>Choose...</option>
                 @foreach($categories as $catId => $catTitle)
                     <option value="{{ $catId }}" @if(!empty($model) && $catId == $model->category->id) selected @endif >{{ $catTitle }}</option>
                 @endforeach
             </select>
-            @if ($errors->has('catId'))
+            @if ($errors->has('category_id'))
                 <div class="invalid-feedback" id="validationCatIdFeedback">
-                    <strong>{{ $errors->first('catId') }}</strong>
+                    <strong>{{ $errors->first('category_id') }}</strong>
                 </div>
             @endif
         </div>
