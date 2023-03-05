@@ -7,43 +7,47 @@
 
         <!-- Email Address -->
         <div class="mb-3 row">
-            <x-input-label for="email" :value="__('Email')" />
-            <div class="col-sm-10">
-                <x-text-input id="email" class="bg-white" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <div class="col-sm-4">
+                <x-input-label for="email" :value="__('Email')" class="mt-md-2 mb-0 mb-md-2 fw-bold" />
             </div>
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <div class="col-sm-8">
+                <x-text-input id="email" class="bg-light rounded-1" :invalid="$errors->has('email')"
+                              type="email" name="email"
+                              :value="old('email')" required autofocus autocomplete="username" />
+                <x-input-error :messages="$errors->get('email')" class="my-1" />
+            </div>
         </div>
 
         <!-- Password -->
-        <div class="mt-4 row">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <div class="col-sm-10">
-                <x-text-input id="password" class="bg-white"
+        <div class="mt-3 row">
+            <div class="col-sm-4">
+                <x-input-label for="password" :value="__('Password')" class="mt-md-2 mb-0 mb-md-2 fw-bold" />
+            </div>
+            <div class="col-sm-8">
+                <x-text-input id="password" class="bg-light rounded-1" :invalid="$errors->has('password')"
                               type="password"
                               name="password"
                               required autocomplete="current-password" />
+                <x-input-error :messages="$errors->get('password')" class="my-1" />
             </div>
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+        <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" name="remember" value="" id="remember_me">
+            <label class="form-check-label fw-bold" for="remember_me">
+                {{ __('Remember me') }}
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="d-flex justify-content-between align-items-center mt-3">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
+                <a class="link-primary" href="{{ route('password.request') }}">
                     {{ __('Forgot your password?') }}
                 </a>
             @endif
 
-            <x-primary-button class="ml-3">
+            <x-primary-button class="ml-3 px-5 fw-bold text-light">
                 {{ __('Log in') }}
             </x-primary-button>
         </div>

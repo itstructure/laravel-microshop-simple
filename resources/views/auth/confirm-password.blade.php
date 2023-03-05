@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
+    <div class="mb-4 text-dark">
         {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
     </div>
 
@@ -7,19 +7,21 @@
         @csrf
 
         <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="mb-3 row">
+            <div class="col-sm-4">
+                <x-input-label for="password" :value="__('Password')" class="mt-md-2 mb-0 mb-md-2 fw-bold" />
+            </div>
+            <div class="col-sm-8">
+                <x-text-input id="password" class="bg-light rounded-1" :invalid="$errors->has('password')"
+                              type="password"
+                              name="password"
+                              required autocomplete="current-password" />
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            </div>
         </div>
 
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
+        <div class="d-flex justify-content-end align-items-center mt-3">
+            <x-primary-button class="px-5 fw-bold text-light">
                 {{ __('Confirm') }}
             </x-primary-button>
         </div>

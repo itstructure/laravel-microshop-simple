@@ -17,7 +17,7 @@
     </head>
     <body class="h-100">
         <div class="d-flex justify-content-center align-items-center h-100">
-            <div class="col-3 bg-primary-subtle py-2 px-2 rounded">
+            <div class="mx-1 col-10 col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3 bg-dark-subtle bg-gradient py-3 px-3 rounded-3 shadow">
                 {{ $slot }}
             </div>
         </div>
