@@ -52,7 +52,7 @@ interface UploadProcessorInterface
      * Save file in storage and database.
      * @return bool
      */
-    public function save(): bool ;
+    public function save(): bool;
 
     /**
      * Delete file from storage and database.
