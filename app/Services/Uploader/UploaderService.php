@@ -2,8 +2,7 @@
 
 namespace App\Services\Uploader;
 
-use App\Services\Uploader\Interfaces\UploadProcessorInterface;
-use App\Services\Uploader\Processors\{LocalProcessor, S3Processor};
+use App\Services\Uploader\Processors\{LocalProcessor, S3Processor, BaseProcessor};
 
 class UploaderService
 {
@@ -42,11 +41,11 @@ class UploaderService
     private $s3Config;
 
     /**
-     * @var UploadProcessorInterface
+     * @var BaseProcessor
      */
     private $processor;
 
-    public static function getInstance(array $config)
+    public static function getInstance(array $config): self
     {
         $obj = new static();
         foreach ($config as $key => $value) {
@@ -60,11 +59,9 @@ class UploaderService
     {
         switch ($this->storageType) {
             case self::STORAGE_TYPE_LOCAL:
-                $this->processor = LocalProcessor::getInstance($this->localConfig);
-                break;
+                return $this->setProcessor(LocalProcessor::getInstance($this->localConfig));
             case self::STORAGE_TYPE_S3:
-                $this->processor = S3Processor::getInstance($this->s3Config);
-                break;
+                return $this->setProcessor(S3Processor::getInstance($this->s3Config));
         }
         return $this;
     }
@@ -99,10 +96,13 @@ class UploaderService
         return $this;
     }
 
-    /**
-     * @return UploadProcessorInterface|LocalProcessor|S3Processor
-     */
-    public function getProcessor(): UploadProcessorInterface
+    public function setProcessor(BaseProcessor $processor): self
+    {
+        $this->processor = $processor;
+        return $this;
+    }
+
+    public function getProcessor(): BaseProcessor
     {
         return $this->processor;
     }

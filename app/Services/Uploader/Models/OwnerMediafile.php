@@ -3,7 +3,7 @@
 namespace App\Services\Uploader\Models;
 
 use Illuminate\Database\Eloquent\{Collection, Builder as EloquentBuilder};
-use App\Services\Uploader\Interfaces\UploadProcessorInterface;
+use App\Services\Uploader\Processors\BaseProcessor;
 use App\Services\Uploader\Traits\HasCompositePrimaryKey;
 
 class OwnerMediafile extends Owner
@@ -56,7 +56,7 @@ class OwnerMediafile extends Owner
         $ownerMediafileModel = static::getEntityIdsQuery('mediafile_id', [
             'owner' => $owner,
             'owner_id' => $ownerId,
-            'owner_attribute' => UploadProcessorInterface::FILE_TYPE_THUMB,
+            'owner_attribute' => BaseProcessor::FILE_TYPE_THUMB,
         ])->first();
 
         if (null === $ownerMediafileModel) {
@@ -74,7 +74,7 @@ class OwnerMediafile extends Owner
      */
     public static function getImageFiles(string $owner, int $ownerId)
     {
-        return static::getMediaFiles($owner, $ownerId, UploadProcessorInterface::FILE_TYPE_IMAGE);
+        return static::getMediaFiles($owner, $ownerId, BaseProcessor::FILE_TYPE_IMAGE);
     }
 
     /**
@@ -85,7 +85,7 @@ class OwnerMediafile extends Owner
      */
     public static function getAudioFiles(string $owner, int $ownerId)
     {
-        return static::getMediaFiles($owner, $ownerId, UploadProcessorInterface::FILE_TYPE_AUDIO);
+        return static::getMediaFiles($owner, $ownerId, BaseProcessor::FILE_TYPE_AUDIO);
     }
 
     /**
@@ -96,7 +96,7 @@ class OwnerMediafile extends Owner
      */
     public static function getVideoFiles(string $owner, int $ownerId)
     {
-        return static::getMediaFiles($owner, $ownerId, UploadProcessorInterface::FILE_TYPE_VIDEO);
+        return static::getMediaFiles($owner, $ownerId, BaseProcessor::FILE_TYPE_VIDEO);
     }
 
     /**
@@ -107,7 +107,7 @@ class OwnerMediafile extends Owner
      */
     public static function getAppFiles(string $owner, int $ownerId)
     {
-        return static::getMediaFiles($owner, $ownerId, UploadProcessorInterface::FILE_TYPE_APP);
+        return static::getMediaFiles($owner, $ownerId, BaseProcessor::FILE_TYPE_APP);
     }
 
     /**
@@ -118,7 +118,7 @@ class OwnerMediafile extends Owner
      */
     public static function getTextFiles(string $owner, int $ownerId)
     {
-        return static::getMediaFiles($owner, $ownerId, UploadProcessorInterface::FILE_TYPE_TEXT);
+        return static::getMediaFiles($owner, $ownerId, BaseProcessor::FILE_TYPE_TEXT);
     }
 
     /**
@@ -129,7 +129,7 @@ class OwnerMediafile extends Owner
      */
     public static function getOtherFiles(string $owner, int $ownerId)
     {
-        return static::getMediaFiles($owner, $ownerId, UploadProcessorInterface::FILE_TYPE_OTHER);
+        return static::getMediaFiles($owner, $ownerId, BaseProcessor::FILE_TYPE_OTHER);
     }
 
     /**
