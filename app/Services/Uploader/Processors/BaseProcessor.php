@@ -4,6 +4,7 @@ namespace App\Services\Uploader\Processors;
 
 use \Exception;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Uploader\Models\Mediafile;
 use App\Services\Uploader\Interfaces\ThumbConfigInterface;
@@ -24,116 +25,57 @@ abstract class BaseProcessor
     const FILE_TYPE_OTHER = 'other';
     const FILE_TYPE_THUMB = 'thumbnail';
 
-    /**
-     * Alt text for the file.
-     * @var string
-     */
-    public $alt;
+    const THUMB_ALIAS_DEFAULT  = 'default';
+    const THUMB_ALIAS_ORIGINAL = 'original';
+    const THUMB_ALIAS_SMALL    = 'small';
+    const THUMB_ALIAS_MEDIUM   = 'medium';
+    const THUMB_ALIAS_LARGE    = 'large';
 
-    /**
-     * Title for the file.
-     * @var string
-     */
-    public $title;
+    const DIR_LENGTH_FIRST = 2;
+    const DIR_LENGTH_SECOND = 4;
 
+    /************************* CONFIG ATTRIBUTES *************************/
     /**
-     * File description.
-     * @var string
-     */
-    public $description;
-
-    /**
-     * Addition sub-directory for uploaded files.
-     * @var string
-     */
-    public $subDir;
-
-    /**
-     * Owner name (post, page, article e.t.c.).
-     * @var string
-     */
-    public $owner;
-
-    /**
-     * Owner id.
-     * @var int
-     */
-    public $ownerId;
-
-    /**
-     * Owner attribute (image, audio, thumbnail e.t.c.).
-     * @var string
-     */
-    public $ownerAttribute;
-
-    /**
-     * Needed file type for validation (thumbnail, image e.t.c.).
-     * @var string
-     */
-    public $neededFileType;
-
-    /**
-     * Rename file after upload.
      * @var bool
      */
-    public $renameFiles = true;
+    protected $renameFiles;
 
     /**
-     * File extensions.
-     * @var array
-     */
-    public $fileExtensions = [
-        self::FILE_TYPE_THUMB => [
-            'png', 'jpg', 'jpeg', 'gif',
-        ],
-        self::FILE_TYPE_IMAGE => [
-            'png', 'jpg', 'jpeg', 'gif',
-        ],
-        self::FILE_TYPE_AUDIO => [
-            'mp3',
-        ],
-        self::FILE_TYPE_VIDEO => [
-            'mp4', 'ogg', 'ogv', 'oga', 'ogx', 'webm',
-        ],
-        self::FILE_TYPE_APP => [
-            'doc', 'docx', 'rtf', 'pdf', 'rar', 'zip', 'jar', 'mcd', 'xls',
-        ],
-        self::FILE_TYPE_TEXT => [
-            'txt',
-        ],
-        self::FILE_TYPE_OTHER => null,
-    ];
-
-    /**
-     * Check extension by MIME type (they are must match).
      * @var bool
      */
-    public $checkExtensionByMimeType = true;
+    protected $checkExtensionByMimeType;
 
     /**
-     * Maximum file size.
      * @var int
      */
-    public $fileMaxSize = 1024*1024*64;
+    protected $fileMaxSize;
 
     /**
-     * Thumbs config with their types and sizes.
      * @var array
      */
-    public $thumbsConfig = [];
+    protected $fileExtensions;
 
     /**
-     * Thumbnails name template.
-     * Values can be the next: {original}, {width}, {height}, {alias}, {extension}
+     * @var array
+     */
+    protected $thumbsConfig;
+
+    /**
      * @var string
      */
-    public $thumbFilenameTemplate = '{original}-{width}-{height}-{alias}.{extension}';
+    protected $thumbFilenameTemplate;
 
     /**
-     * Directories for uploaded files depending on the file type.
      * @var array
      */
-    public $uploadDirs;
+    protected $uploadDirs;
+
+
+    /************************* PROCESS ATTRIBUTES *************************/
+    /**
+     * @var array
+     */
+    protected $data = [];
 
     /**
      * Directory for uploaded files.
@@ -174,6 +116,9 @@ abstract class BaseProcessor
      */
     protected $file;
 
+    /**
+     * @var MessageBag
+     */
     protected $errors;
 
     /**
@@ -230,6 +175,90 @@ abstract class BaseProcessor
             $obj->{'set' . ucfirst($key)}($value);
         }
         return $obj;
+    }
+
+
+    /************************* CONFIG SETTERS ****************************/
+    /**
+     * @param bool $renameFiles
+     * @return BaseProcessor
+     */
+    public function setRenameFiles(bool $renameFiles): self
+    {
+        $this->renameFiles = $renameFiles;
+        return $this;
+    }
+
+    /**
+     * @param bool $checkExtensionByMimeType
+     * @return BaseProcessor
+     */
+    public function setCheckExtensionByMimeType(bool $checkExtensionByMimeType): self
+    {
+        $this->checkExtensionByMimeType = $checkExtensionByMimeType;
+        return $this;
+    }
+
+    /**
+     * @param int $fileMaxSize
+     * @return BaseProcessor
+     */
+    public function setFileMaxSize(int $fileMaxSize): self
+    {
+        $this->fileMaxSize = $fileMaxSize;
+        return $this;
+    }
+
+    /**
+     * @param array $fileExtensions
+     * @return BaseProcessor
+     */
+    public function setFileExtensions(array $fileExtensions): self
+    {
+        $this->fileExtensions = $fileExtensions;
+        return $this;
+    }
+
+    /**
+     * @param array $thumbsConfig
+     * @return BaseProcessor
+     */
+    public function setThumbsConfig(array $thumbsConfig): self
+    {
+        $this->thumbsConfig = $thumbsConfig;
+        return $this;
+    }
+
+    /**
+     * @param string $thumbFilenameTemplate
+     * @return BaseProcessor
+     */
+    public function setThumbFilenameTemplate(string $thumbFilenameTemplate): self
+    {
+        $this->thumbFilenameTemplate = $thumbFilenameTemplate;
+        return $this;
+    }
+
+    /**
+     * @param array $uploadDirs
+     * @return BaseProcessor
+     */
+    public function setUploadDirs(array $uploadDirs): self
+    {
+        $this->uploadDirs = $uploadDirs;
+        return $this;
+    }
+
+
+    /************************* PROCESS METHODS ***************************/
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+        return $this;
     }
 
     /**
@@ -294,7 +323,7 @@ abstract class BaseProcessor
             $this->setParamsForSend();
 
             if (!$this->sendFile()) {
-                throw new \Exception('Error upload file.', 500);
+                throw new \Exception('Error upload file.');
             }
 
             if ($this->scenario == self::SCENARIO_UPDATE) {
@@ -309,12 +338,12 @@ abstract class BaseProcessor
             $this->mediafileModel->storage = $this->getStorageType();
         }
 
-        $this->mediafileModel->alt = $this->alt;
-        $this->mediafileModel->title = $this->title;
-        $this->mediafileModel->description = $this->description;
+        $this->mediafileModel->alt = $this->data['alt'];
+        $this->mediafileModel->title = $this->data['title'];
+        $this->mediafileModel->description = $this->data['description'];
 
         if (!$this->mediafileModel->save()) {
-            throw new \Exception('Error save file data in database.', 500);
+            throw new \Exception('Error save file data in database.');
         }
 
         $this->afterSave();
@@ -351,37 +380,76 @@ abstract class BaseProcessor
     }
 
     /**
-     * Set attributes with their values.
-     * @param $values
-     * @return mixed
-     */
-    public function setAttributes($values)
-    {
-
-    }
-
-    /**
      * Validate data.
-     * @return mixed
+     * @return bool
      */
-    public function validate()
+    public function validate(): bool
     {
-        $validator = Validator::make([], $this->validateRules($this->scenario));
+        $validator = Validator::make($this->data, $this->validateRules($this->scenario));
+        if ($validator->fails()) {
+            $this->errors = $validator->getMessageBag();
+            return false;
+        }
+        return true;
     }
 
     /**
-     * Returns the errors for all attributes.
-     * @return array.
+     * @return MessageBag|null
      */
-    public function getErrors()
+    public function getErrors(): ?MessageBag
     {
-
+        return $this->errors;
     }
 
+    /**
+     * @param string $scenario
+     * @return array
+     */
     protected function validateRules(string $scenario): array
     {
-        return [
+        switch ($scenario) {
+            case self::SCENARIO_UPLOAD:
+                return [
 
-        ];
+                ];
+            case self::SCENARIO_UPDATE:
+                return [
+
+                ];
+            default:
+                return [];
+        }
+    }
+
+    /**
+     * Get upload directory configuration by file type.
+     * @param string $fileType
+     * @throws Exception
+     * @return string
+     */
+    protected function getUploadDirConfig(string $fileType): string
+    {
+        if (!is_array($this->uploadDirs) || empty($this->uploadDirs)) {
+            throw new Exception('The localUploadDirs is not defined.');
+        }
+
+        if (strpos($fileType, self::FILE_TYPE_IMAGE) !== false) {
+            return $this->uploadDirs[self::FILE_TYPE_IMAGE];
+
+        } elseif (strpos($fileType, self::FILE_TYPE_AUDIO) !== false) {
+            return $this->uploadDirs[self::FILE_TYPE_AUDIO];
+
+        } elseif (strpos($fileType, self::FILE_TYPE_VIDEO) !== false) {
+            return $this->uploadDirs[self::FILE_TYPE_VIDEO];
+
+        } elseif (strpos($fileType, self::FILE_TYPE_APP) !== false) {
+            return $this->uploadDirs[self::FILE_TYPE_APP];
+
+        } elseif (strpos($fileType, self::FILE_TYPE_TEXT) !== false) {
+            return $this->uploadDirs[self::FILE_TYPE_TEXT];
+
+        } else {
+            return $this->uploadDirs[self::FILE_TYPE_OTHER];
+        }
     }
 }

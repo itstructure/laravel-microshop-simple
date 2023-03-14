@@ -9,12 +9,6 @@ class UploaderService
     const STORAGE_TYPE_LOCAL = 'local';
     const STORAGE_TYPE_S3 = 's3';
 
-    const THUMB_ALIAS_DEFAULT  = 'default';
-    const THUMB_ALIAS_ORIGINAL = 'original';
-    const THUMB_ALIAS_SMALL    = 'small';
-    const THUMB_ALIAS_MEDIUM   = 'medium';
-    const THUMB_ALIAS_LARGE    = 'large';
-
     /**
      * @var string
      */
@@ -28,7 +22,7 @@ class UploaderService
     /**
      * @var array
      */
-    private $thumbsConfig;
+    private $baseConfig;
 
     /**
      * @var array
@@ -59,9 +53,13 @@ class UploaderService
     {
         switch ($this->storageType) {
             case self::STORAGE_TYPE_LOCAL:
-                return $this->setProcessor(LocalProcessor::getInstance($this->localConfig));
+                return $this->setProcessor(
+                    LocalProcessor::getInstance(array_merge($this->baseConfig, $this->localConfig))
+                );
             case self::STORAGE_TYPE_S3:
-                return $this->setProcessor(S3Processor::getInstance($this->s3Config));
+                return $this->setProcessor(
+                    S3Processor::getInstance(array_merge($this->baseConfig, $this->s3Config))
+                );
         }
         return $this;
     }
@@ -78,9 +76,9 @@ class UploaderService
         return $this;
     }
 
-    public function setThumbsConfig(array $thumbsConfig): self
+    public function setBaseConfig(array $baseConfig): self
     {
-        $this->thumbsConfig = $thumbsConfig;
+        $this->baseConfig = $baseConfig;
         return $this;
     }
 
