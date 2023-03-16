@@ -10,27 +10,44 @@ class ThumbConfig
     /**
      * @var string
      */
-    public $alias;
+    private $alias;
 
     /**
      * @var string
      */
-    public $name;
+    private $name;
 
     /**
      * @var int|null
      */
-    public $width;
+    private $width;
 
     /**
      * @var int|null
      */
-    public $height;
+    private $height;
 
     /**
      * @var
      */
-    public $mode;
+    private $mode;
+
+    /**
+     * ThumbConfig constructor.
+     * @param string $alias
+     * @param string $name
+     * @param int|null $width
+     * @param int|null $height
+     * @param string|null $mode
+     */
+    public function __construct(string $alias, string $name, ?int $width, ?int $height, string $mode = null)
+    {
+        $this->alias = $alias;
+        $this->name = $name;
+        $this->width = $width;
+        $this->height = $height;
+        $this->mode = $mode;
+    }
 
     /**
      * @return string

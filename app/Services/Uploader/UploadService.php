@@ -4,10 +4,16 @@ namespace App\Services\Uploader;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\{MessageBag, Str};
-use Illuminate\Support\Facades\{Storage, Validator};
+use Illuminate\Support\{
+    MessageBag, Str
+};
+use Illuminate\Support\Facades\{
+    Storage, Validator
+};
 use App\Services\Uploader\Classes\ThumbConfig;
-use App\Services\Uploader\Helpers\ImageHelper;
+use App\Services\Uploader\Helpers\{
+    ImageHelper, ThumbHelper
+};
 use App\Services\Uploader\Models\Mediafile;
 
 class UploadService
@@ -26,11 +32,11 @@ class UploadService
     const FILE_TYPE_OTHER = 'other';
     const FILE_TYPE_THUMB = 'thumbnail';
 
-    const THUMB_ALIAS_DEFAULT  = 'default';
+    const THUMB_ALIAS_DEFAULT = 'default';
     const THUMB_ALIAS_ORIGINAL = 'original';
-    const THUMB_ALIAS_SMALL    = 'small';
-    const THUMB_ALIAS_MEDIUM   = 'medium';
-    const THUMB_ALIAS_LARGE    = 'large';
+    const THUMB_ALIAS_SMALL = 'small';
+    const THUMB_ALIAS_MEDIUM = 'medium';
+    const THUMB_ALIAS_LARGE = 'large';
 
     const DIR_LENGTH_FIRST = 2;
     const DIR_LENGTH_SECOND = 4;
@@ -372,24 +378,13 @@ class UploadService
         ImageHelper::$driver = [ImageHelper::DRIVER_GD2, ImageHelper::DRIVER_GMAGICK, ImageHelper::DRIVER_IMAGICK];
 
         foreach ($this->thumbSizes as $alias => $preset) {
-            $thumbUrl = $this->createThumb(Module::configureThumb($alias, $preset));
-            if (null === $thumbUrl) {
-                continue;
-            }
-            $thumbs[$alias] = $thumbUrl;
+            $thumbs[$alias] = $this->createThumb(ThumbHelper::configureThumb($alias, $preset));
         }
 
         // Create default thumb.
         if (!array_key_exists(self::THUMB_ALIAS_DEFAULT, $this->thumbSizes)) {
-            $thumbUrlDefault = $this->createThumb(
-                Module::configureThumb(
-                    self::THUMB_ALIAS_DEFAULT,
-                    Module::getDefaultThumbConfig()
-                )
-            );
-            if (null !== $thumbUrlDefault) {
-                $thumbs[self::THUMB_ALIAS_DEFAULT] = $thumbUrlDefault;
-            }
+            $defaultThumbConfig = ThumbHelper::configureThumb(self::THUMB_ALIAS_DEFAULT, ThumbHelper::getDefaultSizes());
+            $thumbs[self::THUMB_ALIAS_DEFAULT] = $this->createThumb($defaultThumbConfig);
         }
 
         $this->mediafileModel->thumbs = serialize($thumbs);
@@ -416,7 +411,8 @@ class UploadService
                 $thumbConfig->getHeight()
             );
 
-        $thumbContent = ImageHelper::thumbnail(Storage::path($this->mediafileModel->url),
+        $thumbContent = ImageHelper::thumbnail(
+            ImageHelper::getImagine()->load(Storage::get($this->mediafileModel->url)),
             $thumbConfig->getWidth(),
             $thumbConfig->getHeight(),
             $thumbConfig->getMode()
@@ -515,11 +511,11 @@ class UploadService
     private function getThumbFilename($original, $extension, $alias, $width, $height)
     {
         return strtr($this->thumbFilenameTemplate, [
-            '{original}'  => $original,
+            '{original}' => $original,
             '{extension}' => $extension,
-            '{alias}'     => $alias,
-            '{width}'     => $width,
-            '{height}'    => $height,
+            '{alias}' => $alias,
+            '{width}' => $width,
+            '{height}' => $height,
         ]);
     }
 
