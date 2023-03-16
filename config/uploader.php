@@ -1,64 +1,58 @@
 <?php
 
-use App\Services\Uploader\Processors\BaseProcessor;
+use App\Services\Uploader\UploadService;
 
 return [
     'baseUrl' => config('app.url'),
-    'baseConfig' => [
-        'renameFiles' => true,
-        'checkExtensionByMimeType' => true,
-        'fileMaxSize' => 1024*1024*64,
-        'fileExtensions' => [
-            BaseProcessor::FILE_TYPE_THUMB => [
-                'png', 'jpg', 'jpeg', 'gif',
-            ],
-            BaseProcessor::FILE_TYPE_IMAGE => [
-                'png', 'jpg', 'jpeg', 'gif',
-            ],
-            BaseProcessor::FILE_TYPE_AUDIO => [
-                'mp3',
-            ],
-            BaseProcessor::FILE_TYPE_VIDEO => [
-                'mp4', 'ogg', 'ogv', 'oga', 'ogx', 'webm',
-            ],
-            BaseProcessor::FILE_TYPE_APP => [
-                'doc', 'docx', 'rtf', 'pdf', 'rar', 'zip', 'jar', 'mcd', 'xls',
-            ],
-            BaseProcessor::FILE_TYPE_TEXT => [
-                'txt',
-            ],
-            BaseProcessor::FILE_TYPE_OTHER => null,
+    'renameFiles' => true,
+    'checkExtensionByMimeType' => true,
+    'fileMaxSize' => 1024 * 1024 * 64,
+    'fileExtensions' => [
+        UploadService::FILE_TYPE_THUMB => [
+            'png', 'jpg', 'jpeg', 'gif',
         ],
-        'thumbSizes' => [
-            BaseProcessor::THUMB_ALIAS_DEFAULT => [
-                'name' => 'Default size',
-                'size' => [200, null],
-            ],
-            BaseProcessor::THUMB_ALIAS_SMALL => [
-                'name' => 'Small size',
-                'size' => [100, null],
-            ],
-            BaseProcessor::THUMB_ALIAS_MEDIUM => [
-                'name' => 'Medium size',
-                'size' => [400, null],
-            ],
-            BaseProcessor::THUMB_ALIAS_LARGE => [
-                'name' => 'Large size',
-                'size' => [970, null],
-            ],
+        UploadService::FILE_TYPE_IMAGE => [
+            'png', 'jpg', 'jpeg', 'gif',
         ],
-        'thumbFilenameTemplate' => '{original}-{width}-{height}-{alias}.{extension}',
-        'uploadDirectories' => [
-            BaseProcessor::FILE_TYPE_IMAGE => 'images',
-            BaseProcessor::FILE_TYPE_AUDIO => 'audio',
-            BaseProcessor::FILE_TYPE_VIDEO => 'video',
-            BaseProcessor::FILE_TYPE_APP => 'application',
-            BaseProcessor::FILE_TYPE_TEXT => 'text',
-            BaseProcessor::FILE_TYPE_OTHER => 'other',
+        UploadService::FILE_TYPE_AUDIO => [
+            'mp3',
+        ],
+        UploadService::FILE_TYPE_VIDEO => [
+            'mp4', 'ogg', 'ogv', 'oga', 'ogx', 'webm',
+        ],
+        UploadService::FILE_TYPE_APP => [
+            'doc', 'docx', 'rtf', 'pdf', 'rar', 'zip', 'jar', 'mcd', 'xls',
+        ],
+        UploadService::FILE_TYPE_TEXT => [
+            'txt',
+        ],
+        UploadService::FILE_TYPE_OTHER => null,
+    ],
+    'thumbSizes' => [
+        UploadService::THUMB_ALIAS_DEFAULT => [
+            'name' => 'Default size',
+            'size' => [200, null],
+        ],
+        UploadService::THUMB_ALIAS_SMALL => [
+            'name' => 'Small size',
+            'size' => [100, null],
+        ],
+        UploadService::THUMB_ALIAS_MEDIUM => [
+            'name' => 'Medium size',
+            'size' => [400, null],
+        ],
+        UploadService::THUMB_ALIAS_LARGE => [
+            'name' => 'Large size',
+            'size' => [970, null],
         ],
     ],
-    'localConfig' => [],
-    's3Config' => [
-        'bucketsMap' => [],
+    'thumbFilenameTemplate' => '{original}-{width}-{height}-{alias}.{extension}',
+    'uploadDirectories' => [
+        UploadService::FILE_TYPE_IMAGE => 'images',
+        UploadService::FILE_TYPE_AUDIO => 'audio',
+        UploadService::FILE_TYPE_VIDEO => 'video',
+        UploadService::FILE_TYPE_APP => 'application',
+        UploadService::FILE_TYPE_TEXT => 'text',
+        UploadService::FILE_TYPE_OTHER => 'other',
     ],
 ];

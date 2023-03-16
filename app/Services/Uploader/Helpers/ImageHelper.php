@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Services\Uploader\Helpers;
 
 use Exception;
-use Imagine\Image\{
-    Box, BoxInterface, ImageInterface, ImagineInterface, ManipulatorInterface, Point, Palette\RGB
-};
-use Imagine\Filter\Basic\Autorotate;
 use Illuminate\Support\Arr;
+use Imagine\Filter\Basic\Autorotate;
+use Imagine\Image\{Box, BoxInterface, ImageInterface, ImagineInterface, ManipulatorInterface, Palette\RGB, Point};
 
 
 class ImageHelper

@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Services\Uploader\Processors;
+namespace App\Services\Uploader;
 
-use \Exception;
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\{MessageBag, Str};
-use Illuminate\Support\Facades\{Validator, Storage};
+use Illuminate\Support\Facades\{Storage, Validator};
+use App\Services\Uploader\Classes\ThumbConfig;
+use App\Services\Uploader\Helpers\ImageHelper;
 use App\Services\Uploader\Models\Mediafile;
-use App\Services\Uploader\Interfaces\ThumbConfigInterface;
 
-abstract class BaseProcessor
+class UploadService
 {
     const SCENARIO_UPLOAD = 'upload';
     const SCENARIO_UPDATE = 'update';
@@ -36,121 +37,94 @@ abstract class BaseProcessor
 
     /************************* CONFIG ATTRIBUTES *************************/
     /**
-     * @var bool
+     * @var string
      */
-    protected $renameFiles;
+    private $baseUrl;
 
     /**
      * @var bool
      */
-    protected $checkExtensionByMimeType;
+    private $renameFiles;
+
+    /**
+     * @var bool
+     */
+    private $checkExtensionByMimeType;
 
     /**
      * @var int
      */
-    protected $fileMaxSize;
+    private $fileMaxSize;
 
     /**
      * @var array
      */
-    protected $fileExtensions;
+    private $fileExtensions;
 
     /**
      * @var array
      */
-    protected $thumbSizes;
+    private $thumbSizes;
 
     /**
      * @var string
      */
-    protected $thumbFilenameTemplate;
+    private $thumbFilenameTemplate;
 
     /**
      * @var array
      */
-    protected $uploadDirectories;
+    private $uploadDirectories;
 
 
     /************************* PROCESS ATTRIBUTES *************************/
     /**
      * @var array
      */
-    protected $data = [];
-
-    /**
-     * Directory for uploaded files.
-     * @var string
-     */
-    protected $uploadDirectory;
-
-    /**
-     * Prepared file name to save in database and storage.
-     * @var string
-     */
-    protected $outFileName;
-
-    /**
-     * File url path for database.
-     * @var string
-     */
-    protected $databaseUrl;
+    private $data = [];
 
     /**
      * @var string
      */
-    protected $scenario;
+    private $uploadDirectory;
+
+    /**
+     * @var string
+     */
+    private $directoryForDelete;
+
+    /**
+     * @var string
+     */
+    private $outFileName;
+
+    /**
+     * @var string
+     */
+    private $databaseUrl;
+
+    /**
+     * @var string
+     */
+    private $scenario;
 
     /**
      * @var Mediafile
      */
-    protected $mediafileModel;
+    private $mediafileModel;
 
     /**
      * @var UploadedFile
      */
-    protected $file;
+    private $file;
 
     /**
      * @var MessageBag
      */
-    protected $errors;
+    private $errors;
 
-    /**
-     * Set some params for delete.
-     * @return void
-     */
-    abstract protected function setParamsForDelete(): void;
 
-    /**
-     * Send file to local directory or send file to remote storage.
-     * @return bool
-     */
-    abstract protected function sendFile(): bool;
-
-    /**
-     * Delete files from local directory or from remote storage.
-     * @return bool
-     */
-    abstract protected function deleteFiles(): bool;
-
-    /**
-     * Create thumb.
-     * @param ThumbConfigInterface $thumbConfig
-     * @return string|null
-     */
-    abstract protected function createThumb(ThumbConfigInterface $thumbConfig);
-
-    /**
-     * Actions after main save.
-     * @return mixed
-     */
-    abstract protected function afterSave();
-
-    /**
-     * @param array $config
-     * @return static
-     */
-    public static function getInstance(array $config)
+    public static function getInstance(array $config): self
     {
         $obj = new static();
         foreach ($config as $key => $value) {
@@ -162,8 +136,18 @@ abstract class BaseProcessor
 
     /************************* CONFIG SETTERS ****************************/
     /**
+     * @param string $baseUrl
+     * @return $this
+     */
+    public function setBaseUrl(string $baseUrl): self
+    {
+        $this->baseUrl = $baseUrl;
+        return $this;
+    }
+
+    /**
      * @param bool $renameFiles
-     * @return BaseProcessor
+     * @return $this
      */
     public function setRenameFiles(bool $renameFiles): self
     {
@@ -173,7 +157,7 @@ abstract class BaseProcessor
 
     /**
      * @param bool $checkExtensionByMimeType
-     * @return BaseProcessor
+     * @return $this
      */
     public function setCheckExtensionByMimeType(bool $checkExtensionByMimeType): self
     {
@@ -183,7 +167,7 @@ abstract class BaseProcessor
 
     /**
      * @param int $fileMaxSize
-     * @return BaseProcessor
+     * @return $this
      */
     public function setFileMaxSize(int $fileMaxSize): self
     {
@@ -193,7 +177,7 @@ abstract class BaseProcessor
 
     /**
      * @param array $fileExtensions
-     * @return BaseProcessor
+     * @return $this
      */
     public function setFileExtensions(array $fileExtensions): self
     {
@@ -203,7 +187,7 @@ abstract class BaseProcessor
 
     /**
      * @param array $thumbSizes
-     * @return BaseProcessor
+     * @return $this
      */
     public function setThumbSizes(array $thumbSizes): self
     {
@@ -213,7 +197,7 @@ abstract class BaseProcessor
 
     /**
      * @param string $thumbFilenameTemplate
-     * @return BaseProcessor
+     * @return $this
      */
     public function setThumbFilenameTemplate(string $thumbFilenameTemplate): self
     {
@@ -223,7 +207,7 @@ abstract class BaseProcessor
 
     /**
      * @param array $uploadDirectories
-     * @return BaseProcessor
+     * @return $this
      */
     public function setUploadDirectories(array $uploadDirectories): self
     {
@@ -232,7 +216,7 @@ abstract class BaseProcessor
     }
 
 
-    /************************* PROCESS METHODS ***************************/
+    /********************** PROCESS PUBLIC METHODS ***********************/
     /**
      * @param array $data
      * @return $this
@@ -244,7 +228,6 @@ abstract class BaseProcessor
     }
 
     /**
-     * Set mediafile model.
      * @param Mediafile $model
      * @return $this
      */
@@ -255,7 +238,6 @@ abstract class BaseProcessor
     }
 
     /**
-     * Get mediafile model.
      * @return Mediafile
      */
     public function getMediafileModel(): Mediafile
@@ -264,7 +246,6 @@ abstract class BaseProcessor
     }
 
     /**
-     * Set file.
      * @param UploadedFile|null $file
      * @return $this
      */
@@ -275,7 +256,6 @@ abstract class BaseProcessor
     }
 
     /**
-     * Get file.
      * @return UploadedFile|null
      */
     public function getFile(): ?UploadedFile
@@ -284,7 +264,6 @@ abstract class BaseProcessor
     }
 
     /**
-     * Save file in storage and database.
      * @return bool
      * @throws Exception
      */
@@ -335,7 +314,6 @@ abstract class BaseProcessor
     }
 
     /**
-     * Delete files from local directory or from remote storage.
      * @return int
      * @throws Exception
      */
@@ -355,7 +333,6 @@ abstract class BaseProcessor
     }
 
     /**
-     * Returns mediafile model id.
      * @return int|string
      */
     public function getId()
@@ -364,44 +341,6 @@ abstract class BaseProcessor
     }
 
     /**
-     * Create thumbs for this image
-     * @throws Exception
-     * @return bool
-     */
-    public function createThumbs(): bool
-    {
-        $thumbs = [];
-
-        Image::$driver = [Image::DRIVER_GD2, Image::DRIVER_GMAGICK, Image::DRIVER_IMAGICK];
-
-        foreach ($this->thumbsConfig as $alias => $preset) {
-            $thumbUrl = $this->createThumb(Module::configureThumb($alias, $preset));
-            if (null === $thumbUrl) {
-                continue;
-            }
-            $thumbs[$alias] = $thumbUrl;
-        }
-
-        // Create default thumb.
-        if (!array_key_exists(Module::THUMB_ALIAS_DEFAULT, $this->thumbsConfig)) {
-            $thumbUrlDefault = $this->createThumb(
-                Module::configureThumb(
-                    Module::THUMB_ALIAS_DEFAULT,
-                    Module::getDefaultThumbConfig()
-                )
-            );
-            if (null !== $thumbUrlDefault) {
-                $thumbs[Module::THUMB_ALIAS_DEFAULT] = $thumbUrlDefault;
-            }
-        }
-
-        $this->mediafileModel->thumbs = serialize($thumbs);
-
-        return $this->mediafileModel->save();
-    }
-
-    /**
-     * Validate data.
      * @return bool
      */
     public function validate(): bool
@@ -423,10 +362,95 @@ abstract class BaseProcessor
     }
 
     /**
+     * @throws Exception
+     * @return bool
+     */
+    public function createThumbs(): bool
+    {
+        $thumbs = [];
+
+        ImageHelper::$driver = [ImageHelper::DRIVER_GD2, ImageHelper::DRIVER_GMAGICK, ImageHelper::DRIVER_IMAGICK];
+
+        foreach ($this->thumbSizes as $alias => $preset) {
+            $thumbUrl = $this->createThumb(Module::configureThumb($alias, $preset));
+            if (null === $thumbUrl) {
+                continue;
+            }
+            $thumbs[$alias] = $thumbUrl;
+        }
+
+        // Create default thumb.
+        if (!array_key_exists(self::THUMB_ALIAS_DEFAULT, $this->thumbSizes)) {
+            $thumbUrlDefault = $this->createThumb(
+                Module::configureThumb(
+                    self::THUMB_ALIAS_DEFAULT,
+                    Module::getDefaultThumbConfig()
+                )
+            );
+            if (null !== $thumbUrlDefault) {
+                $thumbs[self::THUMB_ALIAS_DEFAULT] = $thumbUrlDefault;
+            }
+        }
+
+        $this->mediafileModel->thumbs = serialize($thumbs);
+
+        return $this->mediafileModel->save();
+    }
+
+
+    /********************** PROCESS INTERNAL METHODS *********************/
+    /**
+     * @param ThumbConfig $thumbConfig
+     * @return string
+     */
+    private function createThumb(ThumbConfig $thumbConfig)
+    {
+        $originalPathInfo = pathinfo($this->mediafileModel->url);
+
+        $thumbPath = $originalPathInfo['dirname'] .
+            DIRECTORY_SEPARATOR .
+            $this->getThumbFilename($originalPathInfo['filename'],
+                $originalPathInfo['extension'],
+                $thumbConfig->getAlias(),
+                $thumbConfig->getWidth(),
+                $thumbConfig->getHeight()
+            );
+
+        $thumbContent = ImageHelper::thumbnail(Storage::path($this->mediafileModel->url),
+            $thumbConfig->getWidth(),
+            $thumbConfig->getHeight(),
+            $thumbConfig->getMode()
+        )->get($originalPathInfo['extension']);
+
+        Storage::put($thumbPath, $thumbContent);
+
+        return $thumbPath;
+    }
+
+    /**
+     * @return bool
+     */
+    private function sendFile(): bool
+    {
+        Storage::putFileAs($this->uploadDirectory, $this->file, $this->outFileName);
+
+        return Storage::fileExists($this->uploadDirectory . DIRECTORY_SEPARATOR . $this->outFileName);
+    }
+
+    /**
+     * Delete local directory with original file and thumbs.
+     * @return bool
+     */
+    private function deleteFiles(): bool
+    {
+        return Storage::deleteDirectory($this->directoryForDelete);
+    }
+
+    /**
      * @param string $scenario
      * @return array
      */
-    protected function validateRules(string $scenario): array
+    private function validateRules(string $scenario): array
     {
         switch ($scenario) {
             case self::SCENARIO_UPLOAD:
@@ -443,15 +467,10 @@ abstract class BaseProcessor
     }
 
     /**
-     * Set some params for send.
-     * It is needed to set the next parameters:
-     * $this->uploadDirectory
-     * $this->outFileName
-     * $this->databaseUrl
      * @throws \Exception
      * @return void
      */
-    protected function setParamsForSend(): void
+    private function setParamsForSend(): void
     {
         $uploadDirectory = rtrim(rtrim($this->getUploadDirConfig($this->file->getMimeType()), '/'), '\\');
 
@@ -471,7 +490,21 @@ abstract class BaseProcessor
     }
 
     /**
-     * Returns thumbnail name.
+     * @return void
+     */
+    private function setParamsForDelete(): void
+    {
+        $originalPathinfo = pathinfo($this->mediafileModel->getUrl());
+
+        $dirnameParent = substr($originalPathinfo['dirname'], 0, -(self::DIR_LENGTH_SECOND + 1));
+        $childDirectories = Storage::disk($this->mediafileModel->getDisk())->directories($dirnameParent);
+
+        $this->directoryForDelete = count($childDirectories) == 1
+            ? $dirnameParent
+            : $originalPathinfo['dirname'];
+    }
+
+    /**
      * @param $original
      * @param $extension
      * @param $alias
@@ -479,7 +512,7 @@ abstract class BaseProcessor
      * @param $height
      * @return string
      */
-    protected function getThumbFilename($original, $extension, $alias, $width, $height)
+    private function getThumbFilename($original, $extension, $alias, $width, $height)
     {
         return strtr($this->thumbFilenameTemplate, [
             '{original}'  => $original,
@@ -491,34 +524,43 @@ abstract class BaseProcessor
     }
 
     /**
-     * Get upload directory configuration by file type.
      * @param string $fileType
      * @throws Exception
      * @return string
      */
-    protected function getUploadDirConfig(string $fileType): string
+    private function getUploadDirConfig(string $fileType): string
     {
         if (!is_array($this->uploadDirectories) || empty($this->uploadDirectories)) {
             throw new Exception('The localUploadDirs is not defined.');
         }
 
-        if (strpos($fileType, self::FILE_TYPE_IMAGE) !== false) {
+        if (str_contains($fileType, self::FILE_TYPE_IMAGE)) {
             return $this->uploadDirectories[self::FILE_TYPE_IMAGE];
 
-        } elseif (strpos($fileType, self::FILE_TYPE_AUDIO) !== false) {
+        } elseif (str_contains($fileType, self::FILE_TYPE_AUDIO)) {
             return $this->uploadDirectories[self::FILE_TYPE_AUDIO];
 
-        } elseif (strpos($fileType, self::FILE_TYPE_VIDEO) !== false) {
+        } elseif (str_contains($fileType, self::FILE_TYPE_VIDEO)) {
             return $this->uploadDirectories[self::FILE_TYPE_VIDEO];
 
-        } elseif (strpos($fileType, self::FILE_TYPE_APP) !== false) {
+        } elseif (str_contains($fileType, self::FILE_TYPE_APP)) {
             return $this->uploadDirectories[self::FILE_TYPE_APP];
 
-        } elseif (strpos($fileType, self::FILE_TYPE_TEXT) !== false) {
+        } elseif (str_contains($fileType, self::FILE_TYPE_TEXT)) {
             return $this->uploadDirectories[self::FILE_TYPE_TEXT];
 
         } else {
             return $this->uploadDirectories[self::FILE_TYPE_OTHER];
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    private function afterSave()
+    {
+        if (!empty($this->data['owner_id']) && !empty($this->data['owner']) && !empty($this->data['owner_attribute'])) {
+            $this->mediafileModel->addOwner($this->data['owner_id'], $this->data['owner'], $this->data['owner_attribute']);
         }
     }
 }
