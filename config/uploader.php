@@ -1,10 +1,8 @@
 <?php
 
-use App\Services\Uploader\UploaderService;
 use App\Services\Uploader\Processors\BaseProcessor;
 
 return [
-    'storageType' => UploaderService::STORAGE_TYPE_LOCAL,
     'baseUrl' => config('app.url'),
     'baseConfig' => [
         'renameFiles' => true,
@@ -31,7 +29,7 @@ return [
             ],
             BaseProcessor::FILE_TYPE_OTHER => null,
         ],
-        'thumbsConfig' => [
+        'thumbSizes' => [
             BaseProcessor::THUMB_ALIAS_DEFAULT => [
                 'name' => 'Default size',
                 'size' => [200, null],
@@ -49,29 +47,8 @@ return [
                 'size' => [970, null],
             ],
         ],
-        'thumbFilenameTemplate' => '{original}-{width}-{height}-{alias}.{extension}'
-    ],
-    'localConfig' => [
-        'uploadRoot' => dirname($_SERVER['SCRIPT_FILENAME']),
-        'uploadDirs' => [
-            BaseProcessor::FILE_TYPE_IMAGE => storage_path('app/public') . DIRECTORY_SEPARATOR . 'images',
-            BaseProcessor::FILE_TYPE_AUDIO => storage_path('app/public') . DIRECTORY_SEPARATOR . 'audio',
-            BaseProcessor::FILE_TYPE_VIDEO => storage_path('app/public') . DIRECTORY_SEPARATOR . 'video',
-            BaseProcessor::FILE_TYPE_APP => storage_path('app/public') . DIRECTORY_SEPARATOR . 'application',
-            BaseProcessor::FILE_TYPE_TEXT => storage_path('app/public') . DIRECTORY_SEPARATOR . 'text',
-            BaseProcessor::FILE_TYPE_OTHER => storage_path('app/public') . DIRECTORY_SEPARATOR . 'other',
-        ]
-    ],
-    's3Config' => [
-        'clientVersion' => 'latest',
-        'credentials' => [
-            'key' => env('AWS_S3_KEY'),
-            'secret' => env('AWS_S3_SECRET'),
-        ],
-        'region' => 'us-west-2',
-        'defaultBucket' => 'filesmodule2',
-        'bucketsMap' => [],
-        'uploadDirs' => [
+        'thumbFilenameTemplate' => '{original}-{width}-{height}-{alias}.{extension}',
+        'uploadDirectories' => [
             BaseProcessor::FILE_TYPE_IMAGE => 'images',
             BaseProcessor::FILE_TYPE_AUDIO => 'audio',
             BaseProcessor::FILE_TYPE_VIDEO => 'video',
@@ -79,5 +56,9 @@ return [
             BaseProcessor::FILE_TYPE_TEXT => 'text',
             BaseProcessor::FILE_TYPE_OTHER => 'other',
         ],
+    ],
+    'localConfig' => [],
+    's3Config' => [
+        'bucketsMap' => [],
     ],
 ];

@@ -4,8 +4,8 @@ namespace App\Services\Uploader\Processors;
 
 use \Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\MessageBag;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\{MessageBag, Str};
+use Illuminate\Support\Facades\{Validator, Storage};
 use App\Services\Uploader\Models\Mediafile;
 use App\Services\Uploader\Interfaces\ThumbConfigInterface;
 
@@ -58,7 +58,7 @@ abstract class BaseProcessor
     /**
      * @var array
      */
-    protected $thumbsConfig;
+    protected $thumbSizes;
 
     /**
      * @var string
@@ -68,7 +68,7 @@ abstract class BaseProcessor
     /**
      * @var array
      */
-    protected $uploadDirs;
+    protected $uploadDirectories;
 
 
     /************************* PROCESS ATTRIBUTES *************************/
@@ -81,13 +81,7 @@ abstract class BaseProcessor
      * Directory for uploaded files.
      * @var string
      */
-    protected $uploadDir;
-
-    /**
-     * Full directory path to upload file.
-     * @var string
-     */
-    protected $uploadPath;
+    protected $uploadDirectory;
 
     /**
      * Prepared file name to save in database and storage.
@@ -122,12 +116,6 @@ abstract class BaseProcessor
     protected $errors;
 
     /**
-     * Set params for send file.
-     * @return void
-     */
-    abstract protected function setParamsForSend(): void;
-
-    /**
      * Set some params for delete.
      * @return void
      */
@@ -141,9 +129,9 @@ abstract class BaseProcessor
 
     /**
      * Delete files from local directory or from remote storage.
-     * @return void
+     * @return bool
      */
-    abstract protected function deleteFiles(): void;
+    abstract protected function deleteFiles(): bool;
 
     /**
      * Create thumb.
@@ -151,12 +139,6 @@ abstract class BaseProcessor
      * @return string|null
      */
     abstract protected function createThumb(ThumbConfigInterface $thumbConfig);
-
-    /**
-     * Get storage type (local, s3, e.t.c...).
-     * @return string
-     */
-    abstract protected function getStorageType(): string;
 
     /**
      * Actions after main save.
@@ -220,12 +202,12 @@ abstract class BaseProcessor
     }
 
     /**
-     * @param array $thumbsConfig
+     * @param array $thumbSizes
      * @return BaseProcessor
      */
-    public function setThumbsConfig(array $thumbsConfig): self
+    public function setThumbSizes(array $thumbSizes): self
     {
-        $this->thumbsConfig = $thumbsConfig;
+        $this->thumbSizes = $thumbSizes;
         return $this;
     }
 
@@ -240,12 +222,12 @@ abstract class BaseProcessor
     }
 
     /**
-     * @param array $uploadDirs
+     * @param array $uploadDirectories
      * @return BaseProcessor
      */
-    public function setUploadDirs(array $uploadDirs): self
+    public function setUploadDirectories(array $uploadDirectories): self
     {
-        $this->uploadDirs = $uploadDirs;
+        $this->uploadDirectories = $uploadDirectories;
         return $this;
     }
 
@@ -335,7 +317,8 @@ abstract class BaseProcessor
             $this->mediafileModel->filename = $this->outFileName;
             $this->mediafileModel->size = $this->file->getSize();
             $this->mediafileModel->type = $this->file->getMimeType();
-            $this->mediafileModel->storage = $this->getStorageType();
+            $this->mediafileModel->disk = Storage::getDefaultDriver();
+            $this->mediafileModel->driver = Storage::getConfig()['driver'];
         }
 
         $this->mediafileModel->alt = $this->data['alt'];
@@ -352,21 +335,32 @@ abstract class BaseProcessor
     }
 
     /**
-     * Delete file from storage and database.
+     * Delete files from local directory or from remote storage.
      * @return int
+     * @throws Exception
      */
     public function delete(): int
     {
+        $this->setParamsForDelete();
 
+        $this->deleteFiles();
+
+        $deleted = $this->mediafileModel->delete();
+
+        if (false === $deleted) {
+            throw new \Exception('Error delete file data from database.', 500);
+        }
+
+        return $deleted;
     }
 
     /**
-     * Returns current model id.
+     * Returns mediafile model id.
      * @return int|string
      */
     public function getId()
     {
-
+        return $this->mediafileModel->id;
     }
 
     /**
@@ -376,7 +370,34 @@ abstract class BaseProcessor
      */
     public function createThumbs(): bool
     {
+        $thumbs = [];
 
+        Image::$driver = [Image::DRIVER_GD2, Image::DRIVER_GMAGICK, Image::DRIVER_IMAGICK];
+
+        foreach ($this->thumbsConfig as $alias => $preset) {
+            $thumbUrl = $this->createThumb(Module::configureThumb($alias, $preset));
+            if (null === $thumbUrl) {
+                continue;
+            }
+            $thumbs[$alias] = $thumbUrl;
+        }
+
+        // Create default thumb.
+        if (!array_key_exists(Module::THUMB_ALIAS_DEFAULT, $this->thumbsConfig)) {
+            $thumbUrlDefault = $this->createThumb(
+                Module::configureThumb(
+                    Module::THUMB_ALIAS_DEFAULT,
+                    Module::getDefaultThumbConfig()
+                )
+            );
+            if (null !== $thumbUrlDefault) {
+                $thumbs[Module::THUMB_ALIAS_DEFAULT] = $thumbUrlDefault;
+            }
+        }
+
+        $this->mediafileModel->thumbs = serialize($thumbs);
+
+        return $this->mediafileModel->save();
     }
 
     /**
@@ -422,6 +443,54 @@ abstract class BaseProcessor
     }
 
     /**
+     * Set some params for send.
+     * It is needed to set the next parameters:
+     * $this->uploadDirectory
+     * $this->outFileName
+     * $this->databaseUrl
+     * @throws \Exception
+     * @return void
+     */
+    protected function setParamsForSend(): void
+    {
+        $uploadDirectory = rtrim(rtrim($this->getUploadDirConfig($this->file->getMimeType()), '/'), '\\');
+
+        if (!empty($this->data['subDir'])) {
+            $uploadDirectory = $uploadDirectory . DIRECTORY_SEPARATOR . trim(trim($this->data['subDir'], '/'), '\\');
+        }
+
+        $this->uploadDirectory = $uploadDirectory .
+            DIRECTORY_SEPARATOR . substr(md5(time()), 0, self::DIR_LENGTH_FIRST) .
+            DIRECTORY_SEPARATOR . substr(md5(microtime() . $this->file->getBasename()), 0, self::DIR_LENGTH_SECOND);
+
+        $this->outFileName = $this->renameFiles ?
+            Str::uuid() . '.' . $this->file->getExtension() :
+            Str::slug($this->file->getBasename()) . '.' . $this->file->getExtension();
+
+        $this->databaseUrl = $this->uploadDirectory . DIRECTORY_SEPARATOR . $this->outFileName;
+    }
+
+    /**
+     * Returns thumbnail name.
+     * @param $original
+     * @param $extension
+     * @param $alias
+     * @param $width
+     * @param $height
+     * @return string
+     */
+    protected function getThumbFilename($original, $extension, $alias, $width, $height)
+    {
+        return strtr($this->thumbFilenameTemplate, [
+            '{original}'  => $original,
+            '{extension}' => $extension,
+            '{alias}'     => $alias,
+            '{width}'     => $width,
+            '{height}'    => $height,
+        ]);
+    }
+
+    /**
      * Get upload directory configuration by file type.
      * @param string $fileType
      * @throws Exception
@@ -429,27 +498,27 @@ abstract class BaseProcessor
      */
     protected function getUploadDirConfig(string $fileType): string
     {
-        if (!is_array($this->uploadDirs) || empty($this->uploadDirs)) {
+        if (!is_array($this->uploadDirectories) || empty($this->uploadDirectories)) {
             throw new Exception('The localUploadDirs is not defined.');
         }
 
         if (strpos($fileType, self::FILE_TYPE_IMAGE) !== false) {
-            return $this->uploadDirs[self::FILE_TYPE_IMAGE];
+            return $this->uploadDirectories[self::FILE_TYPE_IMAGE];
 
         } elseif (strpos($fileType, self::FILE_TYPE_AUDIO) !== false) {
-            return $this->uploadDirs[self::FILE_TYPE_AUDIO];
+            return $this->uploadDirectories[self::FILE_TYPE_AUDIO];
 
         } elseif (strpos($fileType, self::FILE_TYPE_VIDEO) !== false) {
-            return $this->uploadDirs[self::FILE_TYPE_VIDEO];
+            return $this->uploadDirectories[self::FILE_TYPE_VIDEO];
 
         } elseif (strpos($fileType, self::FILE_TYPE_APP) !== false) {
-            return $this->uploadDirs[self::FILE_TYPE_APP];
+            return $this->uploadDirectories[self::FILE_TYPE_APP];
 
         } elseif (strpos($fileType, self::FILE_TYPE_TEXT) !== false) {
-            return $this->uploadDirs[self::FILE_TYPE_TEXT];
+            return $this->uploadDirectories[self::FILE_TYPE_TEXT];
 
         } else {
-            return $this->uploadDirs[self::FILE_TYPE_OTHER];
+            return $this->uploadDirectories[self::FILE_TYPE_OTHER];
         }
     }
 }

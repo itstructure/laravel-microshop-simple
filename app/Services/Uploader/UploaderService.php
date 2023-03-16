@@ -2,18 +2,12 @@
 
 namespace App\Services\Uploader;
 
+use Exception;
+use Illuminate\Support\Facades\Storage;
 use App\Services\Uploader\Processors\{LocalProcessor, S3Processor, BaseProcessor};
 
 class UploaderService
 {
-    const STORAGE_TYPE_LOCAL = 'local';
-    const STORAGE_TYPE_S3 = 's3';
-
-    /**
-     * @var string
-     */
-    private $storageType;
-
     /**
      * @var string
      */
@@ -51,23 +45,17 @@ class UploaderService
 
     public function initProcessor(): self
     {
-        switch ($this->storageType) {
-            case self::STORAGE_TYPE_LOCAL:
+        switch (Storage::getConfig()['driver']) {
+            case 'local':
                 return $this->setProcessor(
                     LocalProcessor::getInstance(array_merge($this->baseConfig, $this->localConfig))
                 );
-            case self::STORAGE_TYPE_S3:
+            case 's3':
                 return $this->setProcessor(
                     S3Processor::getInstance(array_merge($this->baseConfig, $this->s3Config))
                 );
         }
-        return $this;
-    }
-
-    public function setStorageType(string $storageType): self
-    {
-        $this->storageType = $storageType;
-        return $this;
+        throw new Exception('Storage driver ' . Storage::getConfig()['driver'] . ' is not allowed in uploader service');
     }
 
     public function setBaseUrl(string $baseUrl): self
