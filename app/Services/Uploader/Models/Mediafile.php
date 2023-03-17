@@ -24,4 +24,9 @@ class Mediafile extends Model
     {
         return $this->driver;
     }
+
+    public function addOwner(int $ownerId, string $owner, string $ownerAttribute): bool
+    {
+        return OwnerMediafile::addOwner($this->id, $ownerId, $owner, $ownerAttribute);
+    }
 }

@@ -85,6 +85,11 @@ class UploadService
 
     /************************* PROCESS ATTRIBUTES *************************/
     /**
+     * @var string
+     */
+    private $currentDisk;
+
+    /**
      * @var array
      */
     private $data = [];
@@ -98,6 +103,11 @@ class UploadService
      * @var string
      */
     private $directoryForDelete;
+
+    /**
+     * @var array
+     */
+    private $filesForDelete;
 
     /**
      * @var string
@@ -143,7 +153,7 @@ class UploadService
     /************************* CONFIG SETTERS ****************************/
     /**
      * @param string $baseUrl
-     * @return $this
+     * @return UploadService
      */
     public function setBaseUrl(string $baseUrl): self
     {
@@ -153,7 +163,7 @@ class UploadService
 
     /**
      * @param bool $renameFiles
-     * @return $this
+     * @return UploadService
      */
     public function setRenameFiles(bool $renameFiles): self
     {
@@ -163,7 +173,7 @@ class UploadService
 
     /**
      * @param bool $checkExtensionByMimeType
-     * @return $this
+     * @return UploadService
      */
     public function setCheckExtensionByMimeType(bool $checkExtensionByMimeType): self
     {
@@ -173,7 +183,7 @@ class UploadService
 
     /**
      * @param int $fileMaxSize
-     * @return $this
+     * @return UploadService
      */
     public function setFileMaxSize(int $fileMaxSize): self
     {
@@ -183,7 +193,7 @@ class UploadService
 
     /**
      * @param array $fileExtensions
-     * @return $this
+     * @return UploadService
      */
     public function setFileExtensions(array $fileExtensions): self
     {
@@ -193,7 +203,7 @@ class UploadService
 
     /**
      * @param array $thumbSizes
-     * @return $this
+     * @return UploadService
      */
     public function setThumbSizes(array $thumbSizes): self
     {
@@ -203,7 +213,7 @@ class UploadService
 
     /**
      * @param string $thumbFilenameTemplate
-     * @return $this
+     * @return UploadService
      */
     public function setThumbFilenameTemplate(string $thumbFilenameTemplate): self
     {
@@ -213,7 +223,7 @@ class UploadService
 
     /**
      * @param array $uploadDirectories
-     * @return $this
+     * @return UploadService
      */
     public function setUploadDirectories(array $uploadDirectories): self
     {
@@ -225,9 +235,9 @@ class UploadService
     /********************** PROCESS PUBLIC METHODS ***********************/
     /**
      * @param array $data
-     * @return $this
+     * @return UploadService
      */
-    public function setData(array $data)
+    public function setData(array $data): self
     {
         $this->data = $data;
         return $this;
@@ -235,9 +245,9 @@ class UploadService
 
     /**
      * @param Mediafile $model
-     * @return $this
+     * @return UploadService
      */
-    public function setMediafileModel(Mediafile $model)
+    public function setMediafileModel(Mediafile $model): self
     {
         $this->mediafileModel = $model;
         return $this;
@@ -253,9 +263,9 @@ class UploadService
 
     /**
      * @param UploadedFile|null $file
-     * @return $this
+     * @return UploadService
      */
-    public function setFile(UploadedFile $file = null)
+    public function setFile(UploadedFile $file = null): self
     {
         $this->file = $file;
         return $this;
@@ -275,27 +285,27 @@ class UploadService
      */
     public function save(): bool
     {
-        if (empty($this->mediafileModel->getKey())) {
-            $this->scenario = self::SCENARIO_UPLOAD;
-        } else {
-            $this->scenario = self::SCENARIO_UPDATE;
-        }
-
+        $this->detectScenario();
+        
         if (!$this->validate()) {
             return false;
         }
 
         if (null !== $this->file) {
 
-            $this->setParamsForSend();
+            if ($this->scenario == self::SCENARIO_UPLOAD) {
+                $this->setParamsForUpload();
+
+            } else if ($this->scenario == self::SCENARIO_UPDATE) {
+                $this->setParamsForUpdate();
+            }
 
             if (!$this->sendFile()) {
                 throw new \Exception('Error upload file.');
             }
 
             if ($this->scenario == self::SCENARIO_UPDATE) {
-                $this->setParamsForDelete();
-                $this->deleteFiles();
+                $this->deletePreviousFiles();
             }
 
             $this->mediafileModel->url = $this->databaseUrl;
@@ -325,13 +335,13 @@ class UploadService
      */
     public function delete(): int
     {
-        $this->setParamsForDelete();
+        $this->setDirectoryForDelete();
 
-        $this->deleteFiles();
+        $this->deleteDirectoryWithFiles();
 
         $deleted = $this->mediafileModel->delete();
 
-        if (false === $deleted) {
+        if (empty($deleted)) {
             throw new \Exception('Error delete file data from database.', 500);
         }
 
@@ -394,6 +404,15 @@ class UploadService
 
 
     /********************** PROCESS INTERNAL METHODS *********************/
+    private function detectScenario(): void
+    {
+        if (empty($this->mediafileModel->getKey())) {
+            $this->scenario = self::SCENARIO_UPLOAD;
+        } else {
+            $this->scenario = self::SCENARIO_UPDATE;
+        }
+    }
+    
     /**
      * @param ThumbConfig $thumbConfig
      * @return string
@@ -412,13 +431,13 @@ class UploadService
             );
 
         $thumbContent = ImageHelper::thumbnail(
-            ImageHelper::getImagine()->load(Storage::get($this->mediafileModel->url)),
+            ImageHelper::getImagine()->load(Storage::disk($this->currentDisk)->get($this->mediafileModel->url)),
             $thumbConfig->getWidth(),
             $thumbConfig->getHeight(),
             $thumbConfig->getMode()
         )->get($originalPathInfo['extension']);
 
-        Storage::put($thumbPath, $thumbContent);
+        Storage::disk($this->currentDisk)->put($thumbPath, $thumbContent);
 
         return $thumbPath;
     }
@@ -428,18 +447,25 @@ class UploadService
      */
     private function sendFile(): bool
     {
-        Storage::putFileAs($this->uploadDirectory, $this->file, $this->outFileName);
+        Storage::disk($this->currentDisk)->putFileAs($this->uploadDirectory, $this->file, $this->outFileName);
 
-        return Storage::fileExists($this->uploadDirectory . DIRECTORY_SEPARATOR . $this->outFileName);
+        return Storage::disk($this->currentDisk)->fileExists($this->uploadDirectory . DIRECTORY_SEPARATOR . $this->outFileName);
     }
 
     /**
-     * Delete local directory with original file and thumbs.
      * @return bool
      */
-    private function deleteFiles(): bool
+    private function deletePreviousFiles(): bool
     {
-        return Storage::deleteDirectory($this->directoryForDelete);
+        return Storage::disk($this->currentDisk)->delete($this->filesForDelete);
+    }
+
+    /**
+     * @return bool
+     */
+    private function deleteDirectoryWithFiles(): bool
+    {
+        return Storage::disk($this->currentDisk)->deleteDirectory($this->directoryForDelete);
     }
 
     /**
@@ -466,7 +492,7 @@ class UploadService
      * @throws \Exception
      * @return void
      */
-    private function setParamsForSend(): void
+    private function setParamsForUpload(): void
     {
         $uploadDirectory = rtrim(rtrim($this->getUploadDirConfig($this->file->getMimeType()), '/'), '\\');
 
@@ -485,15 +511,21 @@ class UploadService
         $this->databaseUrl = $this->uploadDirectory . DIRECTORY_SEPARATOR . $this->outFileName;
     }
 
+    private function setParamsForUpdate(): void
+    {
+        $originalPathinfo = pathinfo($this->mediafileModel->getUrl());
+        $this->uploadDirectory = $originalPathinfo['dirname'];
+    }
+
     /**
      * @return void
      */
-    private function setParamsForDelete(): void
+    private function setDirectoryForDelete(): void
     {
         $originalPathinfo = pathinfo($this->mediafileModel->getUrl());
 
         $dirnameParent = substr($originalPathinfo['dirname'], 0, -(self::DIR_LENGTH_SECOND + 1));
-        $childDirectories = Storage::disk($this->mediafileModel->getDisk())->directories($dirnameParent);
+        $childDirectories = Storage::disk($this->currentDisk)->directories($dirnameParent);
 
         $this->directoryForDelete = count($childDirectories) == 1
             ? $dirnameParent
