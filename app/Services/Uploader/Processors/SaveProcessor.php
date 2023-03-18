@@ -2,7 +2,19 @@
 
 namespace App\Services\Uploader\Processors;
 
+use Exception;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\{
+    MessageBag, Str
+};
+use Illuminate\Support\Facades\{
+    Storage, Validator
+};
+use App\Services\Uploader\Classes\ThumbConfig;
+use App\Services\Uploader\Helpers\{
+    ImageHelper, ThumbHelper
+};
+use App\Services\Uploader\Models\Mediafile;
 
 abstract class SaveProcessor extends BaseProcessor
 {
@@ -62,6 +74,11 @@ abstract class SaveProcessor extends BaseProcessor
      */
     protected $thumbFilenameTemplate;
 
+    /**
+     * @var array
+     */
+    protected $uploadDirectories;
+
 
     /************************* PROCESS ATTRIBUTES *************************/
     /**
@@ -73,6 +90,21 @@ abstract class SaveProcessor extends BaseProcessor
      * @var UploadedFile
      */
     protected $file;
+
+    /**
+     * @var string
+     */
+    protected $outFileName;
+
+    /**
+     * @var string
+     */
+    protected $databaseUrl;
+
+    /**
+     * @var MessageBag
+     */
+    protected $errors;
 
 
     /************************* CONFIG SETTERS ****************************/
@@ -146,6 +178,16 @@ abstract class SaveProcessor extends BaseProcessor
         return $this;
     }
 
+    /**
+     * @param array $uploadDirectories
+     * @return $this
+     */
+    public function setUploadDirectories(array $uploadDirectories)
+    {
+        $this->uploadDirectories = $uploadDirectories;
+        return $this;
+    }
+
 
     /********************** PROCESS PUBLIC METHODS ***********************/
     /**
@@ -174,5 +216,48 @@ abstract class SaveProcessor extends BaseProcessor
     public function getFile(): ?UploadedFile
     {
         return $this->file;
+    }
+
+
+    /********************** PROCESS INTERNAL METHODS *********************/
+    /**
+     * @return bool
+     */
+    protected function sendFile(): bool
+    {
+        Storage::disk($this->currentDisk)->putFileAs($this->processDirectory, $this->file, $this->outFileName);
+
+        return Storage::disk($this->currentDisk)->fileExists($this->processDirectory . DIRECTORY_SEPARATOR . $this->outFileName);
+    }
+
+    /**
+     * @param string $fileType
+     * @throws Exception
+     * @return string
+     */
+    protected function getUploadDirConfig(string $fileType): string
+    {
+        if (!is_array($this->uploadDirectories) || empty($this->uploadDirectories)) {
+            throw new Exception('The localUploadDirs is not defined.');
+        }
+
+        if (str_contains($fileType, self::FILE_TYPE_IMAGE)) {
+            return $this->uploadDirectories[self::FILE_TYPE_IMAGE];
+
+        } elseif (str_contains($fileType, self::FILE_TYPE_AUDIO)) {
+            return $this->uploadDirectories[self::FILE_TYPE_AUDIO];
+
+        } elseif (str_contains($fileType, self::FILE_TYPE_VIDEO)) {
+            return $this->uploadDirectories[self::FILE_TYPE_VIDEO];
+
+        } elseif (str_contains($fileType, self::FILE_TYPE_APP)) {
+            return $this->uploadDirectories[self::FILE_TYPE_APP];
+
+        } elseif (str_contains($fileType, self::FILE_TYPE_TEXT)) {
+            return $this->uploadDirectories[self::FILE_TYPE_TEXT];
+
+        } else {
+            return $this->uploadDirectories[self::FILE_TYPE_OTHER];
+        }
     }
 }

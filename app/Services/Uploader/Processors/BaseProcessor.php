@@ -8,6 +8,11 @@ abstract class BaseProcessor
 {
     /************************* PROCESS ATTRIBUTES *************************/
     /**
+     * @var string
+     */
+    protected $currentDisk;
+
+    /**
      * @var Mediafile
      */
     protected $mediafileModel;
@@ -17,6 +22,14 @@ abstract class BaseProcessor
      */
     protected $processDirectory;
 
+
+    /************************* ABSTRACT METHODS ***************************/
+    abstract protected function setProcessParams(): void;
+
+    abstract protected function process(): bool;
+
+
+    /********************** PROCESS PUBLIC METHODS ***********************/
     /**
      * @param array $config
      * @return static
@@ -30,7 +43,15 @@ abstract class BaseProcessor
         return $obj;
     }
 
-    /********************** PROCESS PUBLIC METHODS ***********************/
+    /**
+     * @return bool
+     */
+    public function run(): bool
+    {
+        $this->setProcessParams();
+        $this->process();
+    }
+
     /**
      * @param Mediafile $model
      * @return $this
@@ -47,5 +68,13 @@ abstract class BaseProcessor
     public function getMediafileModel(): Mediafile
     {
         return $this->mediafileModel;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->mediafileModel->id;
     }
 }

@@ -18,48 +18,6 @@ use App\Services\Uploader\Models\Mediafile;
 
 class UploadService
 {
-    /************************* PROCESS ATTRIBUTES *************************/
-    /**
-     * @var string
-     */
-    private $currentDisk;
-
-    /**
-     * @var string
-     */
-    private $uploadDirectory;
-
-    /**
-     * @var string
-     */
-    private $directoryForDelete;
-
-    /**
-     * @var array
-     */
-    private $filesForDelete;
-
-    /**
-     * @var string
-     */
-    private $outFileName;
-
-    /**
-     * @var string
-     */
-    private $databaseUrl;
-
-    /**
-     * @var string
-     */
-    private $scenario;
-
-    /**
-     * @var MessageBag
-     */
-    private $errors;
-
-
     public static function getInstance(array $config): self
     {
         $obj = new static();
@@ -138,14 +96,6 @@ class UploadService
         }
 
         return $deleted;
-    }
-
-    /**
-     * @return int|string
-     */
-    public function getId()
-    {
-        return $this->mediafileModel->id;
     }
 
     /**
@@ -242,14 +192,6 @@ class UploadService
         Storage::disk($this->currentDisk)->putFileAs($this->uploadDirectory, $this->file, $this->outFileName);
 
         return Storage::disk($this->currentDisk)->fileExists($this->uploadDirectory . DIRECTORY_SEPARATOR . $this->outFileName);
-    }
-
-    /**
-     * @return bool
-     */
-    private function deletePreviousFiles(): bool
-    {
-        return Storage::disk($this->currentDisk)->delete($this->filesForDelete);
     }
 
     /**
