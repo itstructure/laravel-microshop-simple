@@ -18,81 +18,11 @@ use App\Services\Uploader\Models\Mediafile;
 
 class UploadService
 {
-    const SCENARIO_UPLOAD = 'upload';
-    const SCENARIO_UPDATE = 'update';
-
-    const FILE_TYPE_IMAGE = 'image';
-    const FILE_TYPE_AUDIO = 'audio';
-    const FILE_TYPE_VIDEO = 'video';
-    const FILE_TYPE_APP = 'application';
-    const FILE_TYPE_APP_WORD = 'word';
-    const FILE_TYPE_APP_EXCEL = 'excel';
-    const FILE_TYPE_APP_PDF = 'pdf';
-    const FILE_TYPE_TEXT = 'text';
-    const FILE_TYPE_OTHER = 'other';
-    const FILE_TYPE_THUMB = 'thumbnail';
-
-    const THUMB_ALIAS_DEFAULT = 'default';
-    const THUMB_ALIAS_ORIGINAL = 'original';
-    const THUMB_ALIAS_SMALL = 'small';
-    const THUMB_ALIAS_MEDIUM = 'medium';
-    const THUMB_ALIAS_LARGE = 'large';
-
-    const DIR_LENGTH_FIRST = 2;
-    const DIR_LENGTH_SECOND = 4;
-
-    /************************* CONFIG ATTRIBUTES *************************/
-    /**
-     * @var string
-     */
-    private $baseUrl;
-
-    /**
-     * @var bool
-     */
-    private $renameFiles;
-
-    /**
-     * @var bool
-     */
-    private $checkExtensionByMimeType;
-
-    /**
-     * @var int
-     */
-    private $fileMaxSize;
-
-    /**
-     * @var array
-     */
-    private $fileExtensions;
-
-    /**
-     * @var array
-     */
-    private $thumbSizes;
-
-    /**
-     * @var string
-     */
-    private $thumbFilenameTemplate;
-
-    /**
-     * @var array
-     */
-    private $uploadDirectories;
-
-
     /************************* PROCESS ATTRIBUTES *************************/
     /**
      * @var string
      */
     private $currentDisk;
-
-    /**
-     * @var array
-     */
-    private $data = [];
 
     /**
      * @var string
@@ -125,16 +55,6 @@ class UploadService
     private $scenario;
 
     /**
-     * @var Mediafile
-     */
-    private $mediafileModel;
-
-    /**
-     * @var UploadedFile
-     */
-    private $file;
-
-    /**
      * @var MessageBag
      */
     private $errors;
@@ -150,135 +70,7 @@ class UploadService
     }
 
 
-    /************************* CONFIG SETTERS ****************************/
-    /**
-     * @param string $baseUrl
-     * @return UploadService
-     */
-    public function setBaseUrl(string $baseUrl): self
-    {
-        $this->baseUrl = $baseUrl;
-        return $this;
-    }
-
-    /**
-     * @param bool $renameFiles
-     * @return UploadService
-     */
-    public function setRenameFiles(bool $renameFiles): self
-    {
-        $this->renameFiles = $renameFiles;
-        return $this;
-    }
-
-    /**
-     * @param bool $checkExtensionByMimeType
-     * @return UploadService
-     */
-    public function setCheckExtensionByMimeType(bool $checkExtensionByMimeType): self
-    {
-        $this->checkExtensionByMimeType = $checkExtensionByMimeType;
-        return $this;
-    }
-
-    /**
-     * @param int $fileMaxSize
-     * @return UploadService
-     */
-    public function setFileMaxSize(int $fileMaxSize): self
-    {
-        $this->fileMaxSize = $fileMaxSize;
-        return $this;
-    }
-
-    /**
-     * @param array $fileExtensions
-     * @return UploadService
-     */
-    public function setFileExtensions(array $fileExtensions): self
-    {
-        $this->fileExtensions = $fileExtensions;
-        return $this;
-    }
-
-    /**
-     * @param array $thumbSizes
-     * @return UploadService
-     */
-    public function setThumbSizes(array $thumbSizes): self
-    {
-        $this->thumbSizes = $thumbSizes;
-        return $this;
-    }
-
-    /**
-     * @param string $thumbFilenameTemplate
-     * @return UploadService
-     */
-    public function setThumbFilenameTemplate(string $thumbFilenameTemplate): self
-    {
-        $this->thumbFilenameTemplate = $thumbFilenameTemplate;
-        return $this;
-    }
-
-    /**
-     * @param array $uploadDirectories
-     * @return UploadService
-     */
-    public function setUploadDirectories(array $uploadDirectories): self
-    {
-        $this->uploadDirectories = $uploadDirectories;
-        return $this;
-    }
-
-
     /********************** PROCESS PUBLIC METHODS ***********************/
-    /**
-     * @param array $data
-     * @return UploadService
-     */
-    public function setData(array $data): self
-    {
-        $this->data = $data;
-        return $this;
-    }
-
-    /**
-     * @param Mediafile $model
-     * @return UploadService
-     */
-    public function setMediafileModel(Mediafile $model): self
-    {
-        $this->mediafileModel = $model;
-        return $this;
-    }
-
-    /**
-     * @return Mediafile
-     */
-    public function getMediafileModel(): Mediafile
-    {
-        return $this->mediafileModel;
-    }
-
-    /**
-     * @param UploadedFile|null $file
-     * @return UploadService
-     */
-    public function setFile(UploadedFile $file = null): self
-    {
-        $this->file = $file;
-        return $this;
-    }
-
-    /**
-     * @return UploadedFile|null
-     */
-    public function getFile(): ?UploadedFile
-    {
-        return $this->file;
-    }
-
     /**
      * @return bool
      * @throws Exception
@@ -286,7 +78,7 @@ class UploadService
     public function save(): bool
     {
         $this->detectScenario();
-        
+
         if (!$this->validate()) {
             return false;
         }
@@ -412,7 +204,7 @@ class UploadService
             $this->scenario = self::SCENARIO_UPDATE;
         }
     }
-    
+
     /**
      * @param ThumbConfig $thumbConfig
      * @return string
