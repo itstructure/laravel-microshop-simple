@@ -2,25 +2,14 @@
 
 namespace App\Services\Uploader\Processors;
 
-use Exception;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\{
-    MessageBag, Str
-};
-use Illuminate\Support\Facades\{
-    Storage, Validator
-};
-use App\Services\Uploader\Classes\ThumbConfig;
-use App\Services\Uploader\Helpers\{
-    ImageHelper, ThumbHelper
-};
-use App\Services\Uploader\Models\Mediafile;
+use Illuminate\Support\Facades\Storage;
 
 class DeleteProcessor extends BaseProcessor
 {
     /********************** PROCESS INTERNAL METHODS *********************/
     protected function setProcessParams(): void
     {
+        $this->currentDisk = $this->mediafileModel->getDisk();
         $originalPathinfo = pathinfo($this->mediafileModel->getUrl());
 
         $dirnameParent = substr($originalPathinfo['dirname'], 0, -(SaveProcessor::DIR_LENGTH_SECOND + 1));
@@ -42,5 +31,10 @@ class DeleteProcessor extends BaseProcessor
         }
 
         return $deleted;
+    }
+
+    protected function afterProcess(): void
+    {
+        return;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\Uploader\Processors;
 
+use Exception;
 use App\Services\Uploader\Models\Mediafile;
 
 abstract class BaseProcessor
@@ -26,7 +27,13 @@ abstract class BaseProcessor
     /************************* ABSTRACT METHODS ***************************/
     abstract protected function setProcessParams(): void;
 
+    /**
+     * @throws Exception
+     * @return bool
+     */
     abstract protected function process(): bool;
+
+    abstract protected function afterProcess(): void;
 
 
     /********************** PROCESS PUBLIC METHODS ***********************/
@@ -34,7 +41,7 @@ abstract class BaseProcessor
      * @param array $config
      * @return static
      */
-    public static function getInstance(array $config)
+    public static function getInstance(array $config = [])
     {
         $obj = new static();
         foreach ($config as $key => $value) {
@@ -44,12 +51,15 @@ abstract class BaseProcessor
     }
 
     /**
+     * @throws Exception
      * @return bool
      */
     public function run(): bool
     {
         $this->setProcessParams();
         $this->process();
+        $this->afterProcess();
+        return true;
     }
 
     /**

@@ -4,9 +4,7 @@ namespace App\Services\Uploader\Processors;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\{
-    MessageBag, Str
-};
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\{
     Storage, Validator
 };
@@ -14,7 +12,6 @@ use App\Services\Uploader\Classes\ThumbConfig;
 use App\Services\Uploader\Helpers\{
     ImageHelper, ThumbHelper
 };
-use App\Services\Uploader\Models\Mediafile;
 
 abstract class SaveProcessor extends BaseProcessor
 {
@@ -107,6 +104,10 @@ abstract class SaveProcessor extends BaseProcessor
     protected $errors;
 
 
+    /************************* ABSTRACT METHODS ***************************/
+    abstract protected function getValidateRules(): array;
+
+
     /************************* CONFIG SETTERS ****************************/
     /**
      * @param string $baseUrl
@@ -191,6 +192,18 @@ abstract class SaveProcessor extends BaseProcessor
 
     /********************** PROCESS PUBLIC METHODS ***********************/
     /**
+     * @throws Exception
+     * @return bool
+     */
+    public function run(): bool
+    {
+        if (!$this->validate()) {
+            return false;
+        }
+        return parent::run();
+    }
+
+    /**
      * @param array $data
      * @return $this
      */
@@ -218,8 +231,54 @@ abstract class SaveProcessor extends BaseProcessor
         return $this->file;
     }
 
+    /**
+     * @return MessageBag|null
+     */
+    public function getErrors(): ?MessageBag
+    {
+        return $this->errors;
+    }
+
+    /**
+     * @throws Exception
+     * @return bool
+     */
+    public function createThumbs(): bool
+    {
+        $thumbs = [];
+
+        ImageHelper::$driver = [ImageHelper::DRIVER_GD2, ImageHelper::DRIVER_GMAGICK, ImageHelper::DRIVER_IMAGICK];
+
+        foreach ($this->thumbSizes as $alias => $preset) {
+            $thumbs[$alias] = $this->createThumb(ThumbHelper::configureThumb($alias, $preset));
+        }
+
+        // Create default thumb.
+        if (!array_key_exists(self::THUMB_ALIAS_DEFAULT, $this->thumbSizes)) {
+            $defaultThumbConfig = ThumbHelper::configureThumb(self::THUMB_ALIAS_DEFAULT, ThumbHelper::getDefaultSizes());
+            $thumbs[self::THUMB_ALIAS_DEFAULT] = $this->createThumb($defaultThumbConfig);
+        }
+
+        $this->mediafileModel->thumbs = serialize($thumbs);
+
+        return $this->mediafileModel->save();
+    }
+
 
     /********************** PROCESS INTERNAL METHODS *********************/
+    /**
+     * @return bool
+     */
+    protected function validate(): bool
+    {
+        $validator = Validator::make($this->data, $this->getValidateRules());
+        if ($validator->fails()) {
+            $this->errors = $validator->getMessageBag();
+            return false;
+        }
+        return true;
+    }
+
     /**
      * @return bool
      */
@@ -259,5 +318,66 @@ abstract class SaveProcessor extends BaseProcessor
         } else {
             return $this->uploadDirectories[self::FILE_TYPE_OTHER];
         }
+    }
+
+    protected function getNewProcessDirectory(): string
+    {
+        $processDirectory = rtrim(rtrim($this->getUploadDirConfig($this->file->getMimeType()), '/'), '\\');
+
+        if (!empty($this->data['subDir'])) {
+            $processDirectory = $processDirectory . DIRECTORY_SEPARATOR . trim(trim($this->data['subDir'], '/'), '\\');
+        }
+
+        return $processDirectory .
+            DIRECTORY_SEPARATOR . substr(md5(time()), 0, self::DIR_LENGTH_FIRST) .
+            DIRECTORY_SEPARATOR . substr(md5(microtime() . $this->file->getBasename()), 0, self::DIR_LENGTH_SECOND);
+    }
+
+    /**
+     * @param ThumbConfig $thumbConfig
+     * @return string
+     */
+    protected function createThumb(ThumbConfig $thumbConfig)
+    {
+        $originalPathInfo = pathinfo($this->mediafileModel->url);
+
+        $thumbPath = $originalPathInfo['dirname'] .
+            DIRECTORY_SEPARATOR .
+            $this->getThumbFilename($originalPathInfo['filename'],
+                $originalPathInfo['extension'],
+                $thumbConfig->getAlias(),
+                $thumbConfig->getWidth(),
+                $thumbConfig->getHeight()
+            );
+
+        $thumbContent = ImageHelper::thumbnail(
+            ImageHelper::getImagine()->load(Storage::disk($this->currentDisk)->get($this->mediafileModel->url)),
+            $thumbConfig->getWidth(),
+            $thumbConfig->getHeight(),
+            $thumbConfig->getMode()
+        )->get($originalPathInfo['extension']);
+
+        Storage::disk($this->currentDisk)->put($thumbPath, $thumbContent);
+
+        return $thumbPath;
+    }
+
+    /**
+     * @param $original
+     * @param $extension
+     * @param $alias
+     * @param $width
+     * @param $height
+     * @return string
+     */
+    protected function getThumbFilename($original, $extension, $alias, $width, $height)
+    {
+        return strtr($this->thumbFilenameTemplate, [
+            '{original}' => $original,
+            '{extension}' => $extension,
+            '{alias}' => $alias,
+            '{width}' => $width,
+            '{height}' => $height,
+        ]);
     }
 }

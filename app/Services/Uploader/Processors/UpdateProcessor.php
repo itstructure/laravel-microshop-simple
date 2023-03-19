@@ -2,43 +2,63 @@
 
 namespace App\Services\Uploader\Processors;
 
-use Exception;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\{
-    MessageBag, Str
-};
-use Illuminate\Support\Facades\{
-    Storage, Validator
-};
-use App\Services\Uploader\Classes\ThumbConfig;
-use App\Services\Uploader\Helpers\{
-    ImageHelper, ThumbHelper
-};
-use App\Services\Uploader\Models\Mediafile;
+use Illuminate\Support\Facades\Storage;
 
 class UpdateProcessor extends SaveProcessor
 {
+    /************************* PROCESS ATTRIBUTES *************************/
     /**
      * @var array
      */
-    protected $filesForDelete;
+    protected $previousFiles;
+
 
     /********************** PROCESS INTERNAL METHODS *********************/
+    protected function getValidateRules(): array
+    {
+        return [];
+    }
+
     protected function setProcessParams(): void
     {
-
+        if (is_null($this->file)) {
+            return;
+        }
+        $this->currentDisk = $this->mediafileModel->getDisk();
+        $this->processDirectory = $this->file->getMimeType() == $this->mediafileModel->getType()
+            ? pathinfo($this->mediafileModel->getUrl())['dirname']
+            : $this->getNewProcessDirectory();
+        $this->previousFiles = [];//TODO: Need to finish.
     }
 
     protected function process(): bool
     {
+        if (!is_null($this->file)) {
 
+            if (!$this->sendFile()) {
+                throw new \Exception('Error upload file.');
+            }
+
+            Storage::disk($this->currentDisk)->delete($this->previousFiles);
+
+            $this->mediafileModel->url = $this->databaseUrl;
+            $this->mediafileModel->filename = $this->outFileName;
+            $this->mediafileModel->size = $this->file->getSize();
+            $this->mediafileModel->type = $this->file->getMimeType();
+            $this->mediafileModel->disk = Storage::getDefaultDriver();
+        }
+
+        $this->mediafileModel->alt = $this->data['alt'];
+        $this->mediafileModel->title = $this->data['title'];
+        $this->mediafileModel->description = $this->data['description'];
+
+        if (!$this->mediafileModel->save()) {
+            throw new \Exception('Error save file data in database.');
+        }
     }
 
-    /**
-     * @return bool
-     */
-    private function deletePreviousFiles(): bool
+    protected function afterProcess(): void
     {
-        return Storage::disk($this->currentDisk)->delete($this->filesForDelete);
+        return;
     }
 }

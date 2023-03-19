@@ -10,6 +10,11 @@ class Mediafile extends Model
 
     protected $fillable = ['filename', 'type', 'url', 'alt', 'size', 'title', 'description', 'thumbs', 'disk', 'driver'];
 
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
     public function getUrl(): string
     {
         return $this->url;
