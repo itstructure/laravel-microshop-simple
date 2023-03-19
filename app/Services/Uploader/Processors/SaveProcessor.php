@@ -4,7 +4,6 @@ namespace App\Services\Uploader\Processors;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\MessageBag;
 use Illuminate\Support\Facades\{
     Storage, Validator
 };
@@ -97,11 +96,6 @@ abstract class SaveProcessor extends BaseProcessor
      * @var string
      */
     protected $databaseUrl;
-
-    /**
-     * @var MessageBag
-     */
-    protected $errors;
 
 
     /************************* ABSTRACT METHODS ***************************/
@@ -229,14 +223,6 @@ abstract class SaveProcessor extends BaseProcessor
     public function getFile(): ?UploadedFile
     {
         return $this->file;
-    }
-
-    /**
-     * @return MessageBag|null
-     */
-    public function getErrors(): ?MessageBag
-    {
-        return $this->errors;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Services\Uploader\Processors;
 
 use Exception;
+use Illuminate\Support\MessageBag;
 use App\Services\Uploader\Models\Mediafile;
 
 abstract class BaseProcessor
@@ -22,6 +23,11 @@ abstract class BaseProcessor
      * @var string
      */
     protected $processDirectory;
+
+    /**
+     * @var MessageBag|null
+     */
+    protected $errors;
 
 
     /************************* ABSTRACT METHODS ***************************/
@@ -86,5 +92,13 @@ abstract class BaseProcessor
     public function getId()
     {
         return $this->mediafileModel->id;
+    }
+
+    /**
+     * @return MessageBag|null
+     */
+    public function getErrors(): ?MessageBag
+    {
+        return $this->errors;
     }
 }

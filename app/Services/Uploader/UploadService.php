@@ -4,9 +4,9 @@ namespace App\Services\Uploader;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
-use App\Services\Uploader\Processors\{UploadProcessor, UpdateProcessor, DeleteProcessor};
+use Illuminate\Support\MessageBag;
+use App\Services\Uploader\Processors\{BaseProcessor, UploadProcessor, UpdateProcessor, DeleteProcessor};
 use App\Services\Uploader\Models\Mediafile;
-use App\Services\Uploader\Classes\Result;
 
 class UploadService
 {
@@ -14,6 +14,11 @@ class UploadService
      * @var array
      */
     private $config;
+
+    /**
+     * @var BaseProcessor
+     */
+    private $processor;
 
     public static function getInstance(array $config): self
     {
@@ -24,22 +29,15 @@ class UploadService
      * @param array $data
      * @param UploadedFile $file
      * @throws Exception
-     * @return Result
+     * @return bool
      */
-    public function upload(array $data, UploadedFile $file): Result
+    public function upload(array $data, UploadedFile $file): bool
     {
-        $processor = UploadProcessor::getInstance($this->config)
+        $this->processor = UploadProcessor::getInstance($this->config)
             ->setMediafileModel(new Mediafile())
             ->setData($data)
             ->setFile($file);
-        $result = new Result();
-        if (!$processor->run()) {
-            $result->setErrors($processor->getErrors());
-            $result->setNoSuccessful();
-        } else {
-            $result->setSuccessful();
-        }
-        return $result;
+        return $this->processor->run();
     }
 
     /**
@@ -47,42 +45,49 @@ class UploadService
      * @param array $data
      * @param UploadedFile|null $file
      * @throws Exception
-     * @return Result
+     * @return bool
      */
-    public function update(int $Id, array $data, UploadedFile $file = null): Result
+    public function update(int $Id, array $data, UploadedFile $file = null): bool
     {
-        $processor = UpdateProcessor::getInstance($this->config)
+        $this->processor = UpdateProcessor::getInstance($this->config)
             ->setMediafileModel(Mediafile::find($Id))
             ->setData($data)
             ->setFile($file);
-        $result = new Result();
-        if (!$processor->run()) {
-            $result->setErrors($processor->getErrors());
-            $result->setNoSuccessful();
-        } else {
-            $result->setSuccessful();
-        }
-        return $result;
+        return $this->processor->run();
     }
 
     /**
      * @param int $Id
      * @throws Exception
-     * @return Result
+     * @return bool
      */
-    public function delete(int $Id): Result
+    public function delete(int $Id): bool
     {
-        $processor = DeleteProcessor::getInstance()
+        $this->processor = DeleteProcessor::getInstance()
             ->setMediafileModel(Mediafile::find($Id));
-        $result = new Result();
-        if (!$processor->run()) {
-            $result->setNoSuccessful();
-        } else {
-            $result->setSuccessful();
-        }
-        return $result;
+        return $this->processor->run();
     }
 
+    /**
+     * @return bool
+     */
+    public function hasErrors(): bool
+    {
+        return !is_null($this->processor->getErrors());
+    }
+
+    /**
+     * @return MessageBag
+     */
+    public function getErrors(): MessageBag
+    {
+        return $this->processor->getErrors();
+    }
+
+    /**
+     * UploadService constructor.
+     * @param array $config
+     */
     private function __construct(array $config)
     {
         $this->config = $config;
