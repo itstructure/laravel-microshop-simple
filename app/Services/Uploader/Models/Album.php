@@ -3,16 +3,16 @@
 namespace App\Services\Uploader\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Services\Uploader\UploadService;
+use App\Services\Uploader\Processors\SaveProcessor;
 
 class Album extends Model
 {
-    const ALBUM_TYPE_IMAGE = UploadService::FILE_TYPE_IMAGE . 'Album';
-    const ALBUM_TYPE_AUDIO = UploadService::FILE_TYPE_AUDIO . 'Album';
-    const ALBUM_TYPE_VIDEO = UploadService::FILE_TYPE_VIDEO . 'Album';
-    const ALBUM_TYPE_APP   = UploadService::FILE_TYPE_APP . 'Album';
-    const ALBUM_TYPE_TEXT  = UploadService::FILE_TYPE_TEXT . 'Album';
-    const ALBUM_TYPE_OTHER = UploadService::FILE_TYPE_OTHER . 'Album';
+    const ALBUM_TYPE_IMAGE = SaveProcessor::FILE_TYPE_IMAGE . '_album';
+    const ALBUM_TYPE_AUDIO = SaveProcessor::FILE_TYPE_AUDIO . '_album';
+    const ALBUM_TYPE_VIDEO = SaveProcessor::FILE_TYPE_VIDEO . '_album';
+    const ALBUM_TYPE_APP   = SaveProcessor::FILE_TYPE_APP . '_album';
+    const ALBUM_TYPE_TEXT  = SaveProcessor::FILE_TYPE_TEXT . '_album';
+    const ALBUM_TYPE_OTHER = SaveProcessor::FILE_TYPE_OTHER . '_album';
 
     protected $table = 'albums';
 

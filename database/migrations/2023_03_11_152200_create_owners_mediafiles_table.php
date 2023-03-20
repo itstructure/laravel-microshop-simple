@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('owners_mediafiles', function (Blueprint $table) {
             $table->unsignedBigInteger('mediafile_id')->index();
             $table->unsignedBigInteger('owner_id');
-            $table->string('owner', 64);
+            $table->string('owner_name', 64);
             $table->string('owner_attribute', 64);
-            $table->primary(['mediafile_id', 'owner_id', 'owner', 'owner_attribute']);
+            $table->primary(['mediafile_id', 'owner_id', 'owner_name', 'owner_attribute']);
             $table->timestamps();
 
             $table->foreign('mediafile_id')->references('id')->on('mediafiles')

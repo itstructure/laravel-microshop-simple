@@ -20,8 +20,8 @@ return new class extends Migration
             $table->integer('size');
             $table->string('title', 128)->nullable();
             $table->text('description')->nullable();
-            $table->text('thumbs')->nullable();
-            $table->string('storage', 12);
+            $table->json('thumbs')->default('{}');
+            $table->string('disk', 64);
             $table->timestamps();
         });
     }

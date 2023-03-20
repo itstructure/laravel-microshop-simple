@@ -16,7 +16,11 @@ class UpdateProcessor extends SaveProcessor
     /********************** PROCESS INTERNAL METHODS *********************/
     protected function getValidateRules(): array
     {
-        return [];
+        return [
+            'alt' => 'nullable|string|max:128',
+            'title' => 'nullable|string|max:128',
+            'description' => 'nullable|string|max:2048',
+        ];
     }
 
     protected function setProcessParams(): void
@@ -41,16 +45,10 @@ class UpdateProcessor extends SaveProcessor
 
             Storage::disk($this->currentDisk)->delete($this->previousFiles);
 
-            $this->mediafileModel->url = $this->databaseUrl;
-            $this->mediafileModel->filename = $this->outFileName;
-            $this->mediafileModel->size = $this->file->getSize();
-            $this->mediafileModel->type = $this->file->getMimeType();
-            $this->mediafileModel->disk = Storage::getDefaultDriver();
+            $this->setBaseMediafileData();
         }
 
-        $this->mediafileModel->alt = $this->data['alt'];
-        $this->mediafileModel->title = $this->data['title'];
-        $this->mediafileModel->description = $this->data['description'];
+        $this->setTextMediafileData();
 
         if (!$this->mediafileModel->save()) {
             throw new \Exception('Error save file data in database.');

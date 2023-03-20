@@ -11,7 +11,14 @@ class UploadProcessor extends SaveProcessor
     /********************** PROCESS INTERNAL METHODS *********************/
     protected function getValidateRules(): array
     {
-        return [];
+        return [
+            'alt' => 'nullable|string|max:128',
+            'title' => 'nullable|string|max:128',
+            'description' => 'nullable|string|max:2048',
+            'owner_id' => 'nullable|numeric',
+            'owner_name' => 'nullable|string|max:64',
+            'owner_attribute' => 'nullable|string|max:64',
+        ];
     }
 
     protected function setProcessParams(): void
@@ -37,15 +44,8 @@ class UploadProcessor extends SaveProcessor
             throw new \Exception('Error upload file.');
         }
 
-        $this->mediafileModel->url = $this->databaseUrl;
-        $this->mediafileModel->filename = $this->outFileName;
-        $this->mediafileModel->size = $this->file->getSize();
-        $this->mediafileModel->type = $this->file->getMimeType();
-        $this->mediafileModel->disk = $this->currentDisk;
-
-        $this->mediafileModel->alt = $this->data['alt'];
-        $this->mediafileModel->title = $this->data['title'];
-        $this->mediafileModel->description = $this->data['description'];
+        $this->setBaseMediafileData();
+        $this->setTextMediafileData();
 
         if (!$this->mediafileModel->save()) {
             throw new \Exception('Error save file data in database.');
@@ -54,8 +54,8 @@ class UploadProcessor extends SaveProcessor
 
     protected function afterProcess(): void
     {
-        if (!empty($this->data['owner_id']) && !empty($this->data['owner']) && !empty($this->data['owner_attribute'])) {
-            $this->mediafileModel->addOwner($this->data['owner_id'], $this->data['owner'], $this->data['owner_attribute']);
+        if (!empty($this->data['owner_id']) && !empty($this->data['owner_name']) && !empty($this->data['owner_attribute'])) {
+            $this->mediafileModel->addOwner($this->data['owner_id'], $this->data['owner_name'], $this->data['owner_attribute']);
         }
     }
 }

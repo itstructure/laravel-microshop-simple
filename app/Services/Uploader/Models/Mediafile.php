@@ -8,7 +8,11 @@ class Mediafile extends Model
 {
     protected $table = 'mediafiles';
 
-    protected $fillable = ['filename', 'type', 'url', 'alt', 'size', 'title', 'description', 'thumbs', 'disk', 'driver'];
+    protected $fillable = ['filename', 'type', 'url', 'alt', 'size', 'title', 'description', 'thumbs', 'disk'];
+
+    protected $casts = [
+        'thumbs' => 'array',
+    ];
 
     public function getType(): string
     {
@@ -25,13 +29,8 @@ class Mediafile extends Model
         return $this->disk;
     }
 
-    public function getDriver(): string
+    public function addOwner(int $ownerId, string $ownerName, string $ownerAttribute): bool
     {
-        return $this->driver;
-    }
-
-    public function addOwner(int $ownerId, string $owner, string $ownerAttribute): bool
-    {
-        return OwnerMediafile::addOwner($this->id, $ownerId, $owner, $ownerAttribute);
+        return OwnerMediafile::addOwner($this->id, $ownerId, $ownerName, $ownerAttribute);
     }
 }

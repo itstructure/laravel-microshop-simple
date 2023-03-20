@@ -17,16 +17,16 @@ abstract class Owner extends Model
      * Add owner to mediafiles table.
      * @param int    $modelId
      * @param int    $ownerId
-     * @param string $owner
+     * @param string $ownerName
      * @param string $ownerAttribute
      * @return bool
      */
-    public static function addOwner(int $modelId, int $ownerId, string $owner, string $ownerAttribute): bool
+    public static function addOwner(int $modelId, int $ownerId, string $ownerName, string $ownerAttribute): bool
     {
         $ownerModel = new static();
         $ownerModel->{static::getExternalModelKeyName()} = $modelId;
         $ownerModel->owner_id = $ownerId;
-        $ownerModel->owner = $owner;
+        $ownerModel->owner_name = $ownerName;
         $ownerModel->owner_attribute = $ownerAttribute;
 
         return $ownerModel->save();
@@ -35,14 +35,14 @@ abstract class Owner extends Model
     /**
      * Remove this mediafile/album owner.
      * @param int $ownerId
-     * @param string $owner
+     * @param string $ownerName
      * @param string|null $ownerAttribute
      * @return bool
      */
-    public static function removeOwner(int $ownerId, string $owner, string $ownerAttribute = null): bool
+    public static function removeOwner(int $ownerId, string $ownerName, string $ownerAttribute = null): bool
     {
         $query = static::query();
-        foreach (static::buildFilterOptions($ownerId, $owner, $ownerAttribute) as $attribute => $value) {
+        foreach (static::buildFilterOptions($ownerId, $ownerName, $ownerAttribute) as $attribute => $value) {
             /* @var QueryBuilder $q */
             $query->where($attribute, $value);
         }
@@ -52,19 +52,19 @@ abstract class Owner extends Model
 
     /**
      * Getting entity id's which are related with Other owners too.
-     * @param string $owner
+     * @param string $ownerName
      * @param int $ownerId
      * @param array $entityIds
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public static function filterMultipliedEntityIds(string $owner, int $ownerId, array $entityIds)
+    public static function filterMultipliedEntityIds(string $ownerName, int $ownerId, array $entityIds)
     {
         return static::query()->select(static::getExternalModelKeyName())
             ->where([static::getExternalModelKeyName() => $entityIds])
-            ->where(function ($q) use ($ownerId, $owner) {
+            ->where(function ($q) use ($ownerId, $ownerName) {
                 /* @var QueryBuilder $q */
                 $q->where('owner_id', '!=', $ownerId)
-                    ->orWhere('owner', '!=', $owner);
+                    ->orWhere('owner_name', '!=', $ownerName);
             })
             ->get();
     }
@@ -88,15 +88,15 @@ abstract class Owner extends Model
     /**
      * Build filter options for some actions.
      * @param int $ownerId
-     * @param string $owner
+     * @param string $ownerName
      * @param string|null $ownerAttribute
      * @return array
      */
-    protected static function buildFilterOptions(int $ownerId, string $owner, string $ownerAttribute = null): array
+    protected static function buildFilterOptions(int $ownerId, string $ownerName, string $ownerAttribute = null): array
     {
         return array_merge([
             'owner_id' => $ownerId,
-            'owner' => $owner
+            'owner_name' => $ownerName
         ], empty($ownerAttribute) ? [] : ['owner_attribute' => $ownerAttribute]);
     }
 }

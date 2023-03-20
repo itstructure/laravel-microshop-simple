@@ -245,7 +245,7 @@ abstract class SaveProcessor extends BaseProcessor
             $thumbs[self::THUMB_ALIAS_DEFAULT] = $this->createThumb($defaultThumbConfig);
         }
 
-        $this->mediafileModel->thumbs = serialize($thumbs);
+        $this->mediafileModel->thumbs = $thumbs;
 
         return $this->mediafileModel->save();
     }
@@ -365,5 +365,21 @@ abstract class SaveProcessor extends BaseProcessor
             '{width}' => $width,
             '{height}' => $height,
         ]);
+    }
+
+    protected function setBaseMediafileData(): void
+    {
+        $this->mediafileModel->url = $this->databaseUrl;
+        $this->mediafileModel->filename = $this->outFileName;
+        $this->mediafileModel->size = $this->file->getSize();
+        $this->mediafileModel->type = $this->file->getMimeType();
+        $this->mediafileModel->disk = $this->currentDisk;
+    }
+
+    protected function setTextMediafileData(): void
+    {
+        $this->mediafileModel->alt = $this->data['alt'];
+        $this->mediafileModel->title = $this->data['title'];
+        $this->mediafileModel->description = $this->data['description'];
     }
 }
