@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Validation\Rule;
 use App\Services\Uploader\Processors\SaveProcessor;
 
 return [
@@ -54,5 +55,25 @@ return [
         SaveProcessor::FILE_TYPE_APP => 'application',
         SaveProcessor::FILE_TYPE_TEXT => 'text',
         SaveProcessor::FILE_TYPE_OTHER => 'other',
+    ],
+    'metaDataValidationRules' => [
+        'alt' => 'nullable|string|max:128',
+        'title' => 'nullable|string|max:128',
+        'description' => 'nullable|string|max:2048',
+        'owner_id' => 'nullable|numeric',
+        'owner_name' => 'nullable|string|max:64',
+        'owner_attribute' => 'nullable|string|max:64',
+        'needed_file_type' => [
+            'nullable',
+            Rule::in([
+                SaveProcessor::FILE_TYPE_THUMB,
+                SaveProcessor::FILE_TYPE_IMAGE,
+                SaveProcessor::FILE_TYPE_AUDIO,
+                SaveProcessor::FILE_TYPE_VIDEO,
+                SaveProcessor::FILE_TYPE_APP,
+                SaveProcessor::FILE_TYPE_TEXT,
+                SaveProcessor::FILE_TYPE_OTHER
+            ])
+        ]
     ],
 ];

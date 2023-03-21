@@ -14,13 +14,9 @@ class UpdateProcessor extends SaveProcessor
 
 
     /********************** PROCESS INTERNAL METHODS *********************/
-    protected function getValidateRules(): array
+    protected function isFileRequired(): bool
     {
-        return [
-            'alt' => 'nullable|string|max:128',
-            'title' => 'nullable|string|max:128',
-            'description' => 'nullable|string|max:2048',
-        ];
+        return false;
     }
 
     protected function setProcessParams(): void
@@ -45,10 +41,10 @@ class UpdateProcessor extends SaveProcessor
 
             Storage::disk($this->currentDisk)->delete($this->previousFiles);
 
-            $this->setBaseMediafileData();
+            $this->setMediafileBaseData();
         }
 
-        $this->setTextMediafileData();
+        $this->setMediafileMetaData();
 
         if (!$this->mediafileModel->save()) {
             throw new \Exception('Error save file data in database.');

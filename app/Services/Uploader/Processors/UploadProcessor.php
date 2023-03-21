@@ -9,16 +9,9 @@ use Illuminate\Support\Facades\Storage;
 class UploadProcessor extends SaveProcessor
 {
     /********************** PROCESS INTERNAL METHODS *********************/
-    protected function getValidateRules(): array
+    protected function isFileRequired(): bool
     {
-        return [
-            'alt' => 'nullable|string|max:128',
-            'title' => 'nullable|string|max:128',
-            'description' => 'nullable|string|max:2048',
-            'owner_id' => 'nullable|numeric',
-            'owner_name' => 'nullable|string|max:64',
-            'owner_attribute' => 'nullable|string|max:64',
-        ];
+        return true;
     }
 
     protected function setProcessParams(): void
@@ -44,8 +37,8 @@ class UploadProcessor extends SaveProcessor
             throw new \Exception('Error upload file.');
         }
 
-        $this->setBaseMediafileData();
-        $this->setTextMediafileData();
+        $this->setMediafileBaseData();
+        $this->setMediafileMetaData();
 
         if (!$this->mediafileModel->save()) {
             throw new \Exception('Error save file data in database.');

@@ -7,6 +7,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\{
     Storage, Validator
 };
+use Illuminate\Validation\Rules\File;
 use App\Services\Uploader\Classes\ThumbConfig;
 use App\Services\Uploader\Helpers\{
     ImageHelper, ThumbHelper
@@ -75,6 +76,11 @@ abstract class SaveProcessor extends BaseProcessor
      */
     protected $uploadDirectories;
 
+    /**
+     * @var array
+     */
+    protected $metaDataValidationRules;
+
 
     /************************* PROCESS ATTRIBUTES *************************/
     /**
@@ -99,10 +105,10 @@ abstract class SaveProcessor extends BaseProcessor
 
 
     /************************* ABSTRACT METHODS ***************************/
-    abstract protected function getValidateRules(): array;
+    abstract protected function isFileRequired(): bool;
 
 
-    /************************* CONFIG SETTERS ****************************/
+    /************************* CONFIG SETTERS *****************************/
     /**
      * @param string $baseUrl
      * @return $this
@@ -183,6 +189,16 @@ abstract class SaveProcessor extends BaseProcessor
         return $this;
     }
 
+    /**
+     * @param array $metaDataValidationRules
+     * @return $this
+     */
+    public function setMetaDataValidationRules(array $metaDataValidationRules)
+    {
+        $this->metaDataValidationRules = $metaDataValidationRules;
+        return $this;
+    }
+
 
     /********************** PROCESS PUBLIC METHODS ***********************/
     /**
@@ -257,13 +273,45 @@ abstract class SaveProcessor extends BaseProcessor
      */
     protected function validate(): bool
     {
-        $validator = Validator::make($this->data, $this->getValidateRules());
-        if ($validator->fails()) {
-            $this->errors = $validator->getMessageBag();
+        return $this->validateMetaData() && $this->validateFile();
+    }
+
+    protected function validateMetaData(): bool
+    {
+        $metaDataValidator = Validator::make($this->data, $this->metaDataValidationRules);
+        if ($metaDataValidator->fails()) {
+            $this->errors = !is_null($this->errors)
+                ? $this->errors->merge($metaDataValidator->getMessageBag())
+                : $metaDataValidator->getMessageBag();
             return false;
         }
         return true;
     }
+
+    protected function validateFile(): bool
+    {
+        $fileValidator = Validator::make(['file' => $this->file], [
+            'file' => [
+                $this->isFileRequired() ? 'required' : 'nullable'
+            ]
+        ]);
+        if ($this->checkExtensionByMimeType && !empty($this->fileExtensions[$this->data['needed_file_type']])) {
+            $fileValidator->addRules([
+                'file' => [
+                    File::types($this->fileExtensions[$this->data['needed_file_type']])
+                        ->max($this->fileMaxSize),
+                ]
+            ]);
+        }
+        if ($fileValidator->fails()) {
+            $this->errors = !is_null($this->errors)
+                ? $this->errors->merge($fileValidator->getMessageBag())
+                : $fileValidator->getMessageBag();
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * @return bool
@@ -367,7 +415,7 @@ abstract class SaveProcessor extends BaseProcessor
         ]);
     }
 
-    protected function setBaseMediafileData(): void
+    protected function setMediafileBaseData(): void
     {
         $this->mediafileModel->url = $this->databaseUrl;
         $this->mediafileModel->filename = $this->outFileName;
@@ -376,7 +424,7 @@ abstract class SaveProcessor extends BaseProcessor
         $this->mediafileModel->disk = $this->currentDisk;
     }
 
-    protected function setTextMediafileData(): void
+    protected function setMediafileMetaData(): void
     {
         $this->mediafileModel->alt = $this->data['alt'];
         $this->mediafileModel->title = $this->data['title'];
