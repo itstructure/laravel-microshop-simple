@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Uploader\Helpers;
+namespace App\Services\Uploader\src\Helpers;
 
 use Exception;
 use Illuminate\Support\Arr;

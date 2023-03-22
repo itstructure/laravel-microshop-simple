@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Uploader\Processors;
+namespace App\Services\Uploader\src\Processors;
 
 use Illuminate\Support\Facades\Storage;
 

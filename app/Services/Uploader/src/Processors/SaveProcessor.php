@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Uploader\Processors;
+namespace App\Services\Uploader\src\Processors;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\{
     Storage, Validator
 };
 use Illuminate\Validation\Rules\File;
-use App\Services\Uploader\Classes\ThumbConfig;
-use App\Services\Uploader\Helpers\{
+use App\Services\Uploader\src\Classes\ThumbConfig;
+use App\Services\Uploader\src\Helpers\{
     ImageHelper, ThumbHelper
 };
 
@@ -49,7 +49,7 @@ abstract class SaveProcessor extends BaseProcessor
     /**
      * @var bool
      */
-    protected $checkExtensionByMimeType;
+    protected $checkExtensionByFileType;
 
     /**
      * @var int
@@ -130,12 +130,12 @@ abstract class SaveProcessor extends BaseProcessor
     }
 
     /**
-     * @param bool $checkExtensionByMimeType
+     * @param bool $checkExtensionByFileType
      * @return $this
      */
-    public function setCheckExtensionByMimeType(bool $checkExtensionByMimeType)
+    public function setCheckExtensionByFileType(bool $checkExtensionByFileType)
     {
-        $this->checkExtensionByMimeType = $checkExtensionByMimeType;
+        $this->checkExtensionByFileType = $checkExtensionByFileType;
         return $this;
     }
 
@@ -295,7 +295,7 @@ abstract class SaveProcessor extends BaseProcessor
                 $this->isFileRequired() ? 'required' : 'nullable'
             ]
         ]);
-        if ($this->checkExtensionByMimeType && !empty($this->fileExtensions[$this->data['needed_file_type']])) {
+        if ($this->checkExtensionByFileType && !empty($this->fileExtensions[$this->data['needed_file_type']])) {
             $fileValidator->addRules([
                 'file' => [
                     File::types($this->fileExtensions[$this->data['needed_file_type']])
@@ -418,9 +418,9 @@ abstract class SaveProcessor extends BaseProcessor
     protected function setMediafileBaseData(): void
     {
         $this->mediafileModel->url = $this->databaseUrl;
-        $this->mediafileModel->filename = $this->outFileName;
+        $this->mediafileModel->file_name = $this->outFileName;
         $this->mediafileModel->size = $this->file->getSize();
-        $this->mediafileModel->type = $this->file->getMimeType();
+        $this->mediafileModel->mime_type = $this->file->getMimeType();
         $this->mediafileModel->disk = $this->currentDisk;
     }
 

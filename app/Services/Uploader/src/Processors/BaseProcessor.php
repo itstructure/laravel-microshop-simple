@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services\Uploader\Processors;
+namespace App\Services\Uploader\src\Processors;
 
 use Exception;
 use Illuminate\Support\MessageBag;
-use App\Services\Uploader\Models\Mediafile;
+use App\Services\Uploader\src\Models\Mediafile;
 
 abstract class BaseProcessor
 {

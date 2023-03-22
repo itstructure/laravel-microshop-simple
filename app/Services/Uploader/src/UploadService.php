@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services\Uploader;
+namespace App\Services\Uploader\src;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\MessageBag;
-use App\Services\Uploader\Processors\{BaseProcessor, UploadProcessor, UpdateProcessor, DeleteProcessor};
-use App\Services\Uploader\Models\Mediafile;
+use App\Services\Uploader\src\Processors\{BaseProcessor, UploadProcessor, UpdateProcessor, DeleteProcessor};
+use App\Services\Uploader\src\Models\Mediafile;
 
 class UploadService
 {
@@ -20,7 +20,7 @@ class UploadService
      */
     private $processor;
 
-    public static function getInstance(array $config): self
+    public static function getInstance(array $config = []): self
     {
         return new static($config);
     }
@@ -41,30 +41,30 @@ class UploadService
     }
 
     /**
-     * @param int $Id
+     * @param int $id
      * @param array $data
      * @param UploadedFile|null $file
      * @throws Exception
      * @return bool
      */
-    public function update(int $Id, array $data, UploadedFile $file = null): bool
+    public function update(int $id, array $data, UploadedFile $file = null): bool
     {
         $this->processor = UpdateProcessor::getInstance($this->config)
-            ->setMediafileModel(Mediafile::find($Id))
+            ->setMediafileModel(Mediafile::find($id))
             ->setData($data)
             ->setFile($file);
         return $this->processor->run();
     }
 
     /**
-     * @param int $Id
+     * @param int $id
      * @throws Exception
      * @return bool
      */
-    public function delete(int $Id): bool
+    public function delete(int $id): bool
     {
         $this->processor = DeleteProcessor::getInstance()
-            ->setMediafileModel(Mediafile::find($Id));
+            ->setMediafileModel(Mediafile::find($id));
         return $this->processor->run();
     }
 
@@ -77,9 +77,9 @@ class UploadService
     }
 
     /**
-     * @return MessageBag
+     * @return MessageBag|null
      */
-    public function getErrors(): MessageBag
+    public function getErrors(): ?MessageBag
     {
         return $this->processor->getErrors();
     }
@@ -88,7 +88,7 @@ class UploadService
      * UploadService constructor.
      * @param array $config
      */
-    private function __construct(array $config)
+    private function __construct(array $config = [])
     {
         $this->config = $config;
     }

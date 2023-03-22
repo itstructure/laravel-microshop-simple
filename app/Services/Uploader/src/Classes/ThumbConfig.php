@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Uploader\Classes;
+namespace App\Services\Uploader\src\Classes;
 
 /**
  * Class ThumbConfig

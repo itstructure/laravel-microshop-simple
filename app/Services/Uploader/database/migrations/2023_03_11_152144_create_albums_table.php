@@ -11,17 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mediafiles', function (Blueprint $table) {
+        Schema::create('albums', function (Blueprint $table) {
             $table->id();
-            $table->string('file_name', 128);
-            $table->string('mime_type', 64);
-            $table->text('url');
-            $table->string('alt', 128)->nullable();
-            $table->integer('size');
-            $table->string('title', 128)->nullable();
+            $table->string('title', 64);
             $table->text('description')->nullable();
-            $table->json('thumbs')->default('{}');
-            $table->string('disk', 64);
+            $table->string('type', 64);
             $table->timestamps();
         });
     }
@@ -31,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mediafiles');
+        Schema::dropIfExists('albums');
     }
 };

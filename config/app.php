@@ -199,7 +199,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\CardServiceProvider::class,
         App\Providers\OrderServiceProvider::class,
-        App\Providers\UploadServiceProvider::class,
+        App\Services\Uploader\src\UploadServiceProvider::class,
 
     ],
 
@@ -218,7 +218,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Card' => App\Facades\Card::class,
         'Order' => App\Facades\Order::class,
-        'Uploader' => App\Facades\Uploader::class,
+        //'Uploader' => App\Facades\Uploader::class,
     ])->toArray(),
 
     /*

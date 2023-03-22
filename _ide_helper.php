@@ -18645,6 +18645,91 @@
      
 }
 
+    namespace App\Services\Uploader\src\Facades { 
+            /**
+     * Class Uploader
+     *
+     * @package App\Services\Uploader\src\Facades
+     */ 
+        class Uploader {
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getInstance($config = [])
+        {
+                        return \App\Services\Uploader\src\UploadService::getInstance($config);
+        }
+                    /**
+         * 
+         *
+         * @param array $data
+         * @param \Illuminate\Http\UploadedFile $file
+         * @throws Exception
+         * @return bool 
+         * @static 
+         */ 
+        public static function upload($data, $file)
+        {
+                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        return $instance->upload($data, $file);
+        }
+                    /**
+         * 
+         *
+         * @param int $id
+         * @param array $data
+         * @param \Illuminate\Http\UploadedFile|null $file
+         * @throws Exception
+         * @return bool 
+         * @static 
+         */ 
+        public static function update($id, $data, $file = null)
+        {
+                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        return $instance->update($id, $data, $file);
+        }
+                    /**
+         * 
+         *
+         * @param int $id
+         * @throws Exception
+         * @return bool 
+         * @static 
+         */ 
+        public static function delete($id)
+        {
+                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        return $instance->delete($id);
+        }
+                    /**
+         * 
+         *
+         * @return bool 
+         * @static 
+         */ 
+        public static function hasErrors()
+        {
+                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        return $instance->hasErrors();
+        }
+                    /**
+         * 
+         *
+         * @return \Illuminate\Support\MessageBag|null 
+         * @static 
+         */ 
+        public static function getErrors()
+        {
+                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        return $instance->getErrors();
+        }
+         
+    }
+     
+}
+
     namespace Illuminate\Http { 
             /**
      * 
@@ -22565,6 +22650,7 @@ namespace  {
             class Card extends \App\Facades\Card {}
             class Order extends \App\Facades\Order {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
+            class Uploader extends \App\Services\Uploader\src\Facades\Uploader {}
      
 }
 

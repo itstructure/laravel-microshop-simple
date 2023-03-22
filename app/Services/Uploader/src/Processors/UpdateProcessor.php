@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Uploader\Processors;
+namespace App\Services\Uploader\src\Processors;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -25,7 +25,7 @@ class UpdateProcessor extends SaveProcessor
             return;
         }
         $this->currentDisk = $this->mediafileModel->getDisk();
-        $this->processDirectory = $this->file->getMimeType() == $this->mediafileModel->getType()
+        $this->processDirectory = $this->file->getMimeType() == $this->mediafileModel->getMimeType()
             ? pathinfo($this->mediafileModel->getUrl())['dirname']
             : $this->getNewProcessDirectory();
         $this->previousFiles = [];//TODO: Need to finish.

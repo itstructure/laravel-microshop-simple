@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Uploader\Models;
+namespace App\Services\Uploader\src\Models;
 
 use Illuminate\Database\Eloquent\{Collection, Builder as EloquentBuilder};
-use App\Services\Uploader\Traits\HasCompositePrimaryKey;
+use App\Services\Uploader\src\Traits\HasCompositePrimaryKey;
 
 class OwnerAlbum extends Owner
 {
@@ -22,7 +22,7 @@ class OwnerAlbum extends Owner
      */
     public function getAlbum()
     {
-        return $this->hasOne(Album::class, ['id' => 'album_id']);
+        return $this->hasOne(Album::class, 'album_id', 'id');
     }
 
     /**

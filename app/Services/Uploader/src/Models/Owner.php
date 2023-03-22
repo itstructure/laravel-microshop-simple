@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Uploader\Models;
+namespace App\Services\Uploader\src\Models;
 
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\{Model, Builder as EloquentBuilder};

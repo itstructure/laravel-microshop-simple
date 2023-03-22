@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Uploader\Models;
+namespace App\Services\Uploader\src\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Services\Uploader\Processors\SaveProcessor;
+use App\Services\Uploader\src\Processors\SaveProcessor;
 
 class Album extends Model
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Uploader\Traits;
+namespace App\Services\Uploader\src\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 

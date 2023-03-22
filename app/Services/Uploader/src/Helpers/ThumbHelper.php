@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services\Uploader\Helpers;
+namespace App\Services\Uploader\src\Helpers;
 
 use Exception;
 use Imagine\Image\ImageInterface;
-use App\Services\Uploader\Classes\ThumbConfig;
+use App\Services\Uploader\src\Classes\ThumbConfig;
 
 class ThumbHelper
 {

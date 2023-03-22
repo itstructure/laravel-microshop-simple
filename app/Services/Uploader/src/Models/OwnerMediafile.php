@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services\Uploader\Models;
+namespace App\Services\Uploader\src\Models;
 
 use Illuminate\Database\Eloquent\{Collection, Builder as EloquentBuilder};
-use App\Services\Uploader\Traits\HasCompositePrimaryKey;
-use App\Services\Uploader\Processors\SaveProcessor;
+use App\Services\Uploader\src\Traits\HasCompositePrimaryKey;
+use App\Services\Uploader\src\Processors\SaveProcessor;
 
 class OwnerMediafile extends Owner
 {
@@ -23,7 +23,7 @@ class OwnerMediafile extends Owner
      */
     public function getMediaFile()
     {
-        return $this->hasOne(Mediafile::class, ['id' => 'mediafile_id']);
+        return $this->hasOne(Mediafile::class, 'mediafile_id', 'id');
     }
 
     /**
