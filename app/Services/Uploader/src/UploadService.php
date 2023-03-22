@@ -5,7 +5,9 @@ namespace App\Services\Uploader\src;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\MessageBag;
-use App\Services\Uploader\src\Processors\{BaseProcessor, UploadProcessor, UpdateProcessor, DeleteProcessor};
+use App\Services\Uploader\src\Processors\{
+    BaseProcessor, SaveProcessor, UploadProcessor, UpdateProcessor, DeleteProcessor
+};
 use App\Services\Uploader\src\Models\Mediafile;
 
 class UploadService
@@ -16,7 +18,7 @@ class UploadService
     private $config;
 
     /**
-     * @var BaseProcessor
+     * @var SaveProcessor|BaseProcessor
      */
     private $processor;
 

@@ -279,6 +279,9 @@ abstract class SaveProcessor extends BaseProcessor
     protected function validateMetaData(): bool
     {
         $metaDataValidator = Validator::make($this->data, $this->metaDataValidationRules);
+        if ($this->checkExtensionByFileType) {
+            $metaDataValidator->addRules(['needed_file_type' => 'required']);
+        }
         if ($metaDataValidator->fails()) {
             $this->errors = !is_null($this->errors)
                 ? $this->errors->merge($metaDataValidator->getMessageBag())
@@ -354,13 +357,13 @@ abstract class SaveProcessor extends BaseProcessor
         }
     }
 
+    /**
+     * @return string
+     * @throws Exception
+     */
     protected function getNewProcessDirectory(): string
     {
         $processDirectory = rtrim(rtrim($this->getUploadDirConfig($this->file->getMimeType()), '/'), '\\');
-
-        if (!empty($this->data['subDir'])) {
-            $processDirectory = $processDirectory . DIRECTORY_SEPARATOR . trim(trim($this->data['subDir'], '/'), '\\');
-        }
 
         return $processDirectory .
             DIRECTORY_SEPARATOR . substr(md5(time()), 0, self::DIR_LENGTH_FIRST) .

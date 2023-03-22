@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\Uploader\src\Http\Controllers\UploadController;
 use App\Http\Controllers\{ProfileController, HomeController, CardController, ProductController};
 use Illuminate\Support\Facades\Route;
 
@@ -78,3 +79,10 @@ Route::group(['prefix'=>'admin', 'namespace' => 'App\Http\Controllers\Admin', 'm
         Route::post('delete',      ['as' => 'admin_order_delete', 'uses' => 'OrderController@delete']);
     });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Upload section.
+|--------------------------------------------------------------------------
+*/
+Route::post('/file/upload', [UploadController::class, 'upload'])->name('file.upload');

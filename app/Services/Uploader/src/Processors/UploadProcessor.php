@@ -14,6 +14,10 @@ class UploadProcessor extends SaveProcessor
         return true;
     }
 
+    /**
+     * @return void
+     * @throws Exception
+     */
     protected function setProcessParams(): void
     {
         $this->currentDisk = Storage::getDefaultDriver();
@@ -21,8 +25,8 @@ class UploadProcessor extends SaveProcessor
         $this->processDirectory = $this->getNewProcessDirectory();
 
         $this->outFileName = $this->renameFiles ?
-            Str::uuid() . '.' . $this->file->getExtension() :
-            Str::slug($this->file->getBasename()) . '.' . $this->file->getExtension();
+            Str::uuid()->toString() . '.' . $this->file->extension() :
+            Str::slug($this->file->getClientOriginalName(), '.');
 
         $this->databaseUrl = $this->processDirectory . DIRECTORY_SEPARATOR . $this->outFileName;
     }
@@ -43,6 +47,7 @@ class UploadProcessor extends SaveProcessor
         if (!$this->mediafileModel->save()) {
             throw new \Exception('Error save file data in database.');
         }
+        return true;
     }
 
     protected function afterProcess(): void

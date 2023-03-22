@@ -19,6 +19,10 @@ class UpdateProcessor extends SaveProcessor
         return false;
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     protected function setProcessParams(): void
     {
         if (is_null($this->file)) {
@@ -31,6 +35,10 @@ class UpdateProcessor extends SaveProcessor
         $this->previousFiles = [];//TODO: Need to finish.
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     protected function process(): bool
     {
         if (!is_null($this->file)) {
@@ -49,6 +57,7 @@ class UpdateProcessor extends SaveProcessor
         if (!$this->mediafileModel->save()) {
             throw new \Exception('Error save file data in database.');
         }
+        return true;
     }
 
     protected function afterProcess(): void
