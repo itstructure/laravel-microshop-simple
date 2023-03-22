@@ -218,7 +218,6 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Card' => App\Facades\Card::class,
         'Order' => App\Facades\Order::class,
-        //'Uploader' => App\Facades\Uploader::class,
     ])->toArray(),
 
     /*

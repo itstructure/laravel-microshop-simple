@@ -7,7 +7,7 @@ return [
     'baseUrl' => config('app.url'),
     'renameFiles' => true,
     'checkExtensionByFileType' => true,
-    'fileMaxSize' => 100 * 1024,// Kilobytes
+    'maxFileSize' => 100 * 1024,// Kilobytes
     'fileExtensions' => [
         SaveProcessor::FILE_TYPE_THUMB => [
             'png', 'jpg', 'jpeg', 'gif',

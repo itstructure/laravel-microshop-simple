@@ -6,6 +6,10 @@ use Exception;
 use Illuminate\Support\MessageBag;
 use App\Services\Uploader\src\Models\Mediafile;
 
+/**
+ * Class BaseProcessor
+ * @package App\Services\Uploader\src\Processors
+ */
 abstract class BaseProcessor
 {
     /************************* PROCESS ATTRIBUTES *************************/

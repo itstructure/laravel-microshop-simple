@@ -4,6 +4,10 @@ namespace App\Services\Uploader\src\Processors;
 
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class UpdateProcessor
+ * @package App\Services\Uploader\src\Processors
+ */
 class UpdateProcessor extends SaveProcessor
 {
     /************************* PROCESS ATTRIBUTES *************************/

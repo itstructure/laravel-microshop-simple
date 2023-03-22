@@ -6,6 +6,10 @@ use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class UploadProcessor
+ * @package App\Services\Uploader\src\Processors
+ */
 class UploadProcessor extends SaveProcessor
 {
     /********************** PROCESS INTERNAL METHODS *********************/

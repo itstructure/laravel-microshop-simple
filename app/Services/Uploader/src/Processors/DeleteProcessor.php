@@ -4,6 +4,10 @@ namespace App\Services\Uploader\src\Processors;
 
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Class DeleteProcessor
+ * @package App\Services\Uploader\src\Processors
+ */
 class DeleteProcessor extends BaseProcessor
 {
     /********************** PROCESS INTERNAL METHODS *********************/

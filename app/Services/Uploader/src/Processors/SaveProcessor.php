@@ -13,6 +13,10 @@ use App\Services\Uploader\src\Helpers\{
     ImageHelper, ThumbHelper
 };
 
+/**
+ * Class SaveProcessor
+ * @package App\Services\Uploader\src\Processors
+ */
 abstract class SaveProcessor extends BaseProcessor
 {
     const FILE_TYPE_IMAGE = 'image';
@@ -54,7 +58,7 @@ abstract class SaveProcessor extends BaseProcessor
     /**
      * @var int
      */
-    protected $fileMaxSize;
+    protected $maxFileSize;
 
     /**
      * @var array
@@ -140,12 +144,12 @@ abstract class SaveProcessor extends BaseProcessor
     }
 
     /**
-     * @param int $fileMaxSize
+     * @param int $maxFileSize
      * @return $this
      */
-    public function setFileMaxSize(int $fileMaxSize)
+    public function setMaxFileSize(int $maxFileSize)
     {
-        $this->fileMaxSize = $fileMaxSize;
+        $this->maxFileSize = $maxFileSize;
         return $this;
     }
 
@@ -295,14 +299,14 @@ abstract class SaveProcessor extends BaseProcessor
     {
         $fileValidator = Validator::make(['file' => $this->file], [
             'file' => [
-                $this->isFileRequired() ? 'required' : 'nullable'
+                $this->isFileRequired() ? 'required' : 'nullable',
+                'max:' . $this->maxFileSize
             ]
         ]);
         if ($this->checkExtensionByFileType && !empty($this->fileExtensions[$this->data['needed_file_type']])) {
             $fileValidator->addRules([
                 'file' => [
-                    File::types($this->fileExtensions[$this->data['needed_file_type']])
-                        ->max($this->fileMaxSize),
+                    File::types($this->fileExtensions[$this->data['needed_file_type']]),
                 ]
             ]);
         }
@@ -376,7 +380,7 @@ abstract class SaveProcessor extends BaseProcessor
      */
     protected function createThumb(ThumbConfig $thumbConfig)
     {
-        $originalPathInfo = pathinfo($this->mediafileModel->url);
+        $originalPathInfo = pathinfo($this->mediafileModel->getUrl());
 
         $thumbPath = $originalPathInfo['dirname'] .
             DIRECTORY_SEPARATOR .
@@ -388,7 +392,7 @@ abstract class SaveProcessor extends BaseProcessor
             );
 
         $thumbContent = ImageHelper::thumbnail(
-            ImageHelper::getImagine()->load(Storage::disk($this->currentDisk)->get($this->mediafileModel->url)),
+            ImageHelper::getImagine()->load(Storage::disk($this->currentDisk)->get($this->mediafileModel->getUrl())),
             $thumbConfig->getWidth(),
             $thumbConfig->getHeight(),
             $thumbConfig->getMode()

@@ -10,6 +10,10 @@ use App\Services\Uploader\src\Processors\{
 };
 use App\Services\Uploader\src\Models\Mediafile;
 
+/**
+ * Class UploadService
+ * @package App\Services\Uploader\src
+ */
 class UploadService
 {
     /**
@@ -22,6 +26,10 @@ class UploadService
      */
     private $processor;
 
+    /**
+     * @param array $config
+     * @return UploadService
+     */
     public static function getInstance(array $config = []): self
     {
         return new static($config);
@@ -33,13 +41,14 @@ class UploadService
      * @throws Exception
      * @return bool
      */
-    public function upload(array $data, UploadedFile $file): bool
+    public function upload(array $data, UploadedFile $file = null): bool
     {
         $this->processor = UploadProcessor::getInstance($this->config)
             ->setMediafileModel(new Mediafile())
             ->setData($data)
             ->setFile($file);
-        return $this->processor->run();
+
+        return $this->save();
     }
 
     /**
@@ -55,7 +64,8 @@ class UploadService
             ->setMediafileModel(Mediafile::find($id))
             ->setData($data)
             ->setFile($file);
-        return $this->processor->run();
+
+        return $this->save();
     }
 
     /**
@@ -67,6 +77,7 @@ class UploadService
     {
         $this->processor = DeleteProcessor::getInstance()
             ->setMediafileModel(Mediafile::find($id));
+
         return $this->processor->run();
     }
 
@@ -93,5 +104,21 @@ class UploadService
     private function __construct(array $config = [])
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return bool
+     */
+    private function save(): bool
+    {
+        if (!$this->processor->run()) {
+            return false;
+        }
+
+        if ($this->processor->getMediafileModel()->isImage()) {
+            $this->processor->createThumbs();
+        }
+
+        return true;
     }
 }
