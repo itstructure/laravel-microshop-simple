@@ -34,7 +34,7 @@ class UpdateProcessor extends SaveProcessor
         }
         $this->currentDisk = $this->mediafileModel->getDisk();
         $this->processDirectory = $this->file->getMimeType() == $this->mediafileModel->getMimeType()
-            ? pathinfo($this->mediafileModel->getUrl())['dirname']
+            ? pathinfo($this->mediafileModel->getPath())['dirname']
             : $this->getNewProcessDirectory();
         $this->previousFiles = [];//TODO: Need to finish.
     }

@@ -105,7 +105,7 @@ abstract class SaveProcessor extends BaseProcessor
     /**
      * @var string
      */
-    protected $databaseUrl;
+    protected $path;
 
 
     /************************* ABSTRACT METHODS ***************************/
@@ -327,7 +327,7 @@ abstract class SaveProcessor extends BaseProcessor
     {
         Storage::disk($this->currentDisk)->putFileAs($this->processDirectory, $this->file, $this->outFileName);
 
-        return Storage::disk($this->currentDisk)->fileExists($this->processDirectory . DIRECTORY_SEPARATOR . $this->outFileName);
+        return Storage::disk($this->currentDisk)->fileExists($this->processDirectory . '/' . $this->outFileName);
     }
 
     /**
@@ -370,8 +370,8 @@ abstract class SaveProcessor extends BaseProcessor
         $processDirectory = rtrim(rtrim($this->getUploadDirConfig($this->file->getMimeType()), '/'), '\\');
 
         return $processDirectory .
-            DIRECTORY_SEPARATOR . substr(md5(time()), 0, self::DIR_LENGTH_FIRST) .
-            DIRECTORY_SEPARATOR . substr(md5(microtime() . $this->file->getBasename()), 0, self::DIR_LENGTH_SECOND);
+            '/' . substr(md5(time()), 0, self::DIR_LENGTH_FIRST) .
+            '/' . substr(md5(microtime() . $this->file->getBasename()), 0, self::DIR_LENGTH_SECOND);
     }
 
     /**
@@ -380,10 +380,10 @@ abstract class SaveProcessor extends BaseProcessor
      */
     protected function createThumb(ThumbConfig $thumbConfig)
     {
-        $originalPathInfo = pathinfo($this->mediafileModel->getUrl());
+        $originalPathInfo = pathinfo($this->mediafileModel->getPath());
 
         $thumbPath = $originalPathInfo['dirname'] .
-            DIRECTORY_SEPARATOR .
+            '/' .
             $this->getThumbFilename($originalPathInfo['filename'],
                 $originalPathInfo['extension'],
                 $thumbConfig->getAlias(),
@@ -392,7 +392,7 @@ abstract class SaveProcessor extends BaseProcessor
             );
 
         $thumbContent = ImageHelper::thumbnail(
-            ImageHelper::getImagine()->load(Storage::disk($this->currentDisk)->get($this->mediafileModel->getUrl())),
+            ImageHelper::getImagine()->load(Storage::disk($this->currentDisk)->get($this->mediafileModel->getPath())),
             $thumbConfig->getWidth(),
             $thumbConfig->getHeight(),
             $thumbConfig->getMode()
@@ -424,7 +424,7 @@ abstract class SaveProcessor extends BaseProcessor
 
     protected function setMediafileBaseData(): void
     {
-        $this->mediafileModel->url = $this->databaseUrl;
+        $this->mediafileModel->path = $this->path;
         $this->mediafileModel->file_name = $this->outFileName;
         $this->mediafileModel->size = $this->file->getSize();
         $this->mediafileModel->mime_type = $this->file->getMimeType();

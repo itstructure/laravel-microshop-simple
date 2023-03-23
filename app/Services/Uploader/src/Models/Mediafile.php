@@ -9,7 +9,7 @@ class Mediafile extends Model
 {
     protected $table = 'mediafiles';
 
-    protected $fillable = ['file_name', 'mime_type', 'url', 'alt', 'size', 'title', 'description', 'thumbs', 'disk'];
+    protected $fillable = ['file_name', 'mime_type', 'path', 'alt', 'size', 'title', 'description', 'thumbs', 'disk'];
 
     protected $casts = [
         'thumbs' => 'array',
@@ -26,9 +26,9 @@ class Mediafile extends Model
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getPath(): string
     {
-        return $this->url;
+        return $this->path;
     }
 
     /**

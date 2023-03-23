@@ -32,7 +32,7 @@ class UploadProcessor extends SaveProcessor
             Str::uuid()->toString() . '.' . $this->file->extension() :
             Str::slug($this->file->getClientOriginalName(), '.');
 
-        $this->databaseUrl = $this->processDirectory . DIRECTORY_SEPARATOR . $this->outFileName;
+        $this->path = $this->processDirectory . '/' . $this->outFileName;
     }
 
     /**

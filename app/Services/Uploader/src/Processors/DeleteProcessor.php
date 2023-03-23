@@ -15,7 +15,7 @@ class DeleteProcessor extends BaseProcessor
     {
         $this->currentDisk = $this->mediafileModel->getDisk();
 
-        $originalPathinfo = pathinfo($this->mediafileModel->getUrl());
+        $originalPathinfo = pathinfo($this->mediafileModel->getPath());
         $dirnameParent = substr($originalPathinfo['dirname'], 0, -(SaveProcessor::DIR_LENGTH_SECOND + 1));
         $childDirectories = Storage::disk($this->currentDisk)->directories($dirnameParent);
         $this->processDirectory = count($childDirectories) == 1

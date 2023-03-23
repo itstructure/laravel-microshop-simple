@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9bd0744a0681d855b316337c788b084e",
+    "content-hash": "0383f030cb427a4a9c43cac3aab3b3af",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -1287,16 +1287,16 @@
         },
         {
             "name": "itstructure/laravel-rbac",
-            "version": "3.0.8",
+            "version": "3.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/itstructure/laravel-rbac.git",
-                "reference": "5b61de3fa2a0ed49dad1750c20985e3df38d018e"
+                "reference": "de30bfcb11b0cadadaefada3da27445cb725a437"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/itstructure/laravel-rbac/zipball/5b61de3fa2a0ed49dad1750c20985e3df38d018e",
-                "reference": "5b61de3fa2a0ed49dad1750c20985e3df38d018e",
+                "url": "https://api.github.com/repos/itstructure/laravel-rbac/zipball/de30bfcb11b0cadadaefada3da27445cb725a437",
+                "reference": "de30bfcb11b0cadadaefada3da27445cb725a437",
                 "shasum": ""
             },
             "require": {
@@ -1331,9 +1331,9 @@
             ],
             "support": {
                 "issues": "https://github.com/itstructure/laravel-rbac/issues",
-                "source": "https://github.com/itstructure/laravel-rbac/tree/3.0.8"
+                "source": "https://github.com/itstructure/laravel-rbac/tree/3.0.9"
             },
-            "time": "2023-02-18T09:47:57+00:00"
+            "time": "2023-03-23T17:29:13+00:00"
         },
         {
             "name": "jeroennoten/laravel-adminlte",
