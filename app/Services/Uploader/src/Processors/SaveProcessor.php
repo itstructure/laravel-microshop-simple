@@ -4,6 +4,7 @@ namespace App\Services\Uploader\src\Processors;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\{
     Storage, Validator
 };
@@ -372,6 +373,16 @@ abstract class SaveProcessor extends BaseProcessor
         return $processDirectory .
             '/' . substr(md5(time()), 0, self::DIR_LENGTH_FIRST) .
             '/' . substr(md5(microtime() . $this->file->getBasename()), 0, self::DIR_LENGTH_SECOND);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNewOutFileName(): string
+    {
+        return $this->renameFiles ?
+            Str::uuid()->toString() . '.' . $this->file->extension() :
+            Str::slug($this->file->getClientOriginalName(), '.');
     }
 
     /**

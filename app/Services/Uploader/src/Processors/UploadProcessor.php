@@ -3,7 +3,6 @@
 namespace App\Services\Uploader\src\Processors;
 
 use Exception;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -28,9 +27,7 @@ class UploadProcessor extends SaveProcessor
 
         $this->processDirectory = $this->getNewProcessDirectory();
 
-        $this->outFileName = $this->renameFiles ?
-            Str::uuid()->toString() . '.' . $this->file->extension() :
-            Str::slug($this->file->getClientOriginalName(), '.');
+        $this->outFileName = $this->getNewOutFileName();
 
         $this->path = $this->processDirectory . '/' . $this->outFileName;
     }
@@ -51,6 +48,7 @@ class UploadProcessor extends SaveProcessor
         if (!$this->mediafileModel->save()) {
             throw new \Exception('Error save file data in database.');
         }
+        $this->mediafileModel->refresh();
         return true;
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\Uploader\src\Http\Controllers\UploadController;
+use App\Services\Uploader\src\Http\Controllers\{UploadController, DownloadController};
 use App\Http\Controllers\{ProfileController, HomeController, CardController, ProductController};
 use Illuminate\Support\Facades\Route;
 
@@ -86,3 +86,5 @@ Route::group(['prefix'=>'admin', 'namespace' => 'App\Http\Controllers\Admin', 'm
 |--------------------------------------------------------------------------
 */
 Route::post('/file/upload', [UploadController::class, 'upload'])->name('file.upload');
+Route::post('/file/update', [UploadController::class, 'update'])->name('file.update');
+Route::get('/file/download/{id}', [DownloadController::class, 'download'])->name('file.download')->where('id','\d+');

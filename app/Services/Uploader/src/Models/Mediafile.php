@@ -16,6 +16,15 @@ class Mediafile extends Model
     ];
 
     /**
+     * @param array $mimeTypes
+     * @return \Illuminate\Support\Collection
+     */
+    public static function findByMimeTypes(array $mimeTypes)
+    {
+        return static::whereIn('mime_type', $mimeTypes)->get();
+    }
+
+    /**
      * @return string
      */
     public function getMimeType(): string
@@ -48,21 +57,24 @@ class Mediafile extends Model
     }
 
     /**
-     * @param string $url
-     * @return Model|null|object|static
+     * @param string $alias
+     * @return array
      */
-    public static function findByUrl(string $url)
+    public function getThumbPath(string $alias): array
     {
-        return static::where('url', $url)->first();
-    }
+        if ($alias === SaveProcessor::THUMB_ALIAS_ORIGINAL) {
+            return $this->getPath();
 
-    /**
-     * @param array $mimeTypes
-     * @return \Illuminate\Support\Collection
-     */
-    public static function findByMimeTypes(array $mimeTypes)
-    {
-        return static::whereIn('mime_type', $mimeTypes)->get();
+        } else {
+            $thumbs = $this->getThumbs();
+            $path = !empty($thumbs[$alias]) ? $thumbs[$alias] : '';
+        }
+
+        if (empty($path)) {
+            return '';
+        }
+
+        return $this->getPath();
     }
 
     /**

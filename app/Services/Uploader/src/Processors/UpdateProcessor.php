@@ -32,11 +32,20 @@ class UpdateProcessor extends SaveProcessor
         if (is_null($this->file)) {
             return;
         }
+
         $this->currentDisk = $this->mediafileModel->getDisk();
+
         $this->processDirectory = $this->file->getMimeType() == $this->mediafileModel->getMimeType()
             ? pathinfo($this->mediafileModel->getPath())['dirname']
             : $this->getNewProcessDirectory();
-        $this->previousFiles = [];//TODO: Need to finish.
+
+        $this->outFileName = $this->getNewOutFileName();
+
+        $this->path = $this->processDirectory . '/' . $this->outFileName;
+
+        $this->previousFiles = array_merge(
+            [$this->mediafileModel->getPath()], array_values($this->mediafileModel->getThumbs())
+        );
     }
 
     /**
@@ -61,6 +70,7 @@ class UpdateProcessor extends SaveProcessor
         if (!$this->mediafileModel->save()) {
             throw new \Exception('Error save file data in database.');
         }
+        $this->mediafileModel->refresh();
         return true;
     }
 
