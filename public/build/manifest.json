@@ -1,0 +1,16 @@
+{
+  "E:/Web/Projects/_Httpdocs/laravel-microshop-simple/resources/sass/images/top-card.svg": {
+    "file": "assets/top-card-7423cb74.svg",
+    "src": "E:/Web/Projects/_Httpdocs/laravel-microshop-simple/resources/sass/images/top-card.svg"
+  },
+  "resources/js/app.jsx": {
+    "file": "assets/app-9ea61353.js",
+    "isEntry": true,
+    "src": "resources/js/app.jsx"
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-858af4e4.css",
+    "isEntry": true,
+    "src": "resources/sass/app.scss"
+  }
+}
