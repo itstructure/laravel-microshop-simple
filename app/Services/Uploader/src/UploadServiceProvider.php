@@ -4,12 +4,14 @@ namespace App\Services\Uploader\src;
 
 use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use App\Services\Uploader\src\Facades\Uploader;
 
 /**
  * Class UploadServiceProvider
  * @package App\Services\Uploader\src
+ * @author Andrey Girnik <girnikandrey@gmail.com>
  */
 class UploadServiceProvider extends ServiceProvider
 {
@@ -19,16 +21,19 @@ class UploadServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        /*$this->app->singleton('uploader', function ($app) {
-            return UploadService::getInstance($app['config']['uploader']);
-        });*/
-
         $this->app->bind('uploader', function ($app) {
             return UploadService::getInstance($app['config']['uploader']);
         });
         AliasLoader::getInstance()->alias('Uploader', Uploader::class);
 
-        //$this->registerCommands();
+        // Directives
+        require_once __DIR__ . '/functions.php';
+
+        Blade::directive('fileSetter', function ($config) {
+            return "<?php echo file_setter($config); ?>";
+        });
+
+        $this->registerCommands();
     }
 
     /**
@@ -38,15 +43,15 @@ class UploadServiceProvider extends ServiceProvider
     public function boot()
     {
         // Loading settings
-        //$this->loadViews();
-        //$this->loadTranslations();
+        $this->loadViews();
+        $this->loadTranslations();
         $this->loadMigrations();
 
 
         // Publish settings
         $this->publishConfig();
-        //$this->publishViews();
-        //$this->publishTranslations();
+        $this->publishViews();
+        $this->publishTranslations();
         $this->publishMigrations();
 
 
@@ -67,7 +72,7 @@ class UploadServiceProvider extends ServiceProvider
      */
     private function registerCommands(): void
     {
-        //$this->commands(Commands\PublishCommand::class);
+        $this->commands(Commands\PublishCommand::class);
     }
 
 

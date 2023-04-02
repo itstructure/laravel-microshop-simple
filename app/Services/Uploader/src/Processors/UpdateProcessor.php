@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * Class UpdateProcessor
  * @package App\Services\Uploader\src\Processors
+ * @author Andrey Girnik <girnikandrey@gmail.com>
  */
 class UpdateProcessor extends SaveProcessor
 {

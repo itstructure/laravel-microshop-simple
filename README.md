@@ -9,6 +9,7 @@ A simple internet shop.
 ## Requirements
 
 - php >= 8.1
+- MySQL >= 8.0.13 | MariaDB >= 10.2.1
 - composer
 - NodeJs
 

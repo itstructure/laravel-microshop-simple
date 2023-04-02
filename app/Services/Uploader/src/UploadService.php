@@ -13,6 +13,7 @@ use App\Services\Uploader\src\Models\Mediafile;
 /**
  * Class UploadService
  * @package App\Services\Uploader\src
+ * @author Andrey Girnik <girnikandrey@gmail.com>
  */
 class UploadService
 {

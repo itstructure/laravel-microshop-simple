@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * Class UploadProcessor
  * @package App\Services\Uploader\src\Processors
+ * @author Andrey Girnik <girnikandrey@gmail.com>
  */
 class UploadProcessor extends SaveProcessor
 {

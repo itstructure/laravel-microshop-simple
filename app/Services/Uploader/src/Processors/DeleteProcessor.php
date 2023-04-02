@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 /**
  * Class DeleteProcessor
  * @package App\Services\Uploader\src\Processors
+ * @author Andrey Girnik <girnikandrey@gmail.com>
  */
 class DeleteProcessor extends BaseProcessor
 {

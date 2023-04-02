@@ -17,6 +17,7 @@ use App\Services\Uploader\src\Helpers\{
 /**
  * Class SaveProcessor
  * @package App\Services\Uploader\src\Processors
+ * @author Andrey Girnik <girnikandrey@gmail.com>
  */
 abstract class SaveProcessor extends BaseProcessor
 {

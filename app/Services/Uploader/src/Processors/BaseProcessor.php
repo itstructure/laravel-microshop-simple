@@ -9,6 +9,7 @@ use App\Services\Uploader\src\Models\Mediafile;
 /**
  * Class BaseProcessor
  * @package App\Services\Uploader\src\Processors
+ * @author Andrey Girnik <girnikandrey@gmail.com>
  */
 abstract class BaseProcessor
 {
