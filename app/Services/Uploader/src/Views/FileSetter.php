@@ -32,6 +32,11 @@ class FileSetter
      */
     private $inputId;
 
+    /**
+     * @var string|int
+     */
+    private $openButtonId;
+
 
     /************************* PROCESS ATTRIBUTES *************************/
 
@@ -64,12 +69,13 @@ class FileSetter
      */
     public function render(): string
     {
-        return view('uploader::file_setter', [
+        return view('uploader::file_setter.index', [
             'attribute' => $this->attribute,
             'value' => !empty($this->model)
                 ? $this->model->{$this->attribute}
                 : $this->value,
-            'inputId' => $this->getInputId()
+            'inputId' => $this->getInputId(),
+            'openButtonId' => $this->getOpenButtonId()
         ])->render();
     }
 
@@ -106,18 +112,31 @@ class FileSetter
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return FileSetter
      */
-    public function setInputId($value): self
+    public function setInputId(string $value): self
     {
         $this->inputId = $value;
         return $this;
     }
 
+    /**
+     * @param string $openButtonId
+     * @return FileSetter
+     */
+    public function setOpenButtonId(string $openButtonId): self
+    {
+        $this->openButtonId = $openButtonId;
+        return $this;
+    }
+
 
     /********************** PROCESS INTERNAL METHODS *********************/
-    private function getInputId()
+    /**
+     * @return string
+     */
+    private function getInputId(): string
     {
         if (empty($this->inputId)) {
             $this->inputId = !empty($this->model)
@@ -142,5 +161,16 @@ class FileSetter
     private function getInputIdGenerated(): string
     {
         return static::$autoInputIdPrefix . static::$counter++;
+    }
+
+    /**
+     * @return string
+     */
+    private function getOpenButtonId(): string
+    {
+        if (empty($this->openButtonId)) {
+            $this->openButtonId = $this->inputId . '-btn';
+        }
+        return $this->openButtonId;
     }
 }

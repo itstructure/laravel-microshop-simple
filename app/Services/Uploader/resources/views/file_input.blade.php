@@ -1,1 +1,0 @@
-<input type="hidden" name="{{ $attribute }}" value="{{ $value }}" />

@@ -1,0 +1,1 @@
+<input type="hidden" id="{{ $inputId }}" name="{{ $attribute }}" value="{{ $value }}" />
