@@ -80,7 +80,7 @@ abstract class SaveProcessor extends BaseProcessor
     /**
      * @var array
      */
-    protected $uploadDirectories;
+    protected $baseUploadDirectories;
 
     /**
      * @var array
@@ -186,12 +186,12 @@ abstract class SaveProcessor extends BaseProcessor
     }
 
     /**
-     * @param array $uploadDirectories
+     * @param array $baseUploadDirectories
      * @return $this
      */
-    public function setUploadDirectories(array $uploadDirectories)
+    public function setbaseUploadDirectories(array $baseUploadDirectories)
     {
-        $this->uploadDirectories = $uploadDirectories;
+        $this->baseUploadDirectories = $baseUploadDirectories;
         return $this;
     }
 
@@ -337,29 +337,29 @@ abstract class SaveProcessor extends BaseProcessor
      * @throws Exception
      * @return string
      */
-    protected function getUploadDirConfig(string $fileType): string
+    protected function getBaseUploadDirectory(string $fileType): string
     {
-        if (!is_array($this->uploadDirectories) || empty($this->uploadDirectories)) {
-            throw new Exception('The localUploadDirs is not defined.');
+        if (!is_array($this->baseUploadDirectories) || empty($this->baseUploadDirectories)) {
+            throw new Exception('The baseUploadDirectories is not defined correctly.');
         }
 
         if (str_contains($fileType, self::FILE_TYPE_IMAGE)) {
-            return $this->uploadDirectories[self::FILE_TYPE_IMAGE];
+            return $this->baseUploadDirectories[self::FILE_TYPE_IMAGE];
 
         } elseif (str_contains($fileType, self::FILE_TYPE_AUDIO)) {
-            return $this->uploadDirectories[self::FILE_TYPE_AUDIO];
+            return $this->baseUploadDirectories[self::FILE_TYPE_AUDIO];
 
         } elseif (str_contains($fileType, self::FILE_TYPE_VIDEO)) {
-            return $this->uploadDirectories[self::FILE_TYPE_VIDEO];
+            return $this->baseUploadDirectories[self::FILE_TYPE_VIDEO];
 
         } elseif (str_contains($fileType, self::FILE_TYPE_APP)) {
-            return $this->uploadDirectories[self::FILE_TYPE_APP];
+            return $this->baseUploadDirectories[self::FILE_TYPE_APP];
 
         } elseif (str_contains($fileType, self::FILE_TYPE_TEXT)) {
-            return $this->uploadDirectories[self::FILE_TYPE_TEXT];
+            return $this->baseUploadDirectories[self::FILE_TYPE_TEXT];
 
         } else {
-            return $this->uploadDirectories[self::FILE_TYPE_OTHER];
+            return $this->baseUploadDirectories[self::FILE_TYPE_OTHER];
         }
     }
 
@@ -369,7 +369,11 @@ abstract class SaveProcessor extends BaseProcessor
      */
     protected function getNewProcessDirectory(): string
     {
-        $processDirectory = rtrim(rtrim($this->getUploadDirConfig($this->file->getMimeType()), '/'), '\\');
+        $processDirectory = rtrim(rtrim($this->getBaseUploadDirectory($this->file->getMimeType()), '/'), '\\');
+
+        if (!empty($this->data['sub_dir'])) {
+            $processDirectory .= '/' . trim(trim($this->data['sub_dir'], '/'), '\\');
+        }
 
         return $processDirectory .
             '/' . substr(md5(time()), 0, self::DIR_LENGTH_FIRST) .

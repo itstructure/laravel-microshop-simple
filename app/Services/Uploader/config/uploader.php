@@ -48,7 +48,7 @@ return [
         ],
     ],
     'thumbFilenameTemplate' => '{original}-{width}-{height}-{alias}.{extension}',
-    'uploadDirectories' => [
+    'baseUploadDirectories' => [
         SaveProcessor::FILE_TYPE_IMAGE => 'images',
         SaveProcessor::FILE_TYPE_AUDIO => 'audio',
         SaveProcessor::FILE_TYPE_VIDEO => 'video',
@@ -74,6 +74,7 @@ return [
                 SaveProcessor::FILE_TYPE_TEXT,
                 SaveProcessor::FILE_TYPE_OTHER
             ])
-        ]
+        ],
+        'sub_dir' => 'nullable|string|max:64'
     ],
 ];

@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class FileSetter
 {
-    public static $counter = 0;
-
-    public static $autoInputIdPrefix = 'w';
-
+    const INSERTED_DATA_ID = 'id';
+    const INSERTED_DATA_PATH = 'path';
 
     /************************* CONFIG ATTRIBUTES *************************/
     /**
@@ -37,8 +35,77 @@ class FileSetter
      */
     private $openButtonId;
 
+    /**
+     * @var string
+     */
+    private $openButtonName = 'Browse';
+
+    /**
+     * @var string
+     */
+    private $clearButtonName = 'Clear';
+
+    /**
+     * @var string
+     */
+    private $mediafileContainerId;
+
+    /**
+     * @var string
+     */
+    private $titleContainerId;
+
+    /**
+     * @var string
+     */
+    private $descriptionContainerId;
+
+    /**
+     * @var string
+     */
+    private $callbackBeforeInsert;
+
+    /**
+     * @var string
+     */
+    private $insertedDataType = self::INSERTED_DATA_ID;
+
+    /**
+     * @var string
+     */
+    private $ownerName;
+
+    /**
+     * @var int
+     */
+    private $ownerId;
+
+    /**
+     * @var string
+     */
+    private $ownerAttribute;
+
+    /**
+     * @var string
+     */
+    private $neededFileType;
+
+    /**
+     * @var string
+     */
+    private $subDir;
+
 
     /************************* PROCESS ATTRIBUTES *************************/
+    /**
+     * @var int
+     */
+    public static $counter = 0;
+
+    /**
+     * @var string
+     */
+    public static $autoInputIdPrefix = 'w';
 
 
     /********************** PROCESS PUBLIC METHODS ***********************/
@@ -75,7 +142,18 @@ class FileSetter
                 ? $this->model->{$this->attribute}
                 : $this->value,
             'inputId' => $this->getInputId(),
-            'openButtonId' => $this->getOpenButtonId()
+            'openButtonId' => $this->getOpenButtonId(),
+            'openButtonName' => $this->openButtonName,
+            'clearButtonName' => $this->clearButtonName,
+            'mediafileContainerId' => $this->mediafileContainerId,
+            'titleContainerId' => $this->titleContainerId,
+            'descriptionContainerId' => $this->descriptionContainerId,
+            'insertedDataType' => $this->insertedDataType,
+            'owner' => $this->ownerName,
+            'ownerId' => $this->ownerId,
+            'ownerAttribute' => $this->ownerAttribute,
+            'neededFileType' => $this->neededFileType,
+            'subDir' => $this->subDir,
         ])->render();
     }
 
@@ -128,6 +206,126 @@ class FileSetter
     public function setOpenButtonId(string $openButtonId): self
     {
         $this->openButtonId = $openButtonId;
+        return $this;
+    }
+
+    /**
+     * @param string $openButtonName
+     * @return FileSetter
+     */
+    public function setOpenButtonName(string $openButtonName): self
+    {
+        $this->openButtonName = $openButtonName;
+        return $this;
+    }
+
+    /**
+     * @param string $clearButtonName
+     * @return FileSetter
+     */
+    public function setClearButtonName(string $clearButtonName): self
+    {
+        $this->clearButtonName = $clearButtonName;
+        return $this;
+    }
+
+    /**
+     * @param string $mediafileContainerId
+     * @return FileSetter
+     */
+    public function setMediafileContainerId(string $mediafileContainerId): self
+    {
+        $this->mediafileContainerId = $mediafileContainerId;
+        return $this;
+    }
+
+    /**
+     * @param string $titleContainerId
+     * @return FileSetter
+     */
+    public function setTitleContainerId(string $titleContainerId): self
+    {
+        $this->titleContainerId = $titleContainerId;
+        return $this;
+    }
+
+    /**
+     * @param string $descriptionContainerId
+     * @return FileSetter
+     */
+    public function setDescriptionContainerId(string $descriptionContainerId): self
+    {
+        $this->descriptionContainerId = $descriptionContainerId;
+        return $this;
+    }
+
+    /**
+     * @param string $callbackBeforeInsert
+     * @return FileSetter
+     */
+    public function setCallbackBeforeInsert(string $callbackBeforeInsert): self
+    {
+        $this->callbackBeforeInsert = $callbackBeforeInsert;
+        return $this;
+    }
+
+    /**
+     * @param string $insertedDataType
+     * @return FileSetter
+     */
+    public function setInsertedDataType(string $insertedDataType): self
+    {
+        $this->insertedDataType = $insertedDataType;
+        return $this;
+    }
+
+    /**
+     * @param string $ownerName
+     * @return FileSetter
+     */
+    public function setOwnerName(string $ownerName): self
+    {
+        $this->ownerName = $ownerName;
+        return $this;
+    }
+
+    /**
+     * @param int $ownerId
+     * @return FileSetter
+     */
+    public function setOwnerId(int $ownerId): self
+    {
+        $this->ownerId = $ownerId;
+        return $this;
+    }
+
+    /**
+     * @param string $ownerAttribute
+     * @return FileSetter
+     */
+    public function setOwnerAttribute(string $ownerAttribute): self
+    {
+        $this->ownerAttribute = $ownerAttribute;
+        return $this;
+    }
+
+    /**
+     * @param string $neededFileType
+     * @return FileSetter
+     */
+    public function setNeededFileType(string $neededFileType): self
+    {
+        $this->neededFileType = $neededFileType;
+        return $this;
+    }
+
+    /**
+     * @param string $subDir
+     * @return FileSetter
+     */
+    public function setSubDir(string $subDir): self
+    {
+        $this->subDir = $subDir;
         return $this;
     }
 
