@@ -46,6 +46,11 @@ class FileSetter
     private $clearButtonName = 'Clear';
 
     /**
+     * @var bool
+     */
+    private $deleteBoxDisplay = false;
+
+    /**
      * @var string
      */
     private $deleteBoxName = 'Delete';
@@ -59,11 +64,6 @@ class FileSetter
      * @var int
      */
     private $deleteBoxValue = 1;
-
-    /**
-     * @var bool
-     */
-    private $deleteBoxDisplay = false;
 
     /**
      * @var string
@@ -157,6 +157,7 @@ class FileSetter
     public function render(): string
     {
         return view('uploader::file_setter.index', [
+            'fileManagerUrl' => '???',
             'attribute' => $this->attribute,
             'value' => !empty($this->model)
                 ? $this->model->{$this->attribute}
@@ -173,7 +174,7 @@ class FileSetter
             'titleContainerId' => $this->titleContainerId,
             'descriptionContainerId' => $this->descriptionContainerId,
             'insertedDataType' => $this->insertedDataType,
-            'owner' => $this->ownerName,
+            'ownerName' => $this->ownerName,
             'ownerId' => $this->ownerId,
             'ownerAttribute' => $this->ownerAttribute,
             'neededFileType' => $this->neededFileType,
@@ -250,6 +251,46 @@ class FileSetter
     public function setClearButtonName(string $clearButtonName): self
     {
         $this->clearButtonName = $clearButtonName;
+        return $this;
+    }
+
+    /**
+     * @param bool $deleteBoxDisplay
+     * @return FileSetter
+     */
+    public function setDeleteBoxDisplay(bool $deleteBoxDisplay): self
+    {
+        $this->deleteBoxDisplay = $deleteBoxDisplay;
+        return $this;
+    }
+
+    /**
+     * @param string $deleteBoxName
+     * @return FileSetter
+     */
+    public function setDeleteBoxName(string $deleteBoxName): self
+    {
+        $this->deleteBoxName = $deleteBoxName;
+        return $this;
+    }
+
+    /**
+     * @param string $deleteBoxAttribute
+     * @return FileSetter
+     */
+    public function setDeleteBoxAttribute(string $deleteBoxAttribute): self
+    {
+        $this->deleteBoxAttribute = $deleteBoxAttribute;
+        return $this;
+    }
+
+    /**
+     * @param mixed $deleteBoxValue
+     * @return FileSetter
+     */
+    public function setDeleteBoxValue($deleteBoxValue): self
+    {
+        $this->deleteBoxValue = $deleteBoxValue;
         return $this;
     }
 

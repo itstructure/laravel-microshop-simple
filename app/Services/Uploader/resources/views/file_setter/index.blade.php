@@ -26,6 +26,16 @@
     @endif
 </div>
 @include('layouts.modal', [
+    'fileManagerUrl' => $fileManagerUrl,
     'inputId' => $inputId,
-    'openButtonId' => $openButtonId
+    'openButtonId' => $openButtonId,
+    'mediafileContainerId' => $mediafileContainerId,
+    'titleContainerId' => $titleContainerId,
+    'descriptionContainerId' => $descriptionContainerId,
+    'insertedDataType' => $insertedDataType,
+    'ownerName' => $ownerName,
+    'ownerId' => $ownerId,
+    'ownerAttribute' => $ownerAttribute,
+    'neededFileType' => $neededFileType,
+    'subDir' => $subDir
 ])

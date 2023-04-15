@@ -1,32 +1,16 @@
-<?php
-
-/** @var string $fileManagerUrl Url to get files by filemanager. */
-/** @var int $btnId */
-/** @var int $inputId */
-/** @var string $mediafileContainer In this container will be inserted selected mediafile. */
-/** @var string $titleContainer In this container will be inserted title of selected mediafile. */
-/** @var string $descriptionContainer In this container will be inserted description of selected mediafile. */
-/** @var string $insertedData This data will be inserted in to the input field. */
-/** @var string $owner Owner name (post, article, page e.t.c.). */
-/** @var int $ownerId Owner id. */
-/** @var string $ownerAttribute Owner attribute (thumbnail, image e.t.c.). */
-/** @var string $neededFileType Needed file type for validation (thumbnail, image e.t.c.). */
-/** @var string $subDir Subdirectory to upload files. */
-?>
-
 <div role="filemanager-modal" class="modal" tabindex="-1"
-           data-src-to-files="{{ $fileManagerUrl }}"
-           data-btn-id="{{ $btnId }}"
-           data-input-id="{{ $inputId }}"
-           data-mediafile-container="{{ isset($mediafileContainer) ? $mediafileContainer : '' }}"
-           data-title-container="{{ isset($titleContainer) ? $titleContainer : '' }}"
-           data-description-container="{{ isset($descriptionContainer) ? $descriptionContainer : '' }}"
-           data-inserted-data="{{ isset($insertedData) ? $insertedData : '' }}"
-           data-owner="{{ $owner }}"
-           data-owner-id="{{ $ownerId }}"
-           data-owner-attribute="{{ $ownerAttribute }}"
-           data-needed-file-type="{{ $neededFileType }}"
-           data-sub-dir="{{ $subDir }}"
+     data-src-to-files="{{ $fileManagerUrl }}"
+     data-input-id="{{ $inputId }}"
+     data-open-btn-id="{{ $openButtonId }}"
+     data-mediafile-container-id="{{ isset($mediafileContainerId) ? $mediafileContainerId : '' }}"
+     data-title-container-id="{{ isset($titleContainerId) ? $titleContainerId : '' }}"
+     data-description-container-id="{{ isset($descriptionContainerId) ? $descriptionContainerId : '' }}"
+     data-inserted-data-type="{{ isset($insertedDataType) ? $insertedDataType : '' }}"
+     data-owner-name="{{ $ownerName }}"
+     data-owner-id="{{ $ownerId }}"
+     data-owner-attribute="{{ $ownerAttribute }}"
+     data-needed-file-type="{{ $neededFileType }}"
+     data-sub-dir="{{ $subDir }}"
 >
     <div class="modal-dialog">
         <div class="modal-content">
