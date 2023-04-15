@@ -48,6 +48,26 @@ class FileSetter
     /**
      * @var string
      */
+    private $deleteBoxName = 'Delete';
+
+    /**
+     * @var string
+     */
+    private $deleteBoxAttribute = 'delete[]';
+
+    /**
+     * @var int
+     */
+    private $deleteBoxValue = 1;
+
+    /**
+     * @var bool
+     */
+    private $deleteBoxDisplay = false;
+
+    /**
+     * @var string
+     */
     private $mediafileContainerId;
 
     /**
@@ -145,6 +165,10 @@ class FileSetter
             'openButtonId' => $this->getOpenButtonId(),
             'openButtonName' => $this->openButtonName,
             'clearButtonName' => $this->clearButtonName,
+            'deleteBoxDisplay' => $this->deleteBoxDisplay,
+            'deleteBoxName' => $this->deleteBoxName,
+            'deleteBoxAttribute' => $this->deleteBoxAttribute,
+            'deleteBoxValue' => $this->deleteBoxValue,
             'mediafileContainerId' => $this->mediafileContainerId,
             'titleContainerId' => $this->titleContainerId,
             'descriptionContainerId' => $this->descriptionContainerId,

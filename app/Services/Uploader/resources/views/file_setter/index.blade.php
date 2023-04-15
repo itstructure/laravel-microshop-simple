@@ -15,9 +15,15 @@
             'clearButtonName' => $clearButtonName
         ])
     </span>
-    <span class="delete-box">
-
-    </span>
+    @if(!empty($deleteBoxDisplay))
+        <span class="delete-box">
+            @include('delete_box', [
+                'deleteBoxAttribute' => $deleteBoxAttribute,
+                'deleteBoxValue' => $deleteBoxValue,
+                'deleteBoxName' => $deleteBoxName
+            ])
+        </span>
+    @endif
 </div>
 @include('layouts.modal', [
     'inputId' => $inputId,
