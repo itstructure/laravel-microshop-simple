@@ -99,6 +99,14 @@ class UploadService
     }
 
     /**
+     * @return array|null
+     */
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    /**
      * UploadService constructor.
      * @param array $config
      */

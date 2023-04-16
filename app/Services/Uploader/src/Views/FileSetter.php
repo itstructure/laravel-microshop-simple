@@ -157,7 +157,7 @@ class FileSetter
     public function render(): string
     {
         return view('uploader::file_setter.index', [
-            'fileManagerUrl' => '???',
+            'fileManagerUrl' => route('uploader_managers_filemanager'),
             'attribute' => $this->attribute,
             'value' => !empty($this->model)
                 ? $this->model->{$this->attribute}

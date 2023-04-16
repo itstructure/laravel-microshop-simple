@@ -18655,6 +18655,8 @@
                     /**
          * 
          *
+         * @param array $config
+         * @return \App\Services\Uploader\src\UploadService 
          * @static 
          */ 
         public static function getInstance($config = [])
@@ -18670,7 +18672,7 @@
          * @return bool 
          * @static 
          */ 
-        public static function upload($data, $file)
+        public static function upload($data, $file = null)
         {
                         /** @var \App\Services\Uploader\src\UploadService $instance */
                         return $instance->upload($data, $file);
@@ -18724,6 +18726,17 @@
         {
                         /** @var \App\Services\Uploader\src\UploadService $instance */
                         return $instance->getErrors();
+        }
+                    /**
+         * 
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getConfig()
+        {
+                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        return $instance->getConfig();
         }
          
     }

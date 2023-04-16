@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Services\Uploader\src\Http\Controllers\{UploadController, DownloadController};
+use App\Services\Uploader\src\Http\Controllers\{
+    UploadController, DownloadController, Managers\FileManagerController, Managers\UploadManagerController
+};
 
 Route::group([
         'prefix' => 'uploader',
@@ -11,18 +13,31 @@ Route::group([
         )
     ], function () {
 
+
+    /* UPLOADING */
     Route::group(['prefix' => 'file'], function () {
 
         Route::post('upload', [UploadController::class, 'upload'])
-            ->name('file_upload');
+            ->name('uploader_file_upload');
 
         Route::post('update', [UploadController::class, 'update'])
-            ->name('file_update');
+            ->name('uploader_file_update');
 
         Route::post('delete', [UploadController::class, 'delete'])
-            ->name('file_delete');
+            ->name('uploader_file_delete');
 
         Route::get('download', [DownloadController::class, 'download'])
-            ->name('file_download');
+            ->name('uploader_file_download');
+    });
+
+
+    /* MANAGERS */
+    Route::group(['prefix' => 'managers'], function () {
+
+        Route::get('file-manager', [FileManagerController::class, 'index'])
+            ->name('uploader_managers_filemanager');
+
+        Route::get('upload-manager', [UploadManagerController::class, 'index'])
+            ->name('uploader_managers_uploadmanager');
     });
 });

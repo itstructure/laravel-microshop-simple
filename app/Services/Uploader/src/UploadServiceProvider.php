@@ -33,6 +33,8 @@ class UploadServiceProvider extends ServiceProvider
             return "<?php echo file_setter($config); ?>";
         });
 
+        $this->app->register(UploadRouteServiceProvider::class);
+
         $this->registerCommands();
     }
 

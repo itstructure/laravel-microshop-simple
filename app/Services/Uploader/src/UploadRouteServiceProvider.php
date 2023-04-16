@@ -55,6 +55,6 @@ class UploadRouteServiceProvider extends RouteServiceProvider
      */
     private function getRoutesFile()
     {
-        return __DIR__ . '/' . 'routes.php';
+        return __DIR__ . '/../' . 'routes/uploader.php';
     }
 }
