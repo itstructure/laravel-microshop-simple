@@ -18,8 +18,8 @@ class PublishCommand extends Command
      * @var string
      */
     protected $signature = 'uploader:publish ' .
-    '{--force : Overwrite existing files by default. This option can not be used.}' .
-    '{--only= : Publish only specific part. Available parts: config, views, lang, migrations. This option can not be used.}';
+    '{--force : Overwrite existing files by default.}' .
+    '{--only= : Publish only specific part. Available parts: assets, config, views, lang, migrations.}';
 
     /**
      * The console command description.
@@ -41,6 +41,11 @@ class PublishCommand extends Command
 
         if ($this->option('only')) {
             switch ($this->option('only')) {
+                case 'assets':
+                    $this->info('Publish just a part: assets.');
+                    $callArguments['--tag'] = 'assets';
+                    break;
+
                 case 'config':
                     $this->info('Publish just a part: config.');
                     $callArguments['--tag'] = 'config';
@@ -69,7 +74,7 @@ class PublishCommand extends Command
             }
 
         } else {
-            $this->info('Publish all parts: config, views, lang, migrations.');
+            $this->info('Publish all parts: assets, config, views, lang, migrations.');
             $dumpAutoload = true;
         }
 

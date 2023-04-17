@@ -44,7 +44,7 @@ class UploadService
      */
     public function upload(array $data, UploadedFile $file = null): bool
     {
-        $this->processor = UploadProcessor::getInstance($this->config)
+        $this->processor = UploadProcessor::getInstance($this->config['processor'])
             ->setMediafileModel(new Mediafile())
             ->setData($data)
             ->setFile($file);
@@ -61,7 +61,7 @@ class UploadService
      */
     public function update(int $id, array $data, UploadedFile $file = null): bool
     {
-        $this->processor = UpdateProcessor::getInstance($this->config)
+        $this->processor = UpdateProcessor::getInstance($this->config['processor'])
             ->setMediafileModel(Mediafile::find($id))
             ->setData($data)
             ->setFile($file);
@@ -99,11 +99,12 @@ class UploadService
     }
 
     /**
-     * @return array|null
+     * @param string|null $key
+     * @return array
      */
-    public function getConfig()
+    public function getConfig(string $key = null)
     {
-        return $this->config;
+        return !empty($key) ? $this->config[$key] : $this->config;
     }
 
     /**

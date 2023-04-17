@@ -51,6 +51,7 @@ class UploadServiceProvider extends ServiceProvider
 
 
         // Publish settings
+        $this->publishAssets();
         $this->publishConfig();
         $this->publishViews();
         $this->publishTranslations();
@@ -117,6 +118,13 @@ class UploadServiceProvider extends ServiceProvider
     | PUBLISH SETTINGS
     |--------------------------------------------------------------------------
     */
+
+    private function publishAssets(): void
+    {
+        $this->publishes([
+            $this->packagePath('resources/assets') => public_path('vendor/uploader'),
+        ], 'assets');
+    }
 
     /**
      * Publish config.

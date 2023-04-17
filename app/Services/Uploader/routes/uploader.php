@@ -8,8 +8,9 @@ use App\Services\Uploader\src\Http\Controllers\{
 Route::group([
         'prefix' => 'uploader',
         'middleware' => array_merge(
-            is_array(config('uploader.routesAuthMiddlewares')) ? config('uploader.routesAuthMiddlewares') : [],
-            !empty(config('uploader.routesMainPermission')) ? ['can:'.config('uploader.routesMainPermission')] : []
+            !empty(config('uploader.routing')) && is_array(config('uploader.routing.middlewares'))
+                ? config('uploader.routing.middlewares')
+                : []
         )
     ], function () {
 
