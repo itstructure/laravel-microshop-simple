@@ -26,7 +26,7 @@
     @endif
 </div>
 @include('layouts.modal', [
-    'fileManagerUrl' => $fileManagerUrl,
+    'fileManagerRoute' => $fileManagerRoute,
     'inputId' => $inputId,
     'openButtonId' => $openButtonId,
     'mediafileContainerId' => $mediafileContainerId,

@@ -13,13 +13,13 @@ $(document).ready(function() {
             e.preventDefault();
 
             var fileInputs = $(this).parents('[role="file-inputs"]'),
-                mediafileContainer = $(modal.attr("data-mediafile-container")),
-                titleContainer = $(modal.attr("data-title-container")),
-                descriptionContainer = $(modal.attr("data-description-container")),
-                insertedData = modal.attr("data-inserted-data"),
+                mediafileContainer = $(modal.attr("data-mediafile-container-id")),
+                titleContainer = $(modal.attr("data-title-container-id")),
+                descriptionContainer = $(modal.attr("data-description-container-id")),
+                insertedDataType = modal.attr("data-inserted-data-type"),
                 mainInput = $("#" + modal.attr("data-input-id"));
 
-            mainInput.trigger("fileInsert", [insertedData]);
+            mainInput.trigger("fileInsert", [insertedDataType]);
 
             if (mediafileContainer) {
                 var fileType = fileInputs.attr("data-file-type"),
@@ -52,7 +52,7 @@ $(document).ready(function() {
                 }
             }
 
-            mainInput.val(fileInputs.attr("data-file-" + insertedData));
+            mainInput.val(fileInputs.attr("data-file-" + insertedDataType));
             modal.modal("hide");
         });
     }
@@ -63,25 +63,25 @@ $(document).ready(function() {
     $('[role="filemanager-load"]').on("click", function(e) {
         e.preventDefault();
 
-        var modal = $('[role="filemanager-modal"][data-btn-id="'+$(this).attr('id')+'"]'),
-            srcToFiles = modal.attr("data-src-to-files"),
-            owner = modal.attr("data-owner"),
+        var modal = $('[role="filemanager-modal"][data-open-btn-id="'+$(this).attr('id')+'"]'),
+            fileManagerRoute = modal.attr("data-file-manager-route"),
+            ownerName = modal.attr("data-owner-name"),
             ownerId = modal.attr("data-owner-id"),
             ownerAttribute = modal.attr("data-owner-attribute");
 
         var paramsArray = [];
         var paramsQuery = '';
 
-        if (owner) {
-            paramsArray.owner = owner;
+        if (ownerName) {
+            paramsArray.owner_name = ownerName;
         }
 
         if (ownerId) {
-            paramsArray.ownerId = ownerId;
+            paramsArray.owner_id = ownerId;
         }
 
         if (ownerAttribute) {
-            paramsArray.ownerAttribute = ownerAttribute;
+            paramsArray.owner_attribute = ownerAttribute;
         }
 
         for (var index in paramsArray) {
@@ -90,10 +90,10 @@ $(document).ready(function() {
         }
 
         if (paramsQuery != '') {
-            srcToFiles += '?' + paramsQuery;
+            fileManagerRoute += '?' + paramsQuery;
         }
 
-        var iframe = $('<iframe src="' + srcToFiles + '" frameborder="0" role="filemanager-frame"></iframe>');
+        var iframe = $('<iframe src="' + fileManagerRoute + '" frameborder="0" role="filemanager-frame"></iframe>');
 
         iframe.on("load", frameInsertHandler);
         modal.find(".modal-body").html(iframe);

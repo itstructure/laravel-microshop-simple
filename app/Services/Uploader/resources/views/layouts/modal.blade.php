@@ -1,5 +1,5 @@
 <div role="filemanager-modal" class="modal" tabindex="-1"
-     data-src-to-files="{{ $fileManagerUrl }}"
+     data-file-manager-route="{{ $fileManagerRoute }}"
      data-input-id="{{ $inputId }}"
      data-open-btn-id="{{ $openButtonId }}"
      data-mediafile-container-id="{{ isset($mediafileContainerId) ? $mediafileContainerId : '' }}"
