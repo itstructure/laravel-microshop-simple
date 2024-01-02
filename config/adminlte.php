@@ -461,6 +461,56 @@ return [
                 ],
             ],
         ],
+        'Uploader' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => asset('vendor/uploader/js/main.js'),
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => asset('vendor/uploader/js/filesetter.js'),
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => asset('vendor/uploader/js/filemanager.js'),
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => asset('vendor/uploader/js/uploadmanager.js'),
+                ],
+                /*[
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => asset('vendor/uploader/css/main.css'),
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => asset('vendor/uploader/css/filesetter.css'),
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => asset('vendor/uploader/css/filemanager.css'),
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => asset('vendor/uploader/css/uploadmanager.css'),
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => asset('vendor/uploader/css/modal.css'),
+                ],*/
+            ],
+        ],
     ],
 
     /*
