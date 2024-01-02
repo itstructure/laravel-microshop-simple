@@ -187,6 +187,7 @@ return [
          */
         Itstructure\GridView\GridViewServiceProvider::class,
         Itstructure\LaRbac\RbacServiceProvider::class,
+        Itstructure\MFU\UploadServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         /*
@@ -199,7 +200,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\CardServiceProvider::class,
         App\Providers\OrderServiceProvider::class,
-        App\Services\Uploader\src\UploadServiceProvider::class,
 
     ],
 

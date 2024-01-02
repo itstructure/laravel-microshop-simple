@@ -1,5 +1,10 @@
 <div class="row">
     <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
+        @include('mediafiles.thumbnail', ['model' => $model])
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
         <div class="form-group">
             <label for="id_title">Title</label>
             <input id="id_title" type="text" class="form-control @if ($errors->has('title')) is-invalid @endif"

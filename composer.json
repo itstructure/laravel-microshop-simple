@@ -9,6 +9,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "imagine/imagine": "^1.3",
         "itstructure/laravel-grid-view": "~1.0.11",
+        "itstructure/laravel-media-file-uploader": "dev-main",
         "itstructure/laravel-rbac": "~3.0.9",
         "jeroennoten/laravel-adminlte": "^3.8",
         "laravel/framework": "^10.0",
@@ -27,6 +28,15 @@
         "phpunit/phpunit": "^10.0",
         "spatie/laravel-ignition": "^2.0"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../laravel-media-file-uploader",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "autoload": {
         "psr-4": {
             "App\\": "app/",

@@ -1,1 +1,0 @@
-<button id="{{ $openButtonId }}" class="btn btn-default" role="filemanager-load">{{ $openButtonName }}</button>
