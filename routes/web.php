@@ -1,8 +1,8 @@
 <?php
 
-use App\Services\Uploader\src\Http\Controllers\{UploadController, DownloadController};
-use App\Http\Controllers\{ProfileController, HomeController, CardController, ProductController};
 use Illuminate\Support\Facades\Route;
+use Itstructure\MFU\Http\Controllers\{UploadController, DownloadController};
+use App\Http\Controllers\{ProfileController, HomeController, CardController, ProductController};
 
 /*
 |--------------------------------------------------------------------------
