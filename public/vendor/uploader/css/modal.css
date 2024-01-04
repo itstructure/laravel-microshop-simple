@@ -7,8 +7,8 @@
 [role="filemanager-modal"] .modal-title {
   font-size: 1.2em;
 }
-[role="filemanager-modal"] .modal-dialog {
-  width: 1000px;
+.modal .modal-content {
+  width: 1000px !important;
 }
 [role="filemanager-modal"] .modal-body {
   padding-top: 8px;

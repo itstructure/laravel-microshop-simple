@@ -503,12 +503,12 @@ return [
                     'type' => 'css',
                     'asset' => true,
                     'location' => asset('vendor/uploader/css/uploadmanager.css'),
-                ],
+                ],*/
                 [
                     'type' => 'css',
                     'asset' => true,
                     'location' => asset('vendor/uploader/css/modal.css'),
-                ],*/
+                ],
             ],
         ],
     ],
