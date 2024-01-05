@@ -2,12 +2,10 @@ $(document).ready(function() {
 
     /**
      * Handler to catch press on insert button.
-     *
-     * @param e
      */
-    function frameInsertHandler(e) {
+    function frameInsertHandler() {
 
-        var modal = $(this).parents('[role="filemanager-modal"]');
+        var modal = $(this).parents('.modal');
 
         $(this).contents().find(".redactor").on('click', '[role="insert"]', function(e) {
             e.preventDefault();
@@ -63,7 +61,7 @@ $(document).ready(function() {
     $('[role="filemanager-load"]').on("click", function(e) {
         e.preventDefault();
 
-        var modal = $('[role="filemanager-modal"][data-open-btn-id="'+$(this).attr('id')+'"]'),
+        var modal = $('[data-open-btn-id="'+$(this).attr('id')+'"].modal'),
             fileManagerRoute = modal.attr("data-file-manager-route"),
             ownerName = modal.attr("data-owner-name"),
             ownerId = modal.attr("data-owner-id"),

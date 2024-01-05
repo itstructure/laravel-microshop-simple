@@ -18645,23 +18645,23 @@
      
 }
 
-    namespace App\Services\Uploader\src\Facades { 
+    namespace Itstructure\MFU\Facades { 
             /**
      * Class Uploader
      *
-     * @package App\Services\Uploader\src\Facades
+     * @package Itstructure\MFU\Facades
      */ 
         class Uploader {
                     /**
          * 
          *
          * @param array $config
-         * @return \App\Services\Uploader\src\UploadService 
+         * @return \Uploader 
          * @static 
          */ 
         public static function getInstance($config = [])
         {
-                        return \App\Services\Uploader\src\UploadService::getInstance($config);
+                        return \Itstructure\MFU\Services\Uploader::getInstance($config);
         }
                     /**
          * 
@@ -18674,7 +18674,7 @@
          */ 
         public static function upload($data, $file = null)
         {
-                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        /** @var \Itstructure\MFU\Services\Uploader $instance */
                         return $instance->upload($data, $file);
         }
                     /**
@@ -18689,7 +18689,7 @@
          */ 
         public static function update($id, $data, $file = null)
         {
-                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        /** @var \Itstructure\MFU\Services\Uploader $instance */
                         return $instance->update($id, $data, $file);
         }
                     /**
@@ -18702,7 +18702,7 @@
          */ 
         public static function delete($id)
         {
-                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        /** @var \Itstructure\MFU\Services\Uploader $instance */
                         return $instance->delete($id);
         }
                     /**
@@ -18713,7 +18713,7 @@
          */ 
         public static function hasErrors()
         {
-                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        /** @var \Itstructure\MFU\Services\Uploader $instance */
                         return $instance->hasErrors();
         }
                     /**
@@ -18724,19 +18724,136 @@
          */ 
         public static function getErrors()
         {
-                        /** @var \App\Services\Uploader\src\UploadService $instance */
+                        /** @var \Itstructure\MFU\Services\Uploader $instance */
                         return $instance->getErrors();
         }
                     /**
          * 
          *
+         * @param string|null $key
          * @return array 
          * @static 
          */ 
-        public static function getConfig()
+        public static function getConfig($key = null)
         {
-                        /** @var \App\Services\Uploader\src\UploadService $instance */
-                        return $instance->getConfig();
+                        /** @var \Itstructure\MFU\Services\Uploader $instance */
+                        return $instance->getConfig($key);
+        }
+         
+    }
+            /**
+     * Class Previewer
+     *
+     * @package Itstructure\MFU\Facades
+     */ 
+        class Previewer {
+                    /**
+         * 
+         *
+         * @param array $config
+         * @return \Previewer 
+         * @static 
+         */ 
+        public static function getInstance($config = [])
+        {
+                        return \Itstructure\MFU\Services\Previewer::getInstance($config);
+        }
+                    /**
+         * 
+         *
+         * @param \Itstructure\MFU\Models\Mediafile $mediafile
+         * @param string $location
+         * @param array $htmlAttributes
+         * @return string 
+         * @static 
+         */ 
+        public static function getPreviewHtml($mediafile, $location, $htmlAttributes = [])
+        {
+                        /** @var \Itstructure\MFU\Services\Previewer $instance */
+                        return $instance->getPreviewHtml($mediafile, $location, $htmlAttributes);
+        }
+                    /**
+         * 
+         *
+         * @param \Itstructure\MFU\Models\Mediafile $mediafile
+         * @param string $location
+         * @param array $htmlAttributes
+         * @param string $alias
+         * @return string 
+         * @static 
+         */ 
+        public static function getImagePreview($mediafile, $location, $htmlAttributes = [], $alias = 'default')
+        {
+                        /** @var \Itstructure\MFU\Services\Previewer $instance */
+                        return $instance->getImagePreview($mediafile, $location, $htmlAttributes, $alias);
+        }
+                    /**
+         * 
+         *
+         * @param \Itstructure\MFU\Models\Mediafile $mediafile
+         * @param string $location
+         * @param array $htmlAttributes
+         * @return string 
+         * @static 
+         */ 
+        public static function getAudioPreview($mediafile, $location, $htmlAttributes = [])
+        {
+                        /** @var \Itstructure\MFU\Services\Previewer $instance */
+                        return $instance->getAudioPreview($mediafile, $location, $htmlAttributes);
+        }
+                    /**
+         * 
+         *
+         * @param \Itstructure\MFU\Models\Mediafile $mediafile
+         * @param string $location
+         * @param array $htmlAttributes
+         * @return string 
+         * @static 
+         */ 
+        public static function getVideoPreview($mediafile, $location, $htmlAttributes = [])
+        {
+                        /** @var \Itstructure\MFU\Services\Previewer $instance */
+                        return $instance->getVideoPreview($mediafile, $location, $htmlAttributes);
+        }
+                    /**
+         * 
+         *
+         * @param \Itstructure\MFU\Models\Mediafile $mediafile
+         * @param string $location
+         * @param array $htmlAttributes
+         * @return string 
+         * @static 
+         */ 
+        public static function getStubAppPreview($mediafile, $location, $htmlAttributes = [])
+        {
+                        /** @var \Itstructure\MFU\Services\Previewer $instance */
+                        return $instance->getStubAppPreview($mediafile, $location, $htmlAttributes);
+        }
+                    /**
+         * 
+         *
+         * @param string $location
+         * @param array $htmlAttributes
+         * @return string 
+         * @static 
+         */ 
+        public static function getStubTextPreview($location, $htmlAttributes = [])
+        {
+                        /** @var \Itstructure\MFU\Services\Previewer $instance */
+                        return $instance->getStubTextPreview($location, $htmlAttributes);
+        }
+                    /**
+         * 
+         *
+         * @param string $location
+         * @param array $htmlAttributes
+         * @return string 
+         * @static 
+         */ 
+        public static function getStubOtherPreview($location, $htmlAttributes = [])
+        {
+                        /** @var \Itstructure\MFU\Services\Previewer $instance */
+                        return $instance->getStubOtherPreview($location, $htmlAttributes);
         }
          
     }
@@ -22663,7 +22780,8 @@ namespace  {
             class Card extends \App\Facades\Card {}
             class Order extends \App\Facades\Order {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
-            class Uploader extends \App\Services\Uploader\src\Facades\Uploader {}
+            class Uploader extends \Itstructure\MFU\Facades\Uploader {}
+            class Previewer extends \Itstructure\MFU\Facades\Previewer {}
      
 }
 
