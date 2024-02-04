@@ -91,7 +91,7 @@ $(document).ready(function() {
             fileManagerRoute += '?' + paramsQuery;
         }
 
-        var iframe = $('<iframe src="' + fileManagerRoute + '" frameborder="0" role="filemanager-frame"></iframe>');
+        var iframe = $('<iframe src="' + fileManagerRoute + '" frameborder="0" role="filemanager-frame" class="file-manager-frame"></iframe>');
 
         iframe.on("load", frameInsertHandler);
         modal.find(".modal-body").html(iframe);

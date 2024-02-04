@@ -7,6 +7,7 @@
         'dataProvider' => $dataProvider,
         'paginatorOptions' => [
             'pageName' => 'p',
+            'onEachSide' => 1
         ],
         'rowsPerPage' => 5,
         'title' => 'Orders',
