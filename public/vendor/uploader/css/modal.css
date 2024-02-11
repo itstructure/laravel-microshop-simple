@@ -1,5 +1,6 @@
 .modal .modal-dialog {
   height: calc(100% - 60px);
+  margin: 1.75rem auto !important;
 }
 .modal .modal-dialog .modal-content {
   height: 100%;
@@ -11,6 +12,18 @@
 @media (min-width: 1200px) {
   .modal .modal-dialog {
     max-width: 1200px !important;
+  }
+}
+
+@media (max-width: 1199px) {
+  .modal-dialog {
+    max-width: 800px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-dialog {
+    max-width: 500px !important;
   }
 }
 

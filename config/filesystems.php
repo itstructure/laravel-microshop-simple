@@ -34,12 +34,14 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/uploads'),
             'throw' => false,
+            'url' => env('APP_URL') . '/storage/',
         ],
 
         'test' => [
             'driver' => 'local',
             'root' => storage_path('app/test'),
             'throw' => false,
+            'url' => env('APP_URL') . '/storage/',
         ],
 
         'public' => [

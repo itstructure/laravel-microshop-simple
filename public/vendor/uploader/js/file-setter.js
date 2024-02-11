@@ -58,7 +58,7 @@ $(document).ready(function() {
     /**
      * Load file manager.
      */
-    $('[role="filemanager-load"]').on("click", function(e) {
+    $('[role="file-manager-load"]').on("click", function(e) {
         e.preventDefault();
 
         var modal = $('[data-open-btn-id="'+$(this).attr('id')+'"].modal'),
@@ -82,8 +82,8 @@ $(document).ready(function() {
             paramsArray.owner_attribute = ownerAttribute;
         }
 
-        for (var index in paramsArray) {
-            var paramString = index + '=' + paramsArray[index];
+        for (var key in paramsArray) {
+            var paramString = key + '=' + paramsArray[key];
             paramsQuery += paramsQuery == '' ? paramString : '&' + paramString;
         }
 
@@ -91,7 +91,7 @@ $(document).ready(function() {
             fileManagerRoute += '?' + paramsQuery;
         }
 
-        var iframe = $('<iframe src="' + fileManagerRoute + '" frameborder="0" role="filemanager-frame" class="file-manager-frame"></iframe>');
+        var iframe = $('<iframe src="' + fileManagerRoute + '" frameborder="0" class="file-manager-frame"></iframe>');
 
         iframe.on("load", frameInsertHandler);
         modal.find(".modal-body").html(iframe);
@@ -103,8 +103,7 @@ $(document).ready(function() {
      */
     $('[role="clear-input"]').on("click", function(e) {
         e.preventDefault();
-
         $("#" + $(this).attr("data-clear-element-id")).val("");
-        $($(this).attr("data-mediafile-container")).empty();
+        $("#" + $(this).attr("data-mediafile-container-id")).empty();
     });
 });

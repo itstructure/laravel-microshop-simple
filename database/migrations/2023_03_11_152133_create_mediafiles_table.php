@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('mediafiles', function (Blueprint $table) {
             $table->id();
             $table->string('file_name', 128);
-            $table->string('mime_type', 64);
+            $table->string('mime_type', 128);
             $table->text('path');
             $table->string('alt', 128)->nullable();
             $table->integer('size');

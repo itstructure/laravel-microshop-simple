@@ -1,4 +1,4 @@
-<div id="thumbnail-container">
+<div id="thumbnail_container">
 
 </div>
 @php
@@ -8,7 +8,7 @@
         'neededFileType' => Itstructure\MFU\Processors\SaveProcessor::FILE_TYPE_THUMB,
         'openButtonName' => 'Set thumbnail',
         'clearButtonName' => 'Clear',
-        'mediafileContainerId' => '#thumbnail-container',
+        'mediafileContainerId' => 'thumbnail_container',
         'subDir' => $model->getTable()
     ];
 

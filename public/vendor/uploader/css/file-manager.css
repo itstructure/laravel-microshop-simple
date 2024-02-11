@@ -1,105 +1,129 @@
-/* ITEMS */
+/* LIST */
 .file-manager {
   width: 100%;
   height: calc(100% - 52px);
 }
-.file-manager .file-items {
+.file-manager .file-list {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
 }
-.file-manager .file-items .card {
+.file-manager .file-list .card {
   border: 0;
   height: 100%;
 }
-.file-manager .file-items .card .card-header {
+.file-manager .file-list .card .card-header {
   border: 0;
   padding: 0;
   background-color: #fff;
   height: 24px;
 }
-.file-manager .file-items .card .card-body {
+.file-manager .file-list .card .card-body {
   position: relative;
   padding: 0;
   height: calc(100% - 24px);
 }
-.file-manager .file-items .card .card-body table {
+.file-manager .file-list .card .card-body table {
   height: 100%;
 }
-.file-manager .file-items .card .card-body table thead {
+.file-manager .file-list .card .card-body table thead {
   height: 85px;
   position: sticky;
   top: 0;
   background-color: rgb(188, 231, 249);
 }
-.file-manager .file-items .card .card-body table tbody {
+.file-manager .file-list .card .card-body table tbody {
   height: calc(100% - 140px);
   overflow-y: scroll;
 }
-.file-manager .file-items .card .card-body table tfoot {
+.file-manager .file-list .card .card-body table tfoot {
   height: 55px;
   position: sticky;
   bottom: 0;
   background-color: rgb(188, 231, 249);
 }
-.file-manager .file-items .card .card-body table tfoot ul.pagination,
-.file-manager .file-items .card .card-body table tfoot button {
+.file-manager .file-list .card .card-body table tfoot ul.pagination,
+.file-manager .file-list .card .card-body table tfoot button {
   margin: 3px;
 }
-.file-manager .file-items .card .card-body table thead,
-.file-manager .file-items .card .card-body table tbody tr {
+.file-manager .file-list .card .card-body table thead,
+.file-manager .file-list .card .card-body table tbody tr {
   width: 100%;
 }
-.file-manager .file-items .card .card-body table thead tr th:nth-child(1),
-.file-manager .file-items .card .card-body table tbody tr td:nth-child(1) {
+.file-manager .file-list .card .card-body table thead tr th:nth-child(1),
+.file-manager .file-list .card .card-body table tbody tr td:nth-child(1) {
   width: 5%;
 }
-.file-manager .file-items .card .card-body table thead tr th:nth-child(2),
-.file-manager .file-items .card .card-body table tbody tr td:nth-child(2) {
-  width: 5%;
-}
-.file-manager .file-items .card .card-body table thead tr th:nth-child(3),
-.file-manager .file-items .card .card-body table tbody tr td:nth-child(3) {
+.file-manager .file-list .card .card-body table thead tr th:nth-child(2),
+.file-manager .file-list .card .card-body table tbody tr td:nth-child(2) {
   width: 30%;
 }
-.file-manager .file-items .card .card-body table thead tr th:nth-child(4),
-.file-manager .file-items .card .card-body table tbody tr td:nth-child(4) {
-  width: 20%;
+.file-manager .file-list .card .card-body table thead tr th:nth-child(3),
+.file-manager .file-list .card .card-body table tbody tr td:nth-child(3) {
+  width: 25%;
 }
-.file-manager .file-items .card .card-body table thead tr th:nth-child(5),
-.file-manager .file-items .card .card-body table tbody tr td:nth-child(5) {
-  width: 20%;
+.file-manager .file-list .card .card-body table thead tr th:nth-child(4),
+.file-manager .file-list .card .card-body table tbody tr td:nth-child(4) {
+  width: 15%;
 }
-.file-manager .file-items .card .card-body table thead tr th:nth-child(6),
-.file-manager .file-items .card .card-body table tbody tr td:nth-child(6) {
-  width: 20%;
+.file-manager .file-list .card .card-body table thead tr th:nth-child(5),
+.file-manager .file-list .card .card-body table tbody tr td:nth-child(5) {
+  width: 15%;
 }
-
-/* REDACTOR */
-.file-manager .file-redactor {
-  position: absolute;
-  width: 315px;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  display: none;
+.file-manager .file-list .card .card-body table thead tr th:nth-child(6),
+.file-manager .file-list .card .card-body table tbody tr td:nth-child(6) {
+  width: 5%;
+}
+.file-manager .file-list .card .card-body table thead tr th:nth-child(7),
+.file-manager .file-list .card .card-body table tbody tr td:nth-child(7) {
+  width: 5%;
 }
 
-/* FILEINFO */
-#fileinfo img {
-  float: left;
-  max-width: 100px;
+/* EDITION */
+.file-manager .file-edit {
+  position: relative;
+  clear: both;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }
-#fileinfo .inputs .input-group {
-  margin-bottom: 5px;
+.file-manager .file-edit .file-preview {
+  width: 400px;
+  min-height: 400px;
+  background-color: #ced4da;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-#fileinfo .inputs .input-group textarea {
+.file-manager .file-edit .file-preview img,
+.file-manager .file-edit .file-preview audio,
+.file-manager .file-edit .file-preview video {
+  max-width: 400px;
+}
+.file-manager .file-edit .file-form {
+  width: calc(100% - 400px);
+  padding-left: 5px;
+}
+.file-manager .file-edit .file-form textarea {
   height: 100px;
 }
+.file-manager .file-edit .file-form .input-group.file-section .input-group-prepend,
+.file-manager .file-edit .file-form .input-group.file-section input[type="file"] {
+  height: 44px;
+}
 
-
-@media (max-width: 900px) {
-  .file-manager .file-redactor {
-    left: 0;
+@media (max-width: 800px) {
+  .file-manager .file-edit {
+    flex-direction: column;
+    align-items: center;
+  }
+  .file-manager .file-edit .file-preview {
+    width: 100%;
+    border-radius: 0.25rem;
+  }
+  .file-manager .file-edit .file-form {
+    width: 100%;
+    padding-left: 0;
+    margin-top: 15px;
   }
 }
