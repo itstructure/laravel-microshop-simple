@@ -18782,7 +18782,7 @@
          * @return string 
          * @static 
          */ 
-        public static function getImagePreview($mediafile, $location, $htmlAttributes = [], $alias = 'default')
+        public static function getImagePreview($mediafile, $location, $htmlAttributes = [], $alias = 'small')
         {
                         /** @var \Itstructure\MFU\Services\Previewer $instance */
                         return $instance->getImagePreview($mediafile, $location, $htmlAttributes, $alias);

@@ -78,6 +78,9 @@
 .file-manager .file-list .card .card-body table tbody tr td:nth-child(7) {
   width: 5%;
 }
+.file-manager .file-list .card .card-body table tbody tr td img.list-item {
+  object-fit: cover;
+}
 
 /* EDITION */
 .file-manager .file-edit {
@@ -86,6 +89,7 @@
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  height: 100%;
 }
 .file-manager .file-edit .file-preview {
   width: 400px;
@@ -94,11 +98,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .file-manager .file-edit .file-preview img,
 .file-manager .file-edit .file-preview audio,
 .file-manager .file-edit .file-preview video {
   max-width: 400px;
+}
+.file-manager .file-edit .file-preview img {
+  max-height: 400px;
 }
 .file-manager .file-edit .file-form {
   width: calc(100% - 400px);
