@@ -5,70 +5,76 @@ $(document).ready(function() {
      */
     function frameInsertHandler() {
 
-        var modal = $(this).parents('.modal');
+        let modal = $(this).parents('.modal');
+        let fileForm = $(this).contents().find("#file_form");
 
-        $(this).contents().find(".redactor").on('click', '[role="insert"]', function(e) {
+        fileForm.on('click', '[role="insert-file"]', function(e) {
             e.preventDefault();
 
-            var fileInputs = $(this).parents('[role="file-inputs"]'),
-                mediafileContainer = $(modal.attr("data-mediafile-container-id")),
-                titleContainer = $(modal.attr("data-title-container-id")),
-                descriptionContainer = $(modal.attr("data-description-container-id")),
-                insertedDataType = modal.attr("data-inserted-data-type"),
-                mainInput = $("#" + modal.attr("data-input-id"));
+            let formData = new FormData(fileForm[0]);
 
-            mainInput.trigger("fileInsert", [insertedDataType]);
-
-            if (mediafileContainer) {
-                var fileType = fileInputs.attr("data-file-type"),
-                    fileTypeShort = fileType.split('/')[0],
-                    fileUrl = fileInputs.attr("data-file-url"),
-                    baseUrl = fileInputs.attr("data-base-url"),
-                    previewOptions = {
-                        fileType: fileType,
-                        fileUrl: fileUrl,
-                        baseUrl: baseUrl
-                    };
-
-                if (fileTypeShort === 'image' || fileTypeShort === 'video' || fileTypeShort === 'audio') {
-                    previewOptions.main = {width: fileInputs.attr("data-original-preview-width")};
-                }
-
-                var preview = getPreview(previewOptions);
-                mediafileContainer.html(preview);
-
-                /* Set title */
-                if (titleContainer) {
-                    var titleValue = $(fileInputs.contents().find('[role="file-title"]')).val();
-                    titleContainer.html(titleValue);
-                }
-
-                /* Set description */
-                if (descriptionContainer) {
-                    var descriptionValue = $(fileInputs.contents().find('[role="file-description"]')).val();
-                    descriptionContainer.html(descriptionValue);
-                }
+            let mainInput = null;
+            let dataInputId = modal.attr('data-input-id');
+            if (dataInputId) {
+                mainInput = $('#' + dataInputId);
+                //mainInput.trigger("fileInsert", [insertedDataType]);
             }
 
-            mainInput.val(fileInputs.attr("data-file-" + insertedDataType));
-            modal.modal("hide");
+            let mediaFileContainerId = modal.attr('data-mediafile-container-id');
+            if (mediaFileContainerId) {
+                let url = modal.attr('data-file-preview-route');
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    cache: false,
+                    dataType: 'html',
+                    data: {
+                        id: formData.get('id'),
+                        location: 'existing',
+                        _token: formData.get('_token')
+                    },
+                    success: function (data) {
+                        $('#' + mediaFileContainerId).html(data);
+                    },
+                    error: function (xhr, status, err) {
+                        console.error(url, status, err.toString());
+                    }
+                });
+            }
+
+            let titleContainerId = modal.attr('data-title-container-id');
+            if (titleContainerId) {
+                $('#' + titleContainerId).html(formData.get('data[title]'));
+            }
+
+            let descriptionContainerId = modal.attr('data-description-container-id');
+            if (descriptionContainerId) {
+                $('#' + descriptionContainerId).html(formData.get('data[description]'));
+            }
+
+            let insertedDataType = modal.attr('data-inserted-data-type');
+            if (insertedDataType && mainInput) {
+                mainInput.val(formData.get(insertedDataType));
+            }
+
+            modal.modal('hide');
         });
     }
 
     /**
      * Load file manager.
      */
-    $('[role="file-manager-load"]').on("click", function(e) {
+    $('[role="load-file-manager"]').on("click", function(e) {
         e.preventDefault();
 
-        var modal = $('[data-open-btn-id="'+$(this).attr('id')+'"].modal'),
-            fileManagerRoute = modal.attr("data-file-manager-route"),
-            ownerName = modal.attr("data-owner-name"),
-            ownerId = modal.attr("data-owner-id"),
-            ownerAttribute = modal.attr("data-owner-attribute");
+        let modal = $('[data-open-btn-id="' + $(this).attr('id') + '"].modal'),
+            fileManagerRoute = modal.attr('data-file-manager-route'),
+            ownerName = modal.attr('data-owner-name'),
+            ownerId = modal.attr('data-owner-id'),
+            ownerAttribute = modal.attr('data-owner-attribute');
 
-        var paramsArray = [];
-        var paramsQuery = '';
+        let paramsArray = [];
+        let paramsQuery = '';
 
         if (ownerName) {
             paramsArray.owner_name = ownerName;
@@ -82,8 +88,8 @@ $(document).ready(function() {
             paramsArray.owner_attribute = ownerAttribute;
         }
 
-        for (var key in paramsArray) {
-            var paramString = key + '=' + paramsArray[key];
+        for (let key in paramsArray) {
+            let paramString = key + '=' + paramsArray[key];
             paramsQuery += paramsQuery == '' ? paramString : '&' + paramString;
         }
 
@@ -91,19 +97,37 @@ $(document).ready(function() {
             fileManagerRoute += '?' + paramsQuery;
         }
 
-        var iframe = $('<iframe src="' + fileManagerRoute + '" frameborder="0" class="file-manager-frame"></iframe>');
+        let iframe = $('<iframe src="' + fileManagerRoute + '" frameborder="0" class="file-manager-frame"></iframe>');
 
-        iframe.on("load", frameInsertHandler);
-        modal.find(".modal-body").html(iframe);
-        modal.modal("show");
+        iframe.on('load', frameInsertHandler);
+        modal.find('.modal-body').html(iframe);
+        modal.modal('show');
     });
 
     /**
      * Clear value in main input.
      */
-    $('[role="clear-input"]').on("click", function(e) {
+    $('[role="clear-file"]').on("click", function(e) {
         e.preventDefault();
-        $("#" + $(this).attr("data-clear-element-id")).val("");
-        $("#" + $(this).attr("data-mediafile-container-id")).empty();
+
+        let clearInputId = $(this).attr('data-input-id');
+        if (clearInputId) {
+            $('#' + clearInputId).val('');
+        }
+
+        let mediafileContainerId = $(this).attr('data-mediafile-container-id');
+        if (mediafileContainerId) {
+            $('#' + mediafileContainerId).empty();
+        }
+
+        let titleContainerId = $(this).attr('data-title-container-id');
+        if (titleContainerId) {
+            $('#' + titleContainerId).empty();
+        }
+
+        let descriptionContainerId = $(this).attr('data-description-container-id');
+        if (descriptionContainerId) {
+            $('#' + descriptionContainerId).empty();
+        }
     });
 });

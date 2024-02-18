@@ -26,14 +26,14 @@ function requestAjax(url, sendData, successCallback, errorCallback, options) {
 
 function catchFeedback(rootId, fields, errors) {
     for (let i in fields) {
-        let fieldName = fields[i];
-        let fieldEl = $('#' + rootId + ' [name="data[' + fieldName + ']"]');
-        let feedbackEl = $('#validation_' + fieldName + '_feedback');
-        if (errors[fieldName] !== undefined) {
+        let fieldKey = fields[i];
+        let fieldEl = $('#' + rootId + ' #' + fieldKey);
+        let feedbackEl = $('#validation_' + fieldKey + '_feedback');
+        if (errors[fieldKey] !== undefined) {
             if (!fieldEl.hasClass('is-invalid')) {
                 fieldEl.addClass('is-invalid');
             }
-            feedbackEl.html(errors[fieldName]);
+            feedbackEl.html(errors[fieldKey]);
         } else {
             if (fieldEl.hasClass('is-invalid')) {
                 fieldEl.removeClass('is-invalid');
@@ -41,4 +41,29 @@ function catchFeedback(rootId, fields, errors) {
             feedbackEl.html('');
         }
     }
+}
+
+function getPreview(id, location, successCallback, showPreLoaderCallback, hidePreLoaderCallback) {
+    if (showPreLoaderCallback) {
+        showPreLoaderCallback();
+    }
+    requestAjax(window.route_file_preview, {
+        id: id,
+        location: location,
+        _token: window.csrf_token
+
+    }, function (response) {
+        successCallback(response);
+        if (hidePreLoaderCallback) {
+            hidePreLoaderCallback();
+        }
+
+    }, function () {
+        if (hidePreLoaderCallback) {
+            hidePreLoaderCallback();
+        }
+
+    }, {
+        dataType: 'html'
+    });
 }
