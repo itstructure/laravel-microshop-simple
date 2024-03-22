@@ -10,7 +10,7 @@
         'mediafileContainerId' => !empty($model->id) ? 'thumbnail_container_' . $model->id : 'thumbnail_container',
         'titleContainerId' => !empty($model->id) ? 'thumbnail_title_' . $model->id : 'thumbnail_title',
         'descriptionContainerId' => !empty($model->id) ? 'thumbnail_description_' . $model->id : 'thumbnail_description',
-        'callbackBeforeInsert' => 'function (data) {alert(data);}',
+        //'callbackBeforeInsert' => 'function (e, v) {console.log(e, v);}',
         'insertedDataType' => Itstructure\MFU\Views\FileSetter::INSERTED_DATA_ID,
         //'neededFileType' => Itstructure\MFU\Processors\SaveProcessor::FILE_TYPE_THUMB,
         //'subDir' => $model->getTable()
