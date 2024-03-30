@@ -9,6 +9,12 @@
   padding: 0 !important;
 }
 
+.file-manager-frame {
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+}
+
 @media (min-width: 1200px) {
   .modal .modal-dialog {
     max-width: 1200px !important;
@@ -25,10 +31,4 @@
   .modal-dialog {
     max-width: 500px !important;
   }
-}
-
-.file-manager-frame {
-  width: 100%;
-  height: 100%;
-  padding: 5px;
 }

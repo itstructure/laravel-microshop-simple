@@ -50,12 +50,12 @@ $(document).ready(function() {
     function frameInsertHandlerFromEditor() {
 
         let modal = $(this).parents('.modal');
-        let fileForm = $(this).contents().find("#file_form");
+        let editForm = $(this).contents().find("#edit_form");
 
-        fileForm.on('click', '[role="insert-file"]', function(e) {
+        editForm.on('click', '[role="insert-file"]', function(e) {
             e.preventDefault();
 
-            let formData = new FormData(fileForm[0]);
+            let formData = new FormData(editForm[0]);
             let insertedDataType = modal.attr('data-inserted-data-type');
 
             insertBase(

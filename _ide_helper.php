@@ -18730,6 +18730,17 @@
                     /**
          * 
          *
+         * @return int 
+         * @static 
+         */ 
+        public static function getId()
+        {
+                        /** @var \Itstructure\MFU\Services\Uploader $instance */
+                        return $instance->getId();
+        }
+                    /**
+         * 
+         *
          * @param string|null $key
          * @return array 
          * @static 
