@@ -354,6 +354,108 @@ return [
             'icon' => 'fas fa-fw fa-user-plus',
             'url'  => '/admin/order',
         ],
+        [
+            'text' => 'albums',
+            'icon' => 'fas fa-fw fa-file',
+            'submenu' => [
+                [
+                    'text' => 'Images',
+                    'icon' => 'fas fa-fw fa-file-image',
+                    'submenu' => [
+                        [
+                            'text' => 'List',
+                            'url'  => '/uploader/albums/image/list',
+                            'icon' => 'fas fa-fw fa-list',
+                        ],
+                        [
+                            'text' => 'Create',
+                            'url'  => '/uploader/albums/image/create',
+                            'icon' => 'fas fa-fw fa-plus-square',
+                        ],
+                    ]
+                ],
+                [
+                    'text' => 'Audio',
+                    'icon' => 'fas fa-fw fa-file-audio',
+                    'submenu' => [
+                        [
+                            'text' => 'List',
+                            'url'  => '/uploader/albums/audio/list',
+                            'icon' => 'fas fa-fw fa-list',
+                        ],
+                        [
+                            'text' => 'Create',
+                            'url'  => '/uploader/albums/audio/create',
+                            'icon' => 'fas fa-fw fa-plus-square',
+                        ],
+                    ]
+                ],
+                [
+                    'text' => 'Video',
+                    'icon' => 'fas fa-fw fa-file-video',
+                    'submenu' => [
+                        [
+                            'text' => 'List',
+                            'url'  => '/uploader/albums/video/list',
+                            'icon' => 'fas fa-fw fa-list',
+                        ],
+                        [
+                            'text' => 'Create',
+                            'url'  => '/uploader/albums/video/create',
+                            'icon' => 'fas fa-fw fa-plus-square',
+                        ],
+                    ]
+                ],
+                [
+                    'text' => 'App',
+                    'icon' => 'fas fa-fw fa-file-invoice',
+                    'submenu' => [
+                        [
+                            'text' => 'List',
+                            'url'  => '/uploader/albums/app/list',
+                            'icon' => 'fas fa-fw fa-list',
+                        ],
+                        [
+                            'text' => 'Create',
+                            'url'  => '/uploader/albums/app/create',
+                            'icon' => 'fas fa-fw fa-plus-square',
+                        ],
+                    ]
+                ],
+                [
+                    'text' => 'Text',
+                    'icon' => 'fas fa-fw fa-file-alt',
+                    'submenu' => [
+                        [
+                            'text' => 'List',
+                            'url'  => '/uploader/albums/text/list',
+                            'icon' => 'fas fa-fw fa-list',
+                        ],
+                        [
+                            'text' => 'Create',
+                            'url'  => '/uploader/albums/text/create',
+                            'icon' => 'fas fa-fw fa-plus-square',
+                        ],
+                    ]
+                ],
+                [
+                    'text' => 'Other',
+                    'icon' => 'fas fa-fw fa-file',
+                    'submenu' => [
+                        [
+                            'text' => 'List',
+                            'url'  => '/uploader/albums/other/list',
+                            'icon' => 'fas fa-fw fa-list',
+                        ],
+                        [
+                            'text' => 'Create',
+                            'url'  => '/uploader/albums/other/create',
+                            'icon' => 'fas fa-fw fa-plus-square',
+                        ],
+                    ]
+                ],
+            ],
+        ],
     ],
 
     /*
