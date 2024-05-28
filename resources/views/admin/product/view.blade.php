@@ -27,6 +27,14 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td>Thumbnail</td>
+                            <td>
+                                @if(!empty($thumbModel = $model->getThumbnailModel()))
+                                    {!! \Itstructure\MFU\Facades\Previewer::getPreviewHtml($thumbModel, \Itstructure\MFU\Services\Previewer::LOCATION_FILE_INFO) !!}
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
                             <td>Title</td>
                             <td>{{ $model->title }}</td>
                         </tr>

@@ -22,6 +22,19 @@
                 ],
             ],
             [
+                'label' => 'Preview',
+                'value' => function ($data) {
+                    $thumbModel = $data->getThumbnailModel();
+                    return !empty($thumbModel)
+                        ? \Itstructure\MFU\Facades\Previewer::getPreviewHtml($thumbModel, \Itstructure\MFU\Services\Previewer::LOCATION_FILE_ITEM)
+                        : '';
+                },
+                'filter' => false,
+                'format' => [
+                    'class' => Itstructure\GridView\Formatters\HtmlFormatter::class,
+                ]
+            ],
+            [
                 'label' => 'Title',
                 'attribute' => 'title'
             ],
