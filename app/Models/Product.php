@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Itstructure\MFU\Interfaces\BeingOwnerInterface;
-use Itstructure\MFU\Behaviors\Owner\BehaviorMediafile;
+use Itstructure\MFU\Behaviors\Owner\{BehaviorMediafile, BehaviorAlbum};
 use App\Traits\{Titleable, Aliasable, Thumbnailable};
 
 /**
@@ -46,6 +46,11 @@ class Product extends Model implements BeingOwnerInterface
      */
     public $image;
 
+    /**
+     * @var string[]|int[]
+     */
+    public $albums;
+
     protected $table = 'products';
 
     protected $fillable = ['title', 'alias', 'description', 'price', 'category_id'];
@@ -69,9 +74,25 @@ class Product extends Model implements BeingOwnerInterface
     /**
      * @return array
      */
-    public static function getAllBehaviorAttributes(): array
+    public static function getBehaviorMadiafileAttributes(): array
     {
         return ['thumbnail', 'image'];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getBehaviorAlbumAttributes(): array
+    {
+        return ['albums'];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getAllBehaviorAttributes(): array
+    {
+        return array_merge(static::getBehaviorMadiafileAttributes(), static::getBehaviorAlbumAttributes());
     }
 
     /**
@@ -90,16 +111,22 @@ class Product extends Model implements BeingOwnerInterface
 
     protected static function booted(): void
     {
-        $behavior = BehaviorMediafile::getInstance(static::getAllBehaviorAttributes());
+        $behaviorMediafile = BehaviorMediafile::getInstance(static::getBehaviorMadiafileAttributes());
+        $behaviorAlbum = BehaviorAlbum::getInstance(static::getBehaviorAlbumAttributes());
 
-        static::saved(function (Model $ownerModel) use ($behavior) {
-            $ownerModel->wasRecentlyCreated
-                ? $behavior->link($ownerModel)
-                : $behavior->refresh($ownerModel);
+        static::saved(function (Model $ownerModel) use ($behaviorMediafile, $behaviorAlbum) {
+            if ($ownerModel->wasRecentlyCreated) {
+                $behaviorMediafile->link($ownerModel);
+                $behaviorAlbum->link($ownerModel);
+            } else {
+                $behaviorMediafile->refresh($ownerModel);
+                $behaviorAlbum->refresh($ownerModel);
+            }
         });
 
-        static::deleted(function (Model $ownerModel) use ($behavior) {
-            $behavior->clear($ownerModel);
+        static::deleted(function (Model $ownerModel) use ($behaviorMediafile, $behaviorAlbum) {
+            $behaviorMediafile->clear($ownerModel);
+            $behaviorAlbum->clear($ownerModel);
         });
     }
 

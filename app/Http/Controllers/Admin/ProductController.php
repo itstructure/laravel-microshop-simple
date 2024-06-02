@@ -67,7 +67,7 @@ class ProductController extends Controller
      */
     public function update(int $id, UpdateProduct $request)
     {
-        Product::findOrFail($id)->fill($request->all())->save();
+        Product::findOrFail($id)->update($request->all());
 
         return redirect()->route('admin_product_view', ['id' => $id]);
     }

@@ -1,0 +1,16 @@
+.file-area {
+  background-color: lightgrey;
+}
+.file-area .mediafile-container {
+  position: relative;
+}
+.file-area .mediafile-container img,
+.file-area .mediafile-container audio,
+.file-area .mediafile-container video,
+.file-area .mediafile-container svg {
+  max-width: 100%;
+  width: 100%;
+}
+.file-area .mediafile-meta-data {
+  margin-top: 10px;
+}

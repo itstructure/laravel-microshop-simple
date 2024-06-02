@@ -576,6 +576,11 @@ return [
                     'asset' => true,
                     'location' => asset('vendor/uploader/css/modal.css'),
                 ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => asset('vendor/uploader/css/file-area.css'),
+                ],
             ],
         ],
     ],
