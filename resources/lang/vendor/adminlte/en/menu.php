@@ -16,6 +16,7 @@ return [
     'important'          => 'Important',
     'warning'            => 'Warning',
     'information'        => 'Information',
+    'client_side'        => 'Client side',
     'rbac_manager'       => 'RBAC manager',
     'rbac_users'         => 'Users',
     'rbac_roles'         => 'Roles',
@@ -23,6 +24,7 @@ return [
     'categories'         => 'Categories',
     'products'           => 'Products',
     'orders'             => 'Orders',
+    'files'              => 'Files',
     'albums'             => 'Albums',
     'images'             => 'Images',
     'audio'              => 'Audio',
@@ -30,4 +32,6 @@ return [
     'app'                => 'App',
     'text'               => 'Text',
     'other'              => 'Other',
+    'list'               => 'List',
+    'create'             => 'Create',
 ];

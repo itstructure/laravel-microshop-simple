@@ -78,6 +78,8 @@ Route::group(['prefix'=>'admin', 'namespace' => 'App\Http\Controllers\Admin', 'm
         Route::get('/',            ['as' => 'admin_order_list',   'uses' => 'OrderController@index']);
         Route::post('delete',      ['as' => 'admin_order_delete', 'uses' => 'OrderController@delete']);
     });
+
+    Route::get('files',            ['as' => 'admin_file_manager', 'uses' => 'FileController@index']);
 });
 
 /*

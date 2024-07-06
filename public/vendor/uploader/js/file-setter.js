@@ -1,11 +1,11 @@
 $(document).ready(function() {
 
-    function insertBase(modal, fileId, title, description, mainInputValue) {
+    function insertBase(modal, fileId, title, description) {
         let mainInput = null;
         let dataInputId = modal.attr('data-input-id');
         if (dataInputId) {
             mainInput = $('#' + dataInputId);
-            mainInput.trigger("beforeInsert", mainInputValue);
+            mainInput.trigger("beforeInsert", fileId);
         }
 
         let mediaFileContainerId = modal.attr('data-mediafile-container-id');
@@ -40,8 +40,8 @@ $(document).ready(function() {
             $('#' + descriptionContainerId).html(description);
         }
 
-        if (mainInput && mainInputValue) {
-            mainInput.val(mainInputValue);
+        if (mainInput) {
+            mainInput.val(fileId);
         }
 
         modal.modal('hide');
@@ -56,14 +56,12 @@ $(document).ready(function() {
             e.preventDefault();
 
             let formData = new FormData(editForm[0]);
-            let insertedDataType = modal.attr('data-inserted-data-type');
 
             insertBase(
                 modal,
                 formData.get('id'),
                 formData.get('data[title]'),
-                formData.get('data[description]'),
-                insertedDataType ? formData.get(insertedDataType) : null
+                formData.get('data[description]')
             );
         });
     }
@@ -77,14 +75,12 @@ $(document).ready(function() {
             e.preventDefault();
 
             let listItemDataEl = $(e.target).parents('[role="list-item-data"]');
-            let insertedDataType = modal.attr('data-inserted-data-type');
 
             insertBase(
                 modal,
                 listItemDataEl.attr('data-file-id'),
                 listItemDataEl.attr('data-file-title'),
-                listItemDataEl.attr('data-file-description'),
-                insertedDataType ? listItemDataEl.attr('data-file-' + insertedDataType) : null
+                listItemDataEl.attr('data-file-description')
             );
         });
     }
@@ -98,7 +94,7 @@ $(document).ready(function() {
             ownerId = modal.attr('data-owner-id'),
             ownerAttribute = modal.attr('data-owner-attribute');
 
-        let paramsData = {};
+        let paramsData = {from_file_setter: 1};
         let paramsQuery = '';
 
         if (ownerName) {

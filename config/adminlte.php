@@ -291,7 +291,7 @@ return [
 
     'menu' => [
         [
-            'text' => 'Client side',
+            'text' => 'client_side',
             'icon' => 'fas fa-fw fa-home',
             'url'  => '/',
             'target' => '_blank'
@@ -322,12 +322,12 @@ return [
             'icon' => 'fas fa-project-diagram',
             'submenu' => [
                 [
-                    'text' => 'List',
+                    'text' => 'list',
                     'url'  => '/admin/category',
                     'icon' => 'fas fa-fw fa-list',
                 ],
                 [
-                    'text' => 'Create',
+                    'text' => 'create',
                     'url'  => '/admin/category/create',
                     'icon' => 'fas fa-fw fa-plus-square',
                 ],
@@ -335,15 +335,15 @@ return [
         ],
         [
             'text' => 'products',
-            'icon' => 'fas fa-fw fa-file',
+            'icon' => 'fas fa-fw fa-store',
             'submenu' => [
                 [
-                    'text' => 'List',
+                    'text' => 'list',
                     'url'  => '/admin/product',
                     'icon' => 'fas fa-fw fa-list',
                 ],
                 [
-                    'text' => 'Create',
+                    'text' => 'create',
                     'url'  => '/admin/product/create',
                     'icon' => 'fas fa-fw fa-plus-square',
                 ],
@@ -355,100 +355,105 @@ return [
             'url'  => '/admin/order',
         ],
         [
-            'text' => 'albums',
+            'text' => 'files',
             'icon' => 'fas fa-fw fa-file',
+            'url'  => '/admin/files',
+        ],
+        [
+            'text' => 'albums',
+            'icon' => 'fas fa-fw fa-book-open',
             'submenu' => [
                 [
-                    'text' => 'Images',
+                    'text' => 'images',
                     'icon' => 'fas fa-fw fa-file-image',
                     'submenu' => [
                         [
-                            'text' => 'List',
+                            'text' => 'list',
                             'url'  => '/uploader/albums/image/list',
                             'icon' => 'fas fa-fw fa-list',
                         ],
                         [
-                            'text' => 'Create',
+                            'text' => 'create',
                             'url'  => '/uploader/albums/image/create',
                             'icon' => 'fas fa-fw fa-plus-square',
                         ],
                     ]
                 ],
                 [
-                    'text' => 'Audio',
+                    'text' => 'audio',
                     'icon' => 'fas fa-fw fa-file-audio',
                     'submenu' => [
                         [
-                            'text' => 'List',
+                            'text' => 'list',
                             'url'  => '/uploader/albums/audio/list',
                             'icon' => 'fas fa-fw fa-list',
                         ],
                         [
-                            'text' => 'Create',
+                            'text' => 'create',
                             'url'  => '/uploader/albums/audio/create',
                             'icon' => 'fas fa-fw fa-plus-square',
                         ],
                     ]
                 ],
                 [
-                    'text' => 'Video',
+                    'text' => 'video',
                     'icon' => 'fas fa-fw fa-file-video',
                     'submenu' => [
                         [
-                            'text' => 'List',
+                            'text' => 'list',
                             'url'  => '/uploader/albums/video/list',
                             'icon' => 'fas fa-fw fa-list',
                         ],
                         [
-                            'text' => 'Create',
+                            'text' => 'create',
                             'url'  => '/uploader/albums/video/create',
                             'icon' => 'fas fa-fw fa-plus-square',
                         ],
                     ]
                 ],
                 [
-                    'text' => 'App',
+                    'text' => 'app',
                     'icon' => 'fas fa-fw fa-file-invoice',
                     'submenu' => [
                         [
-                            'text' => 'List',
+                            'text' => 'list',
                             'url'  => '/uploader/albums/app/list',
                             'icon' => 'fas fa-fw fa-list',
                         ],
                         [
-                            'text' => 'Create',
+                            'text' => 'create',
                             'url'  => '/uploader/albums/app/create',
                             'icon' => 'fas fa-fw fa-plus-square',
                         ],
                     ]
                 ],
                 [
-                    'text' => 'Text',
+                    'text' => 'text',
                     'icon' => 'fas fa-fw fa-file-alt',
                     'submenu' => [
                         [
-                            'text' => 'List',
+                            'text' => 'list',
                             'url'  => '/uploader/albums/text/list',
                             'icon' => 'fas fa-fw fa-list',
                         ],
                         [
-                            'text' => 'Create',
+                            'text' => 'create',
                             'url'  => '/uploader/albums/text/create',
                             'icon' => 'fas fa-fw fa-plus-square',
                         ],
                     ]
                 ],
                 [
-                    'text' => 'Other',
+                    'text' => 'other',
                     'icon' => 'fas fa-fw fa-file',
                     'submenu' => [
                         [
-                            'text' => 'List',
+                            'text' => 'list',
                             'url'  => '/uploader/albums/other/list',
                             'icon' => 'fas fa-fw fa-list',
                         ],
                         [
-                            'text' => 'Create',
+                            'text' => 'create',
                             'url'  => '/uploader/albums/other/create',
                             'icon' => 'fas fa-fw fa-plus-square',
                         ],

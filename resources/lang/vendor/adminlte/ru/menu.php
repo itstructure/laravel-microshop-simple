@@ -16,6 +16,7 @@ return [
     'important'          => 'Важно',
     'warning'            => 'Внимание',
     'information'        => 'Информация',
+    'client_side'        => 'Сторона клиента',
     'rbac_manager'       => 'Управление правами',
     'rbac_users'         => 'Пользователи',
     'rbac_roles'         => 'Роли',
@@ -23,6 +24,7 @@ return [
     'categories'         => 'Категории',
     'products'           => 'Продукция',
     'orders'             => 'Заказы',
+    'files'              => 'Файлы',
     'albums'             => 'Альбомы',
     'images'             => 'Картинки',
     'audio'              => 'Аудио',
@@ -30,4 +32,6 @@ return [
     'app'                => 'Приложения',
     'text'               => 'Текстовые',
     'other'              => 'Другие',
+    'list'               => 'Список',
+    'create'             => 'Создать',
 ];
