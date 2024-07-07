@@ -51,6 +51,11 @@ class Product extends Model implements BeingOwnerInterface
      */
     public $albums;
 
+    /**
+     * @var bool
+     */
+    protected $removeDependencies = false;
+
     protected $table = 'products';
 
     protected $fillable = ['title', 'alias', 'description', 'price', 'category_id'];
@@ -69,6 +74,24 @@ class Product extends Model implements BeingOwnerInterface
     public function getPrimaryKey()
     {
         return $this->getKey();
+    }
+
+    /**
+     * @param bool $removeDependencies
+     * @return $this
+     */
+    public function setRemoveDependencies(bool $removeDependencies)
+    {
+        $this->removeDependencies = $removeDependencies;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getRemoveDependencies(): bool
+    {
+        return $this->removeDependencies;
     }
 
     /**

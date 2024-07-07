@@ -4,7 +4,7 @@
 
     <section class="content container-fluid">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 pt-2 pb-4">
 
                 <h2>Create product</h2>
 

@@ -58,6 +58,10 @@
                 </table>
             </div>
         </div>
+
+        <div class="row mb-3">
+            @include('uploader::partials.existing-mediafiles', ['mediaFiles' => $mediaFiles ?? []])
+        </div>
     </section>
 
 @endsection

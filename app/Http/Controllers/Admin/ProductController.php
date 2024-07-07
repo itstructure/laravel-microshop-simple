@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Database\Eloquent\Collection;
 use Itstructure\GridView\DataProviders\EloquentDataProvider;
+use Itstructure\MFU\Models\Owners\{OwnerAlbum, OwnerMediafile};
+use Itstructure\MFU\Processors\SaveProcessor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreProduct, UpdateProduct, Delete};
 use App\Models\{Product, Category};
@@ -56,8 +59,9 @@ class ProductController extends Controller
         $model = Product::findOrFail($id);
 
         $categories = Category::pluck('title', 'id')->toArray();
+        $mediaFiles = $this->getMediaFiles($model);
 
-        return view('admin.product.edit', compact('model', 'categories'));
+        return view('admin.product.edit', compact('model', 'categories', 'mediaFiles'));
     }
 
     /**
@@ -78,13 +82,15 @@ class ProductController extends Controller
      */
     public function delete(Delete $request)
     {
-        foreach ($request->items as $item) {
+        foreach ($request->items as $id) {
 
-            if (!is_numeric($item)) {
+            if (!is_numeric($id)) {
                 continue;
             }
 
-            Product::destroy($item);
+            Product::find($id)
+                ->setRemoveDependencies(!empty($request->get('remove_dependencies')))
+                ->delete();
         }
 
         return redirect()->route('admin_product_list');
@@ -97,7 +103,17 @@ class ProductController extends Controller
     public function view(int $id)
     {
         $model = Product::findOrFail($id);
+        $mediaFiles = $this->getMediaFiles($model);
 
-        return view('admin.product.view', compact('model'));
+        return view('admin.product.view', compact('model', 'mediaFiles'));
+    }
+
+    /**
+     * @param Product $model
+     * @return Collection
+     */
+    protected function getMediaFiles(Product $model): Collection
+    {
+        return OwnerMediafile::getMediaFiles($model->getItsName(), $model->id, SaveProcessor::FILE_TYPE_IMAGE);
     }
 }
