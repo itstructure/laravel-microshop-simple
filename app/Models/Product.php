@@ -49,7 +49,7 @@ class Product extends Model implements BeingOwnerInterface
     /**
      * @var string[]|int[]
      */
-    public $albums;
+    public $image_album;
 
     /**
      * @var bool
@@ -107,7 +107,7 @@ class Product extends Model implements BeingOwnerInterface
      */
     public static function getBehaviorAlbumAttributes(): array
     {
-        return ['albums'];
+        return ['image_album'];
     }
 
     /**

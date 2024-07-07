@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Database\Eloquent\Collection;
 use Itstructure\GridView\DataProviders\EloquentDataProvider;
 use Itstructure\MFU\Models\Owners\{OwnerAlbum, OwnerMediafile};
+use Itstructure\MFU\Models\Albums\{ImageAlbum};
 use Itstructure\MFU\Processors\SaveProcessor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{StoreProduct, UpdateProduct, Delete};
@@ -35,8 +36,9 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::pluck('title', 'id')->toArray();
+        $imageAlbums = $this->getImageAlbums();
 
-        return view('admin.product.create', compact('categories'));
+        return view('admin.product.create', compact('categories', 'imageAlbums'));
     }
 
     /**
@@ -60,8 +62,9 @@ class ProductController extends Controller
 
         $categories = Category::pluck('title', 'id')->toArray();
         $mediaFiles = $this->getMediaFiles($model);
+        $imageAlbums = $this->getImageAlbums($model);
 
-        return view('admin.product.edit', compact('model', 'categories', 'mediaFiles'));
+        return view('admin.product.edit', compact('model', 'categories', 'mediaFiles', 'imageAlbums'));
     }
 
     /**
@@ -115,5 +118,14 @@ class ProductController extends Controller
     protected function getMediaFiles(Product $model): Collection
     {
         return OwnerMediafile::getMediaFiles($model->getItsName(), $model->id, SaveProcessor::FILE_TYPE_IMAGE);
+    }
+
+    /**
+     * @param Product|null $model
+     * @return Collection
+     */
+    protected function getImageAlbums(Product $model = null): Collection
+    {
+        return ImageAlbum::getAllQuery()->with('owners')->get();
     }
 }
