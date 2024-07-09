@@ -62,6 +62,16 @@
         <div class="row mb-3">
             @include('uploader::partials.existing-mediafiles', ['mediaFiles' => $mediaFiles ?? []])
         </div>
+
+        @if(!empty($relatedImageAlbums) && !$relatedImageAlbums->isEmpty())
+            <hr />
+            <h5>{{ trans('uploader::main.image_albums') }}</h5>
+            <div class="row mb-3">
+                @include('uploader::partials.albums-form-list', [
+                    'albums' => $relatedImageAlbums
+                ])
+            </div>
+        @endif
     </section>
 
 @endsection

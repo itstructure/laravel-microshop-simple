@@ -92,45 +92,18 @@
             'edition' => true,
             'fileType' => \Itstructure\MFU\Processors\SaveProcessor::FILE_TYPE_IMAGE,
             'ownerParams' => $ownerParams ?? null,
-            'mediaFiles' => $mediaFiles ?? []]
-        )
+            'mediaFiles' => $mediaFiles ?? []
+        ])
     </div>
 @endif
 
-@if(!empty($imageAlbums) && !$imageAlbums->isEmpty())
+@if(!empty($allImageAlbums) && !$allImageAlbums->isEmpty())
     <hr />
     <h5>{{ trans('uploader::main.image_albums') }}</h5>
     <div class="row mb-3">
-        <table class="table table-bordered table-sm" width="100%">
-            <thead>
-                <tr>
-                    <th width="50">Select</th>
-                    <th width="100">Thumb</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($imageAlbums as $imageAlbum)
-                    <tr>
-                        <td>
-                            <input type="checkbox" name="{{ \Itstructure\MFU\Models\Albums\Album::ALBUM_TYPE_IMAGE }}[]" value="{{ $imageAlbum->id }}" />
-                        </td>
-                        <td>
-                            @php
-                                $html = !empty($thumbModel = $imageAlbum->getThumbnailModel())
-                                    ? \Itstructure\MFU\Facades\Previewer::getPreviewHtml($thumbModel, \Itstructure\MFU\Services\Previewer::LOCATION_FILE_ITEM)
-                                    : '';
-                            @endphp
-                            @if(!empty($html))
-                                <a href="{{ route('uploader_' . $imageAlbum->type . '_view', ['id' => $imageAlbum->id]) }}" target="_blank">{!! $html !!}</a>
-                            @endif
-                        </td>
-                        <td>{{ $imageAlbum->title }}</td>
-                        <td>{{ $imageAlbum->description }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+        @include('uploader::partials.albums-form-list', [
+            'albums' => $allImageAlbums,
+            'edition' => true
+        ])
     </div>
 @endif

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Itstructure\GridView\DataProviders\EloquentDataProvider;
-use Itstructure\MFU\Models\Owners\{OwnerAlbum, OwnerMediafile};
+use Itstructure\MFU\Models\Owners\{OwnerMediafile, OwnerAlbum};
 use Itstructure\MFU\Models\Albums\{ImageAlbum};
 use Itstructure\MFU\Processors\SaveProcessor;
 use App\Http\Controllers\Controller;
@@ -36,9 +37,9 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::pluck('title', 'id')->toArray();
-        $imageAlbums = $this->getImageAlbums();
+        $allImageAlbums = $this->getAllImageAlbums();
 
-        return view('admin.product.create', compact('categories', 'imageAlbums'));
+        return view('admin.product.create', compact('categories', 'allImageAlbums'));
     }
 
     /**
@@ -62,9 +63,9 @@ class ProductController extends Controller
 
         $categories = Category::pluck('title', 'id')->toArray();
         $mediaFiles = $this->getMediaFiles($model);
-        $imageAlbums = $this->getImageAlbums($model);
+        $allImageAlbums = $this->getAllImageAlbums($model);
 
-        return view('admin.product.edit', compact('model', 'categories', 'mediaFiles', 'imageAlbums'));
+        return view('admin.product.edit', compact('model', 'categories', 'mediaFiles', 'allImageAlbums'));
     }
 
     /**
@@ -107,25 +108,35 @@ class ProductController extends Controller
     {
         $model = Product::findOrFail($id);
         $mediaFiles = $this->getMediaFiles($model);
+        $relatedImageAlbums = $this->getRelatedImageAlbums($model);
 
-        return view('admin.product.view', compact('model', 'mediaFiles'));
+        return view('admin.product.view', compact('model', 'mediaFiles', 'relatedImageAlbums'));
     }
 
     /**
      * @param Product $model
-     * @return Collection
+     * @return EloquentCollection
      */
-    protected function getMediaFiles(Product $model): Collection
+    protected function getMediaFiles(Product $model): EloquentCollection
     {
         return OwnerMediafile::getMediaFiles($model->getItsName(), $model->id, SaveProcessor::FILE_TYPE_IMAGE);
     }
 
     /**
      * @param Product|null $model
-     * @return Collection
+     * @return SupportCollection
      */
-    protected function getImageAlbums(Product $model = null): Collection
+    protected function getAllImageAlbums(Product $model = null): SupportCollection
     {
-        return ImageAlbum::getAllQuery()->with('owners')->get();
+        return !is_null($model) ? ImageAlbum::getAllForOwner($model) : ImageAlbum::getAll();
+    }
+
+    /**
+     * @param Product $model
+     * @return EloquentCollection
+     */
+    protected function getRelatedImageAlbums(Product $model): EloquentCollection
+    {
+        return OwnerAlbum::getImageAlbums($model->getItsName(), $model->getPrimaryKey());
     }
 }
