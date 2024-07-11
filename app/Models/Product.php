@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Itstructure\MFU\Interfaces\BeingOwnerInterface;
 use Itstructure\MFU\Behaviors\Owner\{BehaviorMediafile, BehaviorAlbum};
+use Itstructure\MFU\Processors\SaveProcessor;
+use Itstructure\MFU\Models\Albums\AlbumTyped;
+use Itstructure\MFU\Traits\OwnerBehavior;
 use App\Traits\{Titleable, Aliasable, Thumbnailable};
 
 /**
@@ -34,27 +37,7 @@ use App\Traits\{Titleable, Aliasable, Thumbnailable};
  */
 class Product extends Model implements BeingOwnerInterface
 {
-    use Titleable, Aliasable, Thumbnailable;
-
-    /**
-     * @var string|int
-     */
-    public $thumbnail;
-
-    /**
-     * @var string[]|int[]
-     */
-    public $image;
-
-    /**
-     * @var string[]|int[]
-     */
-    public $image_album;
-
-    /**
-     * @var bool
-     */
-    protected $removeDependencies = false;
+    use Titleable, Aliasable, Thumbnailable, OwnerBehavior;
 
     protected $table = 'products';
 
@@ -77,29 +60,11 @@ class Product extends Model implements BeingOwnerInterface
     }
 
     /**
-     * @param bool $removeDependencies
-     * @return $this
-     */
-    public function setRemoveDependencies(bool $removeDependencies)
-    {
-        $this->removeDependencies = $removeDependencies;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getRemoveDependencies(): bool
-    {
-        return $this->removeDependencies;
-    }
-
-    /**
      * @return array
      */
     public static function getBehaviorMadiafileAttributes(): array
     {
-        return ['thumbnail', 'image'];
+        return [SaveProcessor::FILE_TYPE_THUMB, SaveProcessor::FILE_TYPE_IMAGE];
     }
 
     /**
@@ -107,29 +72,15 @@ class Product extends Model implements BeingOwnerInterface
      */
     public static function getBehaviorAlbumAttributes(): array
     {
-        return ['image_album'];
+        return [AlbumTyped::ALBUM_TYPE_IMAGE];
     }
 
     /**
      * @return array
      */
-    public static function getAllBehaviorAttributes(): array
+    public static function getBehaviorAttributes(): array
     {
         return array_merge(static::getBehaviorMadiafileAttributes(), static::getBehaviorAlbumAttributes());
-    }
-
-    /**
-     * @param array $attributes
-     * @return Model
-     */
-    public function fill(array $attributes)
-    {
-        foreach (static::getAllBehaviorAttributes() as $behaviorAttribute) {
-            if (isset($attributes[$behaviorAttribute])) {
-                $this->{$behaviorAttribute} = $attributes[$behaviorAttribute];
-            }
-        }
-        return parent::fill($attributes);
     }
 
     protected static function booted(): void

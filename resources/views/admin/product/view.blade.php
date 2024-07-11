@@ -7,9 +7,15 @@
 
         <div class="row mb-3">
             <div class="col-12">
-                <form action="{{ route('admin_product_delete') }}" method="post">
-                    <a class="btn btn-success" href="{{ route('admin_product_edit', ['id' => $model->id]) }}" title="Edit">Edit</a>
-                    <input type="submit" class="btn btn-danger" value="Delete" title="Delete" onclick="return confirm('Sure?')">
+                <a class="btn btn-success d-inline" href="{{ route('admin_product_edit', ['id' => $model->id]) }}" title="Edit">Edit</a>
+                <form action="{{ route('admin_product_delete') }}" method="post" class="d-inline">
+                    <input type="submit" class="btn btn-danger" value="Delete product" title="Delete" onclick="return confirm('Sure?')">
+                    <input type="hidden" value="{{ $model->id }}" name="items[]">
+                    <input type="hidden" value="{!! csrf_token() !!}" name="_token">
+                </form>
+                <form action="{{ route('admin_product_delete') }}" method="post" class="d-inline">
+                    <input type="submit" class="btn btn-danger" value="Delete total" title="Delete" onclick="return confirm('Sure?')">
+                    <input type="hidden" value="1" name="remove_dependencies">
                     <input type="hidden" value="{{ $model->id }}" name="items[]">
                     <input type="hidden" value="{!! csrf_token() !!}" name="_token">
                 </form>

@@ -10,7 +10,13 @@
 
                 <form action="{{ route('admin_product_update', ['id' => $model->id]) }}" method="post">
 
-                    @include('admin.product._fields', ['edition' => true, 'ownerParams' => ['ownerName' => $model->getItsName(), 'ownerId' => $model->id]])
+                    @include('admin.product._fields', [
+                        'edition' => true,
+                        'ownerParams' => [
+                            'ownerName' => $model->getItsName(),
+                            'ownerId' => $model->getPrimaryKey()
+                        ]
+                    ])
 
                     <button class="btn btn-primary" type="submit">Submit</button>
 

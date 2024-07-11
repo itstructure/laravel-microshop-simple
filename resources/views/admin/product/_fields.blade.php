@@ -81,7 +81,10 @@
 <hr />
 <h5>{{ trans('uploader::main.new_files') }}</h5>
 <div class="row mb-3">
-    @include('uploader::partials.new-mediafiles', ['fileType' => \Itstructure\MFU\Processors\SaveProcessor::FILE_TYPE_IMAGE, 'ownerParams' => $ownerParams ?? null])
+    @include('uploader::partials.new-mediafiles', [
+        'fileType' => \Itstructure\MFU\Processors\SaveProcessor::FILE_TYPE_IMAGE,
+        'ownerParams' => $ownerParams ?? null
+    ])
 </div>
 
 @if(!empty($edition))
