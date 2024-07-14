@@ -7,8 +7,8 @@ use Itstructure\MFU\Interfaces\BeingOwnerInterface;
 use Itstructure\MFU\Behaviors\Owner\{BehaviorMediafile, BehaviorAlbum};
 use Itstructure\MFU\Processors\SaveProcessor;
 use Itstructure\MFU\Models\Albums\AlbumTyped;
-use Itstructure\MFU\Traits\OwnerBehavior;
-use App\Traits\{Titleable, Aliasable, Thumbnailable};
+use Itstructure\MFU\Traits\{OwnerBehavior, Thumbnailable};
+use App\Traits\{Titleable, Aliasable};
 
 /**
  * App\Models\Product

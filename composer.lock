@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d2e053818b376ebb438660ce3e66a05a",
+    "content-hash": "69c6518acacc2ee7d28cdb7c0470ae90",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -1232,16 +1232,16 @@
         },
         {
             "name": "itstructure/laravel-grid-view",
-            "version": "1.1.1",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/itstructure/laravel-grid-view.git",
-                "reference": "490828cbe70c89d70959a7bbb0780b6bf5f1978b"
+                "reference": "4e8574869f3a19deea9319bd70a10487e3872fc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/itstructure/laravel-grid-view/zipball/490828cbe70c89d70959a7bbb0780b6bf5f1978b",
-                "reference": "490828cbe70c89d70959a7bbb0780b6bf5f1978b",
+                "url": "https://api.github.com/repos/itstructure/laravel-grid-view/zipball/4e8574869f3a19deea9319bd70a10487e3872fc4",
+                "reference": "4e8574869f3a19deea9319bd70a10487e3872fc4",
                 "shasum": ""
             },
             "require": {
@@ -1281,22 +1281,28 @@
             ],
             "support": {
                 "issues": "https://github.com/itstructure/laravel-grid-view/issues",
-                "source": "https://github.com/itstructure/laravel-grid-view/tree/1.1.1"
+                "source": "https://github.com/itstructure/laravel-grid-view/tree/1.1.3"
             },
-            "time": "2024-03-20T12:56:59+00:00"
+            "time": "2024-07-13T17:12:34+00:00"
         },
         {
             "name": "itstructure/laravel-media-file-uploader",
-            "version": "dev-main",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/itstructure/laravel-media-file-uploader.git",
+                "reference": "62ad1eeb22cb3c9202817d7ecb73753ee47424d2"
+            },
             "dist": {
-                "type": "path",
-                "url": "../laravel-media-file-uploader",
-                "reference": "a2cb0be043e5bc2015f22ac4e16d00c735d5d54f"
+                "type": "zip",
+                "url": "https://api.github.com/repos/itstructure/laravel-media-file-uploader/zipball/62ad1eeb22cb3c9202817d7ecb73753ee47424d2",
+                "reference": "62ad1eeb22cb3c9202817d7ecb73753ee47424d2",
+                "shasum": ""
             },
             "require": {
-                "itstructure/laravel-grid-view": "~1.1.1",
-                "laravel/framework": "^10.0|^11.0",
-                "php": ">=7.1.0"
+                "itstructure/laravel-grid-view": "^1.1.3",
+                "laravel/framework": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "php": ">=7.2.5"
             },
             "type": "library",
             "extra": {
@@ -1311,6 +1317,7 @@
                     "Itstructure\\MFU\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1331,10 +1338,11 @@
                 "upload",
                 "video"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/itstructure/laravel-media-file-uploader/issues",
+                "source": "https://github.com/itstructure/laravel-media-file-uploader/tree/1.0.1"
+            },
+            "time": "2024-07-14T15:04:28+00:00"
         },
         {
             "name": "itstructure/laravel-rbac",
@@ -9257,9 +9265,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "itstructure/laravel-media-file-uploader": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

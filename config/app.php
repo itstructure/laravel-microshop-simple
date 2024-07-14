@@ -82,7 +82,7 @@ return [
     |
     */
 
-    'locale' => 'ru',
+    'locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -187,7 +187,6 @@ return [
          */
         Itstructure\GridView\GridViewServiceProvider::class,
         Itstructure\LaRbac\RbacServiceProvider::class,
-        Itstructure\MFU\UploadServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
         /*

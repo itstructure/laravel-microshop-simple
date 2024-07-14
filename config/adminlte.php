@@ -417,12 +417,12 @@ return [
                     'submenu' => [
                         [
                             'text' => 'list',
-                            'url'  => '/uploader/albums/app/list',
+                            'url'  => '/uploader/albums/application/list',
                             'icon' => 'fas fa-fw fa-list',
                         ],
                         [
                             'text' => 'create',
-                            'url'  => '/uploader/albums/app/create',
+                            'url'  => '/uploader/albums/application/create',
                             'icon' => 'fas fa-fw fa-plus-square',
                         ],
                     ]
@@ -572,19 +572,19 @@ return [
             'active' => true,
             'files' => [
                 [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/vendor/uploader/css/modal.css',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '/vendor/uploader/css/file-area.css',
+                ],
+                [
                     'type' => 'js',
                     'asset' => true,
-                    'location' => asset('vendor/uploader/js/file-setter.js'),
-                ],
-                [
-                    'type' => 'css',
-                    'asset' => true,
-                    'location' => asset('vendor/uploader/css/modal.css'),
-                ],
-                [
-                    'type' => 'css',
-                    'asset' => true,
-                    'location' => asset('vendor/uploader/css/file-area.css'),
+                    'location' => '/vendor/uploader/js/file-setter.js',
                 ],
             ],
         ],
