@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "69c6518acacc2ee7d28cdb7c0470ae90",
+    "content-hash": "4f6f8ad4304d7b8e174101c5693a3b2f",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -1232,16 +1232,16 @@
         },
         {
             "name": "itstructure/laravel-grid-view",
-            "version": "1.1.3",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/itstructure/laravel-grid-view.git",
-                "reference": "4e8574869f3a19deea9319bd70a10487e3872fc4"
+                "reference": "a9004828b410dfa0dbb8258fe3d2aaabe8e58232"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/itstructure/laravel-grid-view/zipball/4e8574869f3a19deea9319bd70a10487e3872fc4",
-                "reference": "4e8574869f3a19deea9319bd70a10487e3872fc4",
+                "url": "https://api.github.com/repos/itstructure/laravel-grid-view/zipball/a9004828b410dfa0dbb8258fe3d2aaabe8e58232",
+                "reference": "a9004828b410dfa0dbb8258fe3d2aaabe8e58232",
                 "shasum": ""
             },
             "require": {
@@ -1281,22 +1281,22 @@
             ],
             "support": {
                 "issues": "https://github.com/itstructure/laravel-grid-view/issues",
-                "source": "https://github.com/itstructure/laravel-grid-view/tree/1.1.3"
+                "source": "https://github.com/itstructure/laravel-grid-view/tree/1.1.4"
             },
-            "time": "2024-07-13T17:12:34+00:00"
+            "time": "2024-07-15T13:44:38+00:00"
         },
         {
             "name": "itstructure/laravel-media-file-uploader",
-            "version": "1.0.1",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/itstructure/laravel-media-file-uploader.git",
-                "reference": "62ad1eeb22cb3c9202817d7ecb73753ee47424d2"
+                "reference": "32c2a95caa6529a46cc4294871fb073bef3a1533"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/itstructure/laravel-media-file-uploader/zipball/62ad1eeb22cb3c9202817d7ecb73753ee47424d2",
-                "reference": "62ad1eeb22cb3c9202817d7ecb73753ee47424d2",
+                "url": "https://api.github.com/repos/itstructure/laravel-media-file-uploader/zipball/32c2a95caa6529a46cc4294871fb073bef3a1533",
+                "reference": "32c2a95caa6529a46cc4294871fb073bef3a1533",
                 "shasum": ""
             },
             "require": {
@@ -1340,26 +1340,26 @@
             ],
             "support": {
                 "issues": "https://github.com/itstructure/laravel-media-file-uploader/issues",
-                "source": "https://github.com/itstructure/laravel-media-file-uploader/tree/1.0.1"
+                "source": "https://github.com/itstructure/laravel-media-file-uploader/tree/1.0.3"
             },
-            "time": "2024-07-14T15:04:28+00:00"
+            "time": "2024-07-15T13:39:36+00:00"
         },
         {
             "name": "itstructure/laravel-rbac",
-            "version": "3.0.12",
+            "version": "3.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/itstructure/laravel-rbac.git",
-                "reference": "c9c1bf872b3f8b1ed2310009a7f229ae006abe18"
+                "reference": "bab467c3065b22e1a50f6829af5197239cefb7ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/itstructure/laravel-rbac/zipball/c9c1bf872b3f8b1ed2310009a7f229ae006abe18",
-                "reference": "c9c1bf872b3f8b1ed2310009a7f229ae006abe18",
+                "url": "https://api.github.com/repos/itstructure/laravel-rbac/zipball/bab467c3065b22e1a50f6829af5197239cefb7ed",
+                "reference": "bab467c3065b22e1a50f6829af5197239cefb7ed",
                 "shasum": ""
             },
             "require": {
-                "itstructure/laravel-grid-view": "^1.1.1",
+                "itstructure/laravel-grid-view": "^1.1.4",
                 "laravel/framework": "^8.0|^9.0|^10.0|^11.0",
                 "php": ">=7.3.0"
             },
@@ -1398,9 +1398,9 @@
             ],
             "support": {
                 "issues": "https://github.com/itstructure/laravel-rbac/issues",
-                "source": "https://github.com/itstructure/laravel-rbac/tree/3.0.12"
+                "source": "https://github.com/itstructure/laravel-rbac/tree/3.0.15"
             },
-            "time": "2024-03-20T12:50:17+00:00"
+            "time": "2024-07-15T13:50:45+00:00"
         },
         {
             "name": "jeroennoten/laravel-adminlte",
